@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "3DEE348339549D2FB2F5E154D083822C5CB44DF0",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "860889E10DB7F8F38649961856ED2301F379A07B" : 0,
+    "3DEE348339549D2FB2F5E154D083822C5CB44DF0" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B579DBD0-0026-4E7D-A170-C6B4CD24EDD0",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "860889E10DB7F8F38649961856ED2301F379A07B" : "guestbook\/",
+    "3DEE348339549D2FB2F5E154D083822C5CB44DF0" : "RestEssentials\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "RestEssentials",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "RestEssentials\/RestEssentials.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:sean7512\/RestEssentials.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3DEE348339549D2FB2F5E154D083822C5CB44DF0"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "gitlab.agilex-devcloud.com:corp-dev\/guestbook.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "860889E10DB7F8F38649961856ED2301F379A07B"
+    }
+  ]
+}

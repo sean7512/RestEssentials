@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E06E5C641B6A3AD3007EA8B8 /* RestEssentials.h in Headers */ = {isa = PBXBuildFile; fileRef = E06E5C631B6A3AD3007EA8B8 /* RestEssentials.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E06E5C6B1B6A3AD3007EA8B8 /* RestEssentials.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E06E5C601B6A3AD3007EA8B8 /* RestEssentials.framework */; };
-		E06E5C701B6A3AD3007EA8B8 /* RestEssentialsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06E5C6F1B6A3AD3007EA8B8 /* RestEssentialsTests.swift */; };
-		E06E5C831B6A3B9D007EA8B8 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06E5C801B6A3B9D007EA8B8 /* JSON.swift */; };
-		E06E5C841B6A3B9D007EA8B8 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06E5C811B6A3B9D007EA8B8 /* Result.swift */; };
-		E06E5C851B6A3B9D007EA8B8 /* RestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06E5C821B6A3B9D007EA8B8 /* RestController.swift */; };
+		E08F8D051B6A44EE00A190D6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E08F8D001B6A44EE00A190D6 /* Info.plist */; };
+		E08F8D061B6A44EE00A190D6 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D011B6A44EE00A190D6 /* JSON.swift */; };
+		E08F8D071B6A44EE00A190D6 /* RestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D021B6A44EE00A190D6 /* RestController.swift */; };
+		E08F8D081B6A44EE00A190D6 /* RestEssentials.h in Headers */ = {isa = PBXBuildFile; fileRef = E08F8D031B6A44EE00A190D6 /* RestEssentials.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E08F8D091B6A44EE00A190D6 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D041B6A44EE00A190D6 /* Result.swift */; };
+		E08F8D101B6A46E400A190D6 /* RestEssentialsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D0B1B6A450300A190D6 /* RestEssentialsTests.swift */; };
+		E08F8D111B6A46E700A190D6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E08F8D0A1B6A450300A190D6 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,14 +28,14 @@
 
 /* Begin PBXFileReference section */
 		E06E5C601B6A3AD3007EA8B8 /* RestEssentials.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RestEssentials.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E06E5C631B6A3AD3007EA8B8 /* RestEssentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RestEssentials.h; sourceTree = "<group>"; };
-		E06E5C651B6A3AD3007EA8B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E06E5C6A1B6A3AD3007EA8B8 /* RestEssentialsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RestEssentialsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E06E5C6F1B6A3AD3007EA8B8 /* RestEssentialsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestEssentialsTests.swift; sourceTree = "<group>"; };
-		E06E5C711B6A3AD3007EA8B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E06E5C801B6A3B9D007EA8B8 /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
-		E06E5C811B6A3B9D007EA8B8 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
-		E06E5C821B6A3B9D007EA8B8 /* RestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestController.swift; sourceTree = "<group>"; };
+		E08F8D001B6A44EE00A190D6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = SOURCE_ROOT; };
+		E08F8D011B6A44EE00A190D6 /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSON.swift; path = Source/JSON.swift; sourceTree = SOURCE_ROOT; };
+		E08F8D021B6A44EE00A190D6 /* RestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RestController.swift; path = Source/RestController.swift; sourceTree = SOURCE_ROOT; };
+		E08F8D031B6A44EE00A190D6 /* RestEssentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RestEssentials.h; path = Source/RestEssentials.h; sourceTree = SOURCE_ROOT; };
+		E08F8D041B6A44EE00A190D6 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Result.swift; sourceTree = SOURCE_ROOT; };
+		E08F8D0A1B6A450300A190D6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = SOURCE_ROOT; };
+		E08F8D0B1B6A450300A190D6 /* RestEssentialsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RestEssentialsTests.swift; path = Tests/RestEssentialsTests.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +50,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E06E5C6B1B6A3AD3007EA8B8 /* RestEssentials.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,11 +77,11 @@
 		E06E5C621B6A3AD3007EA8B8 /* RestEssentials */ = {
 			isa = PBXGroup;
 			children = (
-				E06E5C801B6A3B9D007EA8B8 /* JSON.swift */,
-				E06E5C811B6A3B9D007EA8B8 /* Result.swift */,
-				E06E5C821B6A3B9D007EA8B8 /* RestController.swift */,
-				E06E5C631B6A3AD3007EA8B8 /* RestEssentials.h */,
-				E06E5C651B6A3AD3007EA8B8 /* Info.plist */,
+				E08F8D001B6A44EE00A190D6 /* Info.plist */,
+				E08F8D011B6A44EE00A190D6 /* JSON.swift */,
+				E08F8D021B6A44EE00A190D6 /* RestController.swift */,
+				E08F8D031B6A44EE00A190D6 /* RestEssentials.h */,
+				E08F8D041B6A44EE00A190D6 /* Result.swift */,
 			);
 			path = RestEssentials;
 			sourceTree = "<group>";
@@ -89,8 +89,8 @@
 		E06E5C6E1B6A3AD3007EA8B8 /* RestEssentialsTests */ = {
 			isa = PBXGroup;
 			children = (
-				E06E5C6F1B6A3AD3007EA8B8 /* RestEssentialsTests.swift */,
-				E06E5C711B6A3AD3007EA8B8 /* Info.plist */,
+				E08F8D0A1B6A450300A190D6 /* Info.plist */,
+				E08F8D0B1B6A450300A190D6 /* RestEssentialsTests.swift */,
 			);
 			path = RestEssentialsTests;
 			sourceTree = "<group>";
@@ -102,7 +102,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E06E5C641B6A3AD3007EA8B8 /* RestEssentials.h in Headers */,
+				E08F8D081B6A44EE00A190D6 /* RestEssentials.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +186,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E08F8D051B6A44EE00A190D6 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,6 +194,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E08F8D111B6A46E700A190D6 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,9 +205,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E06E5C851B6A3B9D007EA8B8 /* RestController.swift in Sources */,
-				E06E5C841B6A3B9D007EA8B8 /* Result.swift in Sources */,
-				E06E5C831B6A3B9D007EA8B8 /* JSON.swift in Sources */,
+				E08F8D091B6A44EE00A190D6 /* Result.swift in Sources */,
+				E08F8D061B6A44EE00A190D6 /* JSON.swift in Sources */,
+				E08F8D071B6A44EE00A190D6 /* RestController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,7 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E06E5C701B6A3AD3007EA8B8 /* RestEssentialsTests.swift in Sources */,
+				E08F8D101B6A46E400A190D6 /* RestEssentialsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,7 +328,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = RestEssentials/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -346,7 +348,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = RestEssentials/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -395,6 +397,7 @@
 				E06E5C761B6A3AD3007EA8B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E06E5C771B6A3AD3007EA8B8 /* Build configuration list for PBXNativeTarget "RestEssentialsTests" */ = {
 			isa = XCConfigurationList;
@@ -403,6 +406,7 @@
 				E06E5C791B6A3AD3007EA8B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
