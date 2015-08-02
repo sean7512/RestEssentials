@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E08F8D051B6A44EE00A190D6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E08F8D001B6A44EE00A190D6 /* Info.plist */; };
 		E08F8D061B6A44EE00A190D6 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D011B6A44EE00A190D6 /* JSON.swift */; };
 		E08F8D071B6A44EE00A190D6 /* RestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D021B6A44EE00A190D6 /* RestController.swift */; };
 		E08F8D081B6A44EE00A190D6 /* RestEssentials.h in Headers */ = {isa = PBXBuildFile; fileRef = E08F8D031B6A44EE00A190D6 /* RestEssentials.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -186,7 +185,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E08F8D051B6A44EE00A190D6 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,20 +8,21 @@
 
 import Foundation
 
-public enum Result<T> : BooleanType {
-    
+/// A typed Result with 2 cases: Success or Failure. If an operation was successful, then the resulting data will be encapsulated. If the operation was a failure, then an `ErrorType` will be encapsulated.
+public enum Result<T> {
+
+    /// Indicates a successful operation.
+    /// - parameter T: The resulting data from the operation.
     case Success(T)
+
+    /// Indicates a failed operation.
+    /// - parameter ErrorType: The error from the operation.
     case Failure(ErrorType)
-    
-    public var boolValue: Bool {
-        switch(self) {
-        case .Success:
-            return true
-        case .Failure:
-            return false
-        }
-    }
-    
+
+    /// Gets the encapsulated value from the operation.
+    ///
+    /// - returns: The succesful `T` parameter this result is encapsulating.
+    /// - throws: Throws the error if the operation was a failure.
     public func value() throws -> T {
         switch(self) {
         case .Success(let value):
@@ -29,15 +30,5 @@ public enum Result<T> : BooleanType {
         case .Failure(let error):
             throw error
         }
-    }
-    
-    public func consumeResultForSuccessCallback(successCallback: (data: T) -> (), forErrorCallback errorCallback: (error: ErrorType) -> (), andAlwaysAfter afterCallback: () -> ()) {
-        switch self {
-        case .Success(let value):
-            successCallback(data: value)
-        case .Failure(let error):
-            errorCallback(error: error)
-        }
-        afterCallback()
     }
 }
