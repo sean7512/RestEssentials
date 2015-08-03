@@ -55,7 +55,7 @@ public struct RestOptions {
     public var expectedStatusCode = 200
 
     /// An optional set of HTTP Headers to send with the call.
-    public let httpHeaders: [String : String]?
+    public var httpHeaders: [String : String]?
 
 }
 
@@ -166,11 +166,11 @@ public class RestController {
     /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
     ///
     /// - parameter json: The JSON to post to the server.
-    /// - parameter options: A `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` indicating the success of the call with the returned data. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
     /// - throws: Throws an error if the JSON cannot be serialized.
-    public func post(json: JSON, withOptions options: RestOptions, withCallback callback: (Result<JSON>) -> ()) throws {
+    public func post(json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<JSON>) -> ()) throws {
         try makeCallForJSONData(RestController.kPostType, withJSONData: json, withOptions: options, withCallback: callback)
     }
 
@@ -179,11 +179,11 @@ public class RestController {
     /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
     ///
     /// - parameter json: The JSON to post to the server.
-    /// - parameter options: A `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<NSHTTPURLResponse>` indicating the success of the call. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
     /// - throws: Throws an error if the JSON cannot be serialized.
-    public func postIgnoringResponseData(json: JSON, withOptions options: RestOptions, withCallback callback: (Result<NSHTTPURLResponse>) -> ()) throws {
+    public func postIgnoringResponseData(json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<NSHTTPURLResponse>) -> ()) throws {
         try makeCallForNoResponseData(RestController.kPostType, withJSONData: json, withOptions: options, withCallback: callback)
     }
 
@@ -192,11 +192,11 @@ public class RestController {
     /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
     ///
     /// - parameter json: The JSON to post to the server. If nil, no data will be sent.
-    /// - parameter options: A `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` indicating the success of the call with the returned data. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
     /// - throws: Throws an error if the JSON cannot be serialized.
-    public func put(json: JSON?, withOptions options: RestOptions, withCallback callback: (Result<JSON>) -> ()) throws {
+    public func put(json: JSON?, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<JSON>) -> ()) throws {
         try makeCallForJSONData(RestController.kPutType, withJSONData: nil, withOptions: options, withCallback: callback)
     }
 
@@ -205,11 +205,11 @@ public class RestController {
     /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
     ///
     /// - parameter json: The JSON to post to the server. If nil, no data will be sent.
-    /// - parameter options: A `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<NSHTTPURLResponse>` indicating the success of the call. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
     /// - throws: Throws an error if the JSON cannot be serialized.
-    public func putIgnoringResponseData(json: JSON?, withOptions options: RestOptions, withCallback callback: (Result<NSHTTPURLResponse>) -> ()) throws {
+    public func putIgnoringResponseData(json: JSON?, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<NSHTTPURLResponse>) -> ()) throws {
         try makeCallForNoResponseData(RestController.kPutType, withJSONData: nil, withOptions: options, withCallback: callback)
     }
 
@@ -217,10 +217,10 @@ public class RestController {
     ///
     /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
     ///
-    /// - parameter options: A `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` indicating the success of the call with the returned data. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
-    public func get(withOptions options: RestOptions, withCallback callback: (Result<JSON>) -> ()) {
+    public func get(withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<JSON>) -> ()) {
         // can only throw if serializing json
         try! makeCallForJSONData(RestController.kGetType, withJSONData: nil, withOptions: options, withCallback: callback)
     }
@@ -229,10 +229,10 @@ public class RestController {
     ///
     /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
     ///
-    /// - parameter options: A `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<NSHTTPURLResponse>` indicating the success of the call. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
-    public func getIgnoringResponseData(withOptions options: RestOptions, withCallback callback: (Result<NSHTTPURLResponse>) -> ()) {
+    public func getIgnoringResponseData(withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<NSHTTPURLResponse>) -> ()) {
         // can only throw if serializing json
         try! makeCallForNoResponseData(RestController.kGetType, withJSONData: nil, withOptions: options, withCallback: callback)
     }

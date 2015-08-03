@@ -11,8 +11,7 @@
 		E08F8D071B6A44EE00A190D6 /* RestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D021B6A44EE00A190D6 /* RestController.swift */; };
 		E08F8D081B6A44EE00A190D6 /* RestEssentials.h in Headers */ = {isa = PBXBuildFile; fileRef = E08F8D031B6A44EE00A190D6 /* RestEssentials.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E08F8D091B6A44EE00A190D6 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D041B6A44EE00A190D6 /* Result.swift */; };
-		E08F8D101B6A46E400A190D6 /* RestEssentialsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D0B1B6A450300A190D6 /* RestEssentialsTests.swift */; };
-		E08F8D111B6A46E700A190D6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E08F8D0A1B6A450300A190D6 /* Info.plist */; };
+		E08F8D101B6A46E400A190D6 /* RestControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D0B1B6A450300A190D6 /* RestControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +33,7 @@
 		E08F8D031B6A44EE00A190D6 /* RestEssentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RestEssentials.h; path = Source/RestEssentials.h; sourceTree = SOURCE_ROOT; };
 		E08F8D041B6A44EE00A190D6 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Result.swift; sourceTree = SOURCE_ROOT; };
 		E08F8D0A1B6A450300A190D6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = SOURCE_ROOT; };
-		E08F8D0B1B6A450300A190D6 /* RestEssentialsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RestEssentialsTests.swift; path = Tests/RestEssentialsTests.swift; sourceTree = SOURCE_ROOT; };
+		E08F8D0B1B6A450300A190D6 /* RestControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RestControllerTests.swift; path = Tests/RestControllerTests.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				E08F8D0A1B6A450300A190D6 /* Info.plist */,
-				E08F8D0B1B6A450300A190D6 /* RestEssentialsTests.swift */,
+				E08F8D0B1B6A450300A190D6 /* RestControllerTests.swift */,
 			);
 			path = RestEssentialsTests;
 			sourceTree = "<group>";
@@ -192,7 +191,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E08F8D111B6A46E700A190D6 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,7 +211,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E08F8D101B6A46E400A190D6 /* RestEssentialsTests.swift in Sources */,
+				E08F8D101B6A46E400A190D6 /* RestControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,7 +357,7 @@
 		E06E5C781B6A3AD3007EA8B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = RestEssentialsTests/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.seak.RestEssentialsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -369,7 +367,7 @@
 		E06E5C791B6A3AD3007EA8B8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = RestEssentialsTests/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.seak.RestEssentialsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
