@@ -148,6 +148,11 @@ public final class JSONArray : CustomStringConvertible, SequenceType {
 
     private let backingArray: [JSONValue]
 
+    /// The number of elements in this JSONArray.
+    public var count: Int {
+        return backingArray.count
+    }
+
     public var description: String {
         return backingArray.description
     }
