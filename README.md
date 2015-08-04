@@ -54,7 +54,6 @@ $ git submodule add https://github.com/sean7512/RestEssentials.git
     > It should appear nested underneath your application's blue project icon. Whether it is above or below all the other Xcode groups does not matter.
 
 - Select the `RestEssentials.xcodeproj` in the Project Navigator and verify the deployment target matches that of your application target.
-- Next, select your application project in the Project Navigator (blue project icon) to navigate to the target configuration window and select the application target under the "Targets" heading in the sidebar.
 
 - And that's it!
 
