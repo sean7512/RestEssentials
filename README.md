@@ -39,7 +39,7 @@ Integration with CocoaPods is coming soon!
 
 ### Manually
 
-If you prefer not to use either of the aforementioned dependency managers, you can integrate RestEssentials into your project manually.
+If you prefer not to use CocoaPods, you can integrate RestEssentials into your project manually.
 
 #### Embedded Framework
 
@@ -68,7 +68,57 @@ For application targets that do not support embedded frameworks, such as iOS 7, 
 
 ## Usage
 
-### Making a Request
+### Making a GET Request and parsing the response.
+
+```swift
+import RestEssentials
+
+guard let rest = RestController.createFromURLString("http://httpbin.org/get") else {
+    print("Bad URL")
+    return
+}
+
+rest.get() { result in
+    do {
+        let json = try result.value()
+        print(json)
+        print(json["url"]?.stringValue) // "http://httpbin.org/get"
+    } catch {
+        print("Error performing GET: \(error)")
+    }
+}
+```
+
+### Making a POST Request and parsing the response.
+
+```swift
+import RestEssentials
+
+guard let rest = RestController.createFromURLString("http://httpbin.org/post") else {
+    print("Bad URL")
+    return
+}
+
+def postData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
+try rest.post(postData) { result in
+    do {
+        let json = try result.value()
+        print(json)
+        print(json["url"]?.stringValue) // "http://httpbin.org/post")
+        print(json["json"]?["key1"]?.stringValue) // "value1")
+        print(json["json"]?["key2"]?.integerValue) // 2)
+        print(json["json"]?["key3"]?.doubleValue) // 4.5)
+        print(json["json"]?["key4"]?.boolValue) // true)
+    } catch {
+        print("Error performing POST: \(error)")
+    }
+}
+```
+
+### Other Notes
+If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the alternative functions: <method>IgnoringResponseData (like getIgnoringResponseData or postIgnoringResponseData).
+
+The callbacks are **NOT** on the main thread, JSON parsing should happen in the callback and then passed back to the main thread as needed (after parsing).
 
 ## Credits
 
