@@ -9,7 +9,7 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift.
 ## Requirements
 
 - iOS 7.0+
-- Xcode 7.0 (currently beta 4)
+- Xcode 7.0 (currently beta 5)
 
 ## Communication
 
