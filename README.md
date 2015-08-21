@@ -8,7 +8,7 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift.
 
 ## Requirements
 
-- iOS 7.0+
+- iOS 8.0+
 - Xcode 7.0 (currently beta 5)
 
 ## Communication
@@ -22,12 +22,10 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift.
 ## Installation
 
 > **Embedded frameworks require a minimum deployment target of iOS 8**
->
-> To use RestEssentials with a project targeting iOS 7, you must include all Swift files located inside the `Source` directory directly in your project. See the ['Source File'](#source-file) section for additional instructions.
 
 ### CocoaPods
 
-[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects and is the preferred method of installation.
 
 CocoaPods 0.36 adds supports for Swift and embedded frameworks. You can install it with the following command:
 
@@ -35,7 +33,21 @@ CocoaPods 0.36 adds supports for Swift and embedded frameworks. You can install 
 $ gem install cocoapods
 ```
 
-Integration with CocoaPods is coming soon!
+To integrate RestEssentials into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+use_frameworks!
+
+pod 'RestEssentials', '~> 0.1'
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
 
 ### Manually
 
@@ -61,7 +73,7 @@ $ git submodule add https://github.com/sean7512/RestEssentials.git
 
 #### Source File
 
-For application targets that do not support embedded frameworks, such as iOS 7, RestEssentials can be integrated by adding all the Swift files located inside the `Source` directory (`Source/*.swift`) directly into your project. Note that you will no longer need to `import RestEssentials` since you are not actually loading a framework.
+If you prefer to rock it old-school, RestEssentials can be integrated by adding all the Swift files located inside the `Source` directory (`Source/*.swift`) directly into your project. Note that you will no longer need to `import RestEssentials` since you are not actually loading a framework.
 
 ---
 
@@ -118,6 +130,33 @@ try rest.post(postData) { result in
 If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the alternative functions: <method>IgnoringResponseData (like getIgnoringResponseData or postIgnoringResponseData).
 
 The callbacks are **NOT** on the main thread, JSON parsing should happen in the callback and then passed back to the main thread as needed (after parsing).
+
+## FAQ
+
+### When should I use RestEssentials?
+
+If you're starting a new project in Swift, and want to take full advantage of its conventions and language features, RestEssentials is a great choice. Although not as fully-featured as Alamofire, AFNetworking, or RestKit, it should satisfy your basic REST needs.  If you only need to perform standard networking options (GET, PUT, POST) and you are only ever dealing with JSON (input and output), then ReseEssentials is a perfect choice!
+
+> It's important to note that two libraries aren't mutually exclusive: RestEssentials can live in the same project as any other networking library.
+
+### When should I use Alamofire?
+
+Alamofire is a more fully featured networking library and is also written in Swift.  It adds support for multi-part file uploads and the ability to configure your own `NSURLSessionConfiguration` (which most probably won't need to do).
+
+### When should I use AFNetworking?
+
+AFNetworking remains the premiere networking library available for OS X and iOS, and can easily be used in Swift, just like any other Objective-C code. AFNetworking is stable and reliable, and isn't going anywhere.
+
+Use AFNetworking for any of the following:
+
+- UIKit extensions, such as asynchronously loading images to `UIImageView`
+- Network reachability monitoring, using `AFNetworkReachabilityManager`
+
+### When should I use RestKit?
+
+RestKit is a very advanced library that is build ontop of AFNetworking and offers very advanced features such as automatic JSON mapping to classes.  RestKit is also an Objective-C library, but it is easily usable in your Swift projects.
+
+* * *
 
 ## Credits
 
