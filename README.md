@@ -2,9 +2,13 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift.
 
 ## Features
 
-- [x] Easily perform asynchronous REST networking calls that works with JSON
+- [x] Easily perform asynchronous REST networking calls (GET, POST, PUT, or DELETE) that works with JSON
 - [x] Full JSON parsing capabilities
-- [x] HTTP Response Validation
+- [x] HTTP response validation
+- [x] Send custom HTTP headers
+- [x] Accept self-signed SSL certificates
+- [x] Change timeout options
+- [x] Fully native Swift API
 
 ## Requirements
 
@@ -40,7 +44,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'RestEssentials', '~> 0.1'
+pod 'RestEssentials', '~> 1.0'
 ```
 
 Then, run the following command:
@@ -89,7 +93,7 @@ guard let rest = RestController.createFromURLString("http://httpbin.org/get") el
     return
 }
 
-rest.get() { result in
+rest.get { result in
     do {
         let json = try result.value()
         print(json)
@@ -111,7 +115,7 @@ guard let rest = RestController.createFromURLString("http://httpbin.org/post") e
 }
 
 def postData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
-try rest.post(postData) { result in
+try rest.post(withJSON: postData) { result in
     do {
         let json = try result.value()
         print(json)
@@ -131,11 +135,17 @@ If the web service you're calling doesn't return any JSON (or you don't need to 
 
 The callbacks are **NOT** on the main thread, JSON parsing should happen in the callback and then passed back to the main thread as needed (after parsing).
 
+Each variation of the calls can take an optional `RestOptions` object, which allow you to configure the expected status return code, optional HTTP headers to include in the request, and the timeout on the request in seconds.
+
+Each variation also allows for a relative path to be used.  If your `RestController` object is for *http://foo.com" you can pass in *some/relative/path* as the first argument, then the request will go to *http://foo.com/some/relative/path*.  This enables you to use a single `RestController` object for all REST calls to the same host.
+
+You can optionally allow the framework to accept a self-signed SSL certificate from the host using the *acceptSelfSignedCertificate* property.  If being used on iOS 9.0+, you must properly configure App Transport Security.
+
 ## FAQ
 
 ### When should I use RestEssentials?
 
-If you're starting a new project in Swift, and want to take full advantage of its conventions and language features, RestEssentials is a great choice. Although not as fully-featured as Alamofire, AFNetworking, or RestKit, it should satisfy your basic REST needs.  If you only need to perform standard networking options (GET, PUT, POST) and you are only ever dealing with JSON (input and output), then ReseEssentials is a perfect choice!
+If you're starting a new project in Swift, and want to take full advantage of its conventions and language features, RestEssentials is a great choice. Although not as fully-featured as Alamofire, AFNetworking, or RestKit, it should satisfy your basic REST needs.  If you only need to perform standard networking options (GET, PUT, POST, DELETE), accept self-signed SSL certificates, send HTTP headers, and you are only ever dealing with JSON (input and output), then RestEssentials is a perfect choice!
 
 > It's important to note that two libraries aren't mutually exclusive: RestEssentials can live in the same project as any other networking library.
 
