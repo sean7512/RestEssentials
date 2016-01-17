@@ -51,12 +51,12 @@ class RestControllerTests: XCTestCase {
     func testPOST() {
         let expectation = expectationWithDescription("POST network call")
 
-        guard let rest = RestController.createFromURLString("http://httpbin.org/post") else {
+        guard let rest = RestController.createFromURLString("http://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
-        try! rest.post(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result in
+        try! rest.post("post", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result in
             do {
                 let json = try result.value()
                 print(json)
