@@ -157,7 +157,7 @@ public class RestController : NSObject, NSURLSessionDelegate {
             }
 
             callback(.Success(data: returnedData, response: httpResponse))
-            }.resume()
+        }.resume()
     }
 
     private func makeCallForJSONData(httpMethod: String, withJSONData json: JSON?, withOptions options: RestOptions, withCallback callback: (Result<JSON>) -> ()) throws {
