@@ -170,7 +170,7 @@ RestKit is a very advanced library that is build ontop of AFNetworking and offer
 
 ## Credits
 
-RestEssentials is owned and maintained by the [Sean K](https://github.com/sean7512).
+RestEssentials is owned and maintained by [Sean K](https://github.com/sean7512).
 
 ## License
 
