@@ -59,6 +59,8 @@ public struct RestOptions {
 
     /// The amount of time in `seconds` until the request times out.
     public var requestTimeoutSeconds = RestController.kDefaultRequestTimeout
+    
+    public init() {}
 }
 
 /// Allos users to create HTTP REST networking calls that deal with JSON.
