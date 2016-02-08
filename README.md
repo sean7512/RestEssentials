@@ -44,7 +44,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'RestEssentials', '~> 1.0'
+pod 'RestEssentials', '~> 1.0.1'
 ```
 
 Then, run the following command:
