@@ -69,6 +69,7 @@ public struct RestOptions {
 public class RestController : NSObject, NSURLSessionDelegate {
 
     private static let kPostType = "POST"
+    private static let kPatchType = "PATCH"
     private static let kGetType = "GET"
     private static let kPutType = "PUT"
     private static let kDeleteType = "DELETE"
@@ -221,6 +222,33 @@ public class RestController : NSObject, NSURLSessionDelegate {
     /// - throws: Throws an error if the JSON cannot be serialized.
     public func postIgnoringResponseData(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<NSHTTPURLResponse>) -> ()) throws {
         try makeCallForNoResponseData(relativePath, forHTTPMethod: RestController.kPostType, withJSONData: json, withOptions: options, withCallback: callback)
+    }
+    
+    /// Performs a PATCH request to the server, capturing the `JSON` response from the server
+    ///
+    /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
+    ///
+    /// - parameter json: The JSON to post to the server.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` indicating the success of the call with the returned data. Note: The callback is **NOT** called on the main thread.
+    /// - returns: Nothing.
+    /// - throws: Throws an error if the JSON cannot be serialized.
+    public func patch(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<JSON>) -> ()) throws {
+        try makeCallForJSONData(relativePath, forHTTPMethod: RestController.kPatchType, withJSONData: json, withOptions: options, withCallback: callback)
+    }
+    
+    /// Performs a PATCH request to the server, while ignoring any response sent back from the server.
+    ///
+    /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
+    ///
+    /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
+    /// - parameter json: The JSON to post to the server.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<NSHTTPURLResponse>` indicating the success of the call. Note: The callback is **NOT** called on the main thread.
+    /// - returns: Nothing.
+    /// - throws: Throws an error if the JSON cannot be serialized.
+    public func patchIgnoringResponseData(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<NSHTTPURLResponse>) -> ()) throws {
+        try makeCallForNoResponseData(relativePath, forHTTPMethod: RestController.kPatchType, withJSONData: json, withOptions: options, withCallback: callback)
     }
 
     /// Performs a PUT request to the server, capturing the `JSON` response from the server
