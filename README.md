@@ -2,7 +2,7 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift.
 
 ## Features
 
-- [x] Easily perform asynchronous REST networking calls (GET, POST, PUT, or DELETE) that works with JSON
+- [x] Easily perform asynchronous REST networking calls (GET, POST, PUT, PATCH, or DELETE) that works with JSON
 - [x] Full JSON parsing capabilities
 - [x] HTTP response validation
 - [x] Send custom HTTP headers
@@ -93,7 +93,7 @@ guard let rest = RestController.createFromURLString("http://httpbin.org/get") el
     return
 }
 
-rest.get { result in
+rest.get { result, httpResponse in
     do {
         let json = try result.value()
         print(json)
@@ -115,7 +115,7 @@ guard let rest = RestController.createFromURLString("http://httpbin.org/post") e
 }
 
 def postData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
-try rest.post(withJSON: postData) { result in
+try rest.post(withJSON: postData) { result, httpResponse in
     do {
         let json = try result.value()
         print(json)

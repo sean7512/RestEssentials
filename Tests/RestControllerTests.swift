@@ -29,7 +29,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        rest.get { result in
+        rest.get { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
@@ -56,7 +56,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        try! rest.post("post", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result in
+        try! rest.post("post", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
