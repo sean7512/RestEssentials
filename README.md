@@ -1,4 +1,6 @@
-RestEssentials is an extremely lightweight REST and JSON library for Swift.
+RestEssentials is an extremely lightweight REST and JSON library for Swift 2.2.
+
+**NOTE:** RestEssentials is **NOT** compatible with the beta versions of Swift 2.3 or 3.0. RestEssentials will be updated for Swift 3.0 once it is released.
 
 ## Features
 
@@ -44,7 +46,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'RestEssentials', '~> 1.0.1'
+pod 'RestEssentials', '~> 1.0.2'
 ```
 
 Then, run the following command:
@@ -109,24 +111,32 @@ rest.get { result, httpResponse in
 ```swift
 import RestEssentials
 
-guard let rest = RestController.createFromURLString("http://httpbin.org/post") else {
+guard let rest = RestController.createFromURLString("http://httpbin.org/") else {
     print("Bad URL")
     return
 }
 
-def postData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
-try rest.post(withJSON: postData) { result, httpResponse in
+def postData = JSON("post", dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
+try! rest.post(withJSON: postData) { result, httpResponse in
     do {
         let json = try result.value()
-        print(json)
-        print(json["url"]?.stringValue) // "http://httpbin.org/post")
-        print(json["json"]?["key1"]?.stringValue) // "value1")
-        print(json["json"]?["key2"]?.integerValue) // 2)
-        print(json["json"]?["key3"]?.doubleValue) // 4.5)
-        print(json["json"]?["key4"]?.boolValue) // true)
+        print(json["url"]?.stringValue) // "http://httpbin.org/post"
+        print(json["json"]?["key1"]?.stringValue) // "value1"
+        print(json["json"]?["key2"]?.integerValue) // 2
+        print(json["json"]?["key3"]?.doubleValue) // 4.5
+        print(json["json"]?["key4"]?.boolValue) // true
     } catch {
         print("Error performing POST: \(error)")
     }
+}
+
+try! rest.put("put", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+    do {
+        let json = try result.value()
+        print(json["url"]?.stringValue) // "http://httpbin.org/put"
+    } catch {
+        print("Error performing GET: \(error)")
+     }
 }
 ```
 

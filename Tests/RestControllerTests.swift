@@ -78,5 +78,32 @@ class RestControllerTests: XCTestCase {
             }
         }
     }
+
+    func testPUT() {
+        let expectation = expectationWithDescription("POST network call")
+
+        guard let rest = RestController.createFromURLString("http://httpbin.org") else {
+            XCTFail("Bad URL")
+            return
+        }
+
+        try! rest.put("put", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+            do {
+                let json = try result.value()
+                print(json)
+                XCTAssert(json["url"]?.stringValue == "http://httpbin.org/put")
+
+                expectation.fulfill()
+            } catch {
+                XCTFail("Error performing GET: \(error)")
+            }
+        }
+
+        waitForExpectationsWithTimeout(5) { (error) -> Void in
+            if let _ = error {
+                XCTFail("Test timeout reached")
+            }
+        }
+    }
     
 }
