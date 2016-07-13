@@ -249,3 +249,26 @@ public final class JSONObject : CustomStringConvertible {
         return self[key]?.boolValue ?? defaultValue
     }
 }
+
+internal extension JSON {
+    convenience internal init?(fromData data: NSData) {
+        do {
+            let json = try  NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers)
+            if let jsonObj = json as? [String : AnyObject] {
+                self.init(dict: jsonObj)
+            } else if let jsonArray = json as? [AnyObject] {
+                self.init(array: jsonArray)
+            } else {
+                print("Unknown json data type: \(json)")
+                return nil
+            }
+        } catch {
+            print("An error occurred deserializing data to JSON: \(error)")
+            return nil
+        }
+    }
+
+    func createNSData() throws -> NSData {
+        return try NSJSONSerialization.dataWithJSONObject(jsonValue.value, options: [])
+    }
+}

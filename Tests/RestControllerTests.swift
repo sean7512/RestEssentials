@@ -29,7 +29,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        rest.get { result, httpResponse in
+        try! rest.get { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
