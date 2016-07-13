@@ -147,7 +147,7 @@ try! rest.put(withJSON: putData) { result, httpResponse in
         let json = try result.value()
         print(json["url"]?.stringValue) // "http://httpbin.org/put"
     } catch {
-        print("Error performing GET: \(error)")
+        print("Error performing PUT: \(error)")
     }
 }
 ```

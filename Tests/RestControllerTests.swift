@@ -68,7 +68,7 @@ class RestControllerTests: XCTestCase {
 
                 expectation.fulfill()
             } catch {
-                XCTFail("Error performing GET: \(error)")
+                XCTFail("Error performing POST: \(error)")
             }
         }
 
@@ -95,7 +95,7 @@ class RestControllerTests: XCTestCase {
 
                 expectation.fulfill()
             } catch {
-                XCTFail("Error performing GET: \(error)")
+                XCTFail("Error performing PUT: \(error)")
             }
         }
 
