@@ -111,12 +111,12 @@ rest.get { result, httpResponse in
 ```swift
 import RestEssentials
 
-guard let rest = RestController.createFromURLString("http://httpbin.org/") else {
+guard let rest = RestController.createFromURLString("http://httpbin.org/post") else {
     print("Bad URL")
     return
 }
 
-def postData = JSON("post", dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
+def postData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
 try! rest.post(withJSON: postData) { result, httpResponse in
     do {
         let json = try result.value()
@@ -129,14 +129,26 @@ try! rest.post(withJSON: postData) { result, httpResponse in
         print("Error performing POST: \(error)")
     }
 }
+```
 
-try! rest.put("put", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+### Making a PUT Request and parsing the response.
+
+```swift
+import RestEssentials
+
+guard let rest = RestController.createFromURLString("http://httpbin.org/put") else {
+    print("Bad URL")
+    return
+}
+
+def putData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
+try! rest.put(withJSON: putData) { result, httpResponse in
     do {
         let json = try result.value()
         print(json["url"]?.stringValue) // "http://httpbin.org/put"
     } catch {
         print("Error performing GET: \(error)")
-     }
+    }
 }
 ```
 
