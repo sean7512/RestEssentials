@@ -17,6 +17,8 @@ public class JSONResponseHandler: ResponseHandler {
 
     public typealias ResponseType = JSON
 
+    public init() { }
+
     public func transform(data: NSData) -> JSON? {
         return JSON(fromData: data)
     }
@@ -25,6 +27,8 @@ public class JSONResponseHandler: ResponseHandler {
 public class VoidResponseHandler: ResponseHandler {
 
     public typealias ResponseType = Void
+
+    public init() { }
 
     public func transform(data: NSData) -> Void? {
         // do nothing
@@ -36,6 +40,8 @@ public class ImageResponseHandler: ResponseHandler {
 
     public typealias ResponseType = UIImage
 
+    public init() { }
+
     public func transform(data: NSData) -> UIImage? {
         return UIImage(data: data)
     }
@@ -44,6 +50,8 @@ public class ImageResponseHandler: ResponseHandler {
 public class DataesponseHandler: ResponseHandler {
 
     public typealias ResponseType = NSData
+
+    public init() { }
 
     public func transform(data: NSData) -> NSData? {
         return data

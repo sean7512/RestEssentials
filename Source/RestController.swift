@@ -77,12 +77,21 @@ public class RestController : NSObject, NSURLSessionDelegate {
     /// - returns: If the given URL string represents a valid `NSURL`, then a `RestController` will be returned; it not then `nil` will be returned.
     public static func createFromURLString(urlString: String) -> RestController? {
         if let validURL = NSURL(string: urlString) {
-            let restController = RestController(validURL)
-            restController.session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: restController, delegateQueue: nil)
-            return restController
+            return createFromURL(validURL)
         }
 
         return nil
+    }
+
+    /// Creates a new `RestController` for the given URL endpoint.
+    ///
+    /// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately for the server.
+    /// - parameter urlString: The URL of the server to send requests to.
+    /// - returns: If the given URL string represents a valid `NSURL`, then a `RestController` will be returned; it not then `nil` will be returned.
+    public static func createFromURL(url: NSURL) -> RestController {
+        let restController = RestController(url)
+        restController.session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: restController, delegateQueue: nil)
+        return restController
     }
 
     @objc public func URLSession(session: NSURLSession, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
@@ -171,8 +180,21 @@ public class RestController : NSObject, NSURLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
-    public func get<T: ResponseHandler>(relativePath: String? = nil, withResposneHandler handler: T = JSONResponseHandler() as! T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
+    public func get<T: ResponseHandler>(relativePath: String? = nil, withResponseHandler handler: T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
         try makeCall(relativePath, forHTTPMethod: RestController.kGetType, withJSONData: nil, withResposneHandler: handler, withOptions: options, withCallback: callback)
+    }
+
+    /// Performs a GET request to the server, capturing the `JSON` response from the server.
+    ///
+    /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
+    ///
+    /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
+    /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    /// - returns: Nothing.
+    public func get(relativePath: String? = nil, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<JSON>, NSHTTPURLResponse?) -> ()) throws {
+        try makeCall(relativePath, forHTTPMethod: RestController.kGetType, withJSONData: nil, withResposneHandler: JSONResponseHandler(), withOptions: options, withCallback: callback)
     }
 
     /// Performs a POST request to the server, capturing the `JSON` response from the server
@@ -184,8 +206,21 @@ public class RestController : NSObject, NSURLSessionDelegate {
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
     /// - throws: Throws an error if the JSON cannot be serialized.
-    public func post<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResposneHandler handler: T = JSONResponseHandler() as! T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
+    public func post<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResponseHandler handler: T = JSONResponseHandler() as! T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
         try makeCall(relativePath, forHTTPMethod: RestController.kPostType, withJSONData: json, withResposneHandler: handler, withOptions: options, withCallback: callback)
+    }
+
+    /// Performs a POST request to the server, capturing the `JSON` response from the server
+    ///
+    /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
+    ///
+    /// - parameter json: The JSON to post to the server.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    /// - returns: Nothing.
+    /// - throws: Throws an error if the JSON cannot be serialized.
+    public func post(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<JSON>, NSHTTPURLResponse?) -> ()) throws {
+        try makeCall(relativePath, forHTTPMethod: RestController.kPostType, withJSONData: json, withResposneHandler: JSONResponseHandler(), withOptions: options, withCallback: callback)
     }
 
     /// Performs a PUT request to the server, capturing the `JSON` response from the server
@@ -198,8 +233,22 @@ public class RestController : NSObject, NSURLSessionDelegate {
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
     /// - throws: Throws an error if the JSON cannot be serialized.
-    public func put<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResposneHandler handler: T = JSONResponseHandler() as! T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
+    public func put<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResponseHandler handler: T = JSONResponseHandler() as! T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
         try makeCall(relativePath, forHTTPMethod: RestController.kPutType, withJSONData: nil, withResposneHandler: handler, withOptions: options, withCallback: callback)
+    }
+
+    /// Performs a PUT request to the server, capturing the `JSON` response from the server
+    ///
+    /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
+    ///
+    /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
+    /// - parameter json: The JSON to post to the server. If nil, no data will be sent.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    /// - returns: Nothing.
+    /// - throws: Throws an error if the JSON cannot be serialized.
+    public func put(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<JSON>, NSHTTPURLResponse?) -> ()) throws {
+        try makeCall(relativePath, forHTTPMethod: RestController.kPutType, withJSONData: nil, withResposneHandler: JSONResponseHandler(), withOptions: options, withCallback: callback)
     }
 
     /// Performs a DELETE request to the server, capturing the `JSON` response from the server.
@@ -211,8 +260,21 @@ public class RestController : NSObject, NSURLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
-    public func delete<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResposneHandler handler: T = JSONResponseHandler() as! T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
+    public func delete<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResponseHandler handler: T = JSONResponseHandler() as! T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
         try makeCall(relativePath, forHTTPMethod: RestController.kDeleteType, withJSONData: json, withResposneHandler: handler, withOptions: options, withCallback: callback)
+    }
+
+    /// Performs a DELETE request to the server, capturing the `JSON` response from the server.
+    ///
+    /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
+    ///
+    /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
+    /// - parameter json: The JSON to post to the server. If nil, no data will be sent.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    /// - returns: Nothing.
+    public func delete(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<JSON>, NSHTTPURLResponse?) -> ()) throws {
+        try makeCall(relativePath, forHTTPMethod: RestController.kDeleteType, withJSONData: json, withResposneHandler: JSONResponseHandler(), withOptions: options, withCallback: callback)
     }
 
     /// Performs a PATCH request to the server, capturing the `JSON` response from the server
@@ -224,7 +286,20 @@ public class RestController : NSObject, NSURLSessionDelegate {
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     /// - returns: Nothing.
     /// - throws: Throws an error if the JSON cannot be serialized.
-    public func patch<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResposneHandler handler: T = JSONResponseHandler() as! T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
+    public func patch<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResponseHandler handler: T = JSONResponseHandler() as! T, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<T.ResponseType>, NSHTTPURLResponse?) -> ()) throws {
         try makeCall(relativePath, forHTTPMethod: RestController.kPatchType, withJSONData: json, withResposneHandler: handler, withOptions: options, withCallback: callback)
+    }
+
+    /// Performs a PATCH request to the server, capturing the `JSON` response from the server
+    ///
+    /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
+    ///
+    /// - parameter json: The JSON to post to the server.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    /// - returns: Nothing.
+    /// - throws: Throws an error if the JSON cannot be serialized.
+    public func patch(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: (Result<JSON>, NSHTTPURLResponse?) -> ()) throws {
+        try makeCall(relativePath, forHTTPMethod: RestController.kPatchType, withJSONData: json, withResposneHandler: JSONResponseHandler(), withOptions: options, withCallback: callback)
     }
 }
