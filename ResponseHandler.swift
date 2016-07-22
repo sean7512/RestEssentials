@@ -8,27 +8,44 @@
 
 import Foundation
 
+/// Protocol for de-serializing responses from the web server.
 public protocol ResponseHandler {
+
     associatedtype ResponseType = Any
+
+    /// The `Accept` Hader value, ex: `application/json`
+    var acceptHeaderValue: String { get }
+
+    init()
+
+    /// Transforms the data returned by the web server to the desired type.
+    /// - parameter data: The data returned by the server.
+    /// - returns: The transformed type of the desired type.
     func transform(data: NSData) -> ResponseType?
 }
 
+/// A `ResponseHandler` for `JSON`
 public class JSONResponseHandler: ResponseHandler {
 
     public typealias ResponseType = JSON
 
-    public init() { }
+    public let acceptHeaderValue = "application/json"
+
+    public required init() { }
 
     public func transform(data: NSData) -> JSON? {
         return JSON(fromData: data)
     }
 }
 
+/// A `ResponseHandler` for `Void` (for use with servers that return no data).
 public class VoidResponseHandler: ResponseHandler {
 
     public typealias ResponseType = Void
 
-    public init() { }
+    public let acceptHeaderValue = "*/*"
+
+    public required init() { }
 
     public func transform(data: NSData) -> Void? {
         // do nothing
@@ -36,22 +53,28 @@ public class VoidResponseHandler: ResponseHandler {
     }
 }
 
+/// A `ResponseHandler` for `UIImage`
 public class ImageResponseHandler: ResponseHandler {
 
     public typealias ResponseType = UIImage
 
-    public init() { }
+    public let acceptHeaderValue = "image/*"
+
+    public required init() { }
 
     public func transform(data: NSData) -> UIImage? {
         return UIImage(data: data)
     }
 }
 
-public class DataesponseHandler: ResponseHandler {
+/// A `ResponseHandler` for `NSData`
+public class DataResponseHandler: ResponseHandler {
 
     public typealias ResponseType = NSData
 
-    public init() { }
+    public let acceptHeaderValue = "*/*"
+
+    public required init() { }
 
     public func transform(data: NSData) -> NSData? {
         return data

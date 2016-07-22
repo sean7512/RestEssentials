@@ -29,7 +29,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        try! rest.get { result, httpResponse in
+        rest.get { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
@@ -56,7 +56,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        try! rest.post("post", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+        rest.post("post", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
@@ -87,7 +87,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        try! rest.put("put", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+        rest.put("put", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
@@ -114,7 +114,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        try! rest.get(withResponseHandler: ImageResponseHandler()) { result, httpResponse in
+        rest.get(withResponseHandler: ImageResponseHandler()) { result, httpResponse in
             do {
                 let img = try result.value()
                 XCTAssert(img.isKindOfClass(UIImage.self))
@@ -140,7 +140,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        try! rest.get(withResponseHandler: VoidResponseHandler()) { _, httpResponse in
+        rest.get(withResponseHandler: VoidResponseHandler()) { _, httpResponse in
             expectation.fulfill()
         }
 
@@ -159,7 +159,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        try! rest.get(withResponseHandler: DataesponseHandler()) { result, httpResponse in
+        rest.get(withResponseHandler: DataResponseHandler()) { result, httpResponse in
             do {
                 let data = try result.value()
                 XCTAssert(data.isKindOfClass(NSData.self))
