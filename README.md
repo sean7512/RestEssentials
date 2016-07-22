@@ -4,18 +4,20 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift 2.2.
 
 ## Features
 
-- [x] Easily perform asynchronous REST networking calls (GET, POST, PUT, PATCH, or DELETE) that works with JSON
+- [x] Easily perform asynchronous REST networking calls (GET, POST, PUT, PATCH, or DELETE) that send JSON
+- [x] Supports JSON, Void, UIImage, and NSData resposne types
 - [x] Full JSON parsing capabilities
 - [x] HTTP response validation
 - [x] Send custom HTTP headers
 - [x] Accept self-signed SSL certificates
 - [x] Change timeout options
+- [x] Response type handling can be extended via new Protocol implementation
 - [x] Fully native Swift API
 
 ## Requirements
 
 - iOS 8.0+
-- Xcode 7.0+
+- Xcode 7.3+
 
 ## Communication
 
@@ -46,7 +48,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'RestEssentials', '~> 1.0.2'
+pod 'RestEssentials', '~> 2.0.0'
 ```
 
 Then, run the following command:
@@ -117,7 +119,7 @@ guard let rest = RestController.createFromURLString("http://httpbin.org/post") e
 }
 
 def postData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
-try! rest.post(withJSON: postData) { result, httpResponse in
+rest.post(withJSON: postData) { result, httpResponse in
     do {
         let json = try result.value()
         print(json["url"]?.stringValue) // "http://httpbin.org/post"
@@ -142,7 +144,7 @@ guard let rest = RestController.createFromURLString("http://httpbin.org/put") el
 }
 
 def putData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
-try! rest.put(withJSON: putData) { result, httpResponse in
+rest.put(withJSON: putData) { result, httpResponse in
     do {
         let json = try result.value()
         print(json["url"]?.stringValue) // "http://httpbin.org/put"
@@ -152,22 +154,44 @@ try! rest.put(withJSON: putData) { result, httpResponse in
 }
 ```
 
+### Making a GET Request for an image.
+
+```swift
+import RestEssentials
+
+guard let rest = RestController.createFromURLString("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
+    print("Bad URL")
+    return
+}
+
+rest.get(withResponseHandler: ImageResponseHandler()) { result, httpResponse in
+    do {
+        let img = try result.value()
+        img.isKindOfClass(UIImage.self) // true
+    } catch {
+        print("Error performing GET: \(error)")
+    }
+}
+```
+
 ### Other Notes
-If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the alternative functions: <method>IgnoringResponseData (like getIgnoringResponseData or postIgnoringResponseData).
+If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the `VoidResponseHandler`.  If you want to return a different data type than JSON, NSData, and UIImage; create a new implementation of `ResponseHandler` and use that.
 
 The callbacks are **NOT** on the main thread, JSON parsing should happen in the callback and then passed back to the main thread as needed (after parsing).
 
-Each variation of the calls can take an optional `RestOptions` object, which allow you to configure the expected status return code, optional HTTP headers to include in the request, and the timeout on the request in seconds.
+There is an alternative static function to instantiate a `RestController` object: `createFromURL:NSURL` This variation does not return an `Optional` like the `String` version.  This is useful for easily constructing your URL with query parameters (typically for a `GET` request).
 
-Each variation also allows for a relative path to be used.  If your `RestController` object is for *http://foo.com" you can pass in *some/relative/path* as the first argument, then the request will go to *http://foo.com/some/relative/path*.  This enables you to use a single `RestController` object for all REST calls to the same host.
+All of the operations can take an optional `RestOptions` object, which allow you to configure the expected HTTP status code, optional HTTP headers to include in the request, and the timeout on the request in seconds.
 
-You can optionally allow the framework to accept a self-signed SSL certificate from the host using the *acceptSelfSignedCertificate* property.  If being used on iOS 9.0+, you must properly configure App Transport Security.
+All of the operations can also take a relative path to be used.  If your `RestController` object is for *http://foo.com* you can pass in *some/relative/path* as the first argument, then the request will go to *http://foo.com/some/relative/path*.  This enables you to use a single `RestController` object for all REST calls to the same host.  This **IS** the preferred behavior isntead of creating a new `RestController` for every call.
+
+You can optionally allow the framework to accept a self-signed SSL certificate from the host using the *acceptSelfSignedCertificate* property on the `RestController` instance.  If being used on iOS 9.0+, you must properly configure App Transport Security.
 
 ## FAQ
 
 ### When should I use RestEssentials?
 
-If you're starting a new project in Swift, and want to take full advantage of its conventions and language features, RestEssentials is a great choice. Although not as fully-featured as Alamofire, AFNetworking, or RestKit, it should satisfy your basic REST needs.  If you only need to perform standard networking options (GET, PUT, POST, DELETE), accept self-signed SSL certificates, send HTTP headers, and you are only ever dealing with JSON (input and output), then RestEssentials is a perfect choice!
+If you're starting a new project in Swift, and want to take full advantage of its conventions and language features, RestEssentials is a great choice. Although not as fully-featured as Alamofire, AFNetworking, or RestKit, it should satisfy your basic REST needs.  If you only need to perform standard networking options (GET, PUT, POST, DELETE), accept self-signed SSL certificates, send HTTP headers, and you are only ever dealing with JSON as input (and any data type as the output), then RestEssentials is the perfect choice!
 
 > It's important to note that two libraries aren't mutually exclusive: RestEssentials can live in the same project as any other networking library.
 
