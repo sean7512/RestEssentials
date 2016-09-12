@@ -21,62 +21,62 @@ public protocol ResponseHandler {
     /// Transforms the data returned by the web server to the desired type.
     /// - parameter data: The data returned by the server.
     /// - returns: The transformed type of the desired type.
-    func transform(data: NSData) -> ResponseType?
+    func transform(data: Data) -> ResponseType?
 }
 
 /// A `ResponseHandler` for `JSON`
-public class JSONResponseHandler: ResponseHandler {
+open class JSONResponseHandler: ResponseHandler {
 
     public typealias ResponseType = JSON
 
-    public let acceptHeaderValue = "application/json"
+    open let acceptHeaderValue = "application/json"
 
     public required init() { }
 
-    public func transform(data: NSData) -> JSON? {
+    open func transform(data: Data) -> JSON? {
         return JSON(fromData: data)
     }
 }
 
 /// A `ResponseHandler` for `Void` (for use with servers that return no data).
-public class VoidResponseHandler: ResponseHandler {
+open class VoidResponseHandler: ResponseHandler {
 
     public typealias ResponseType = Void
 
-    public let acceptHeaderValue = "*/*"
+    open let acceptHeaderValue = "*/*"
 
     public required init() { }
 
-    public func transform(data: NSData) -> Void? {
+    open func transform(data: Data) -> Void? {
         // do nothing
         return Void()
     }
 }
 
 /// A `ResponseHandler` for `UIImage`
-public class ImageResponseHandler: ResponseHandler {
+open class ImageResponseHandler: ResponseHandler {
 
     public typealias ResponseType = UIImage
 
-    public let acceptHeaderValue = "image/*"
+    open let acceptHeaderValue = "image/*"
 
     public required init() { }
 
-    public func transform(data: NSData) -> UIImage? {
+    open func transform(data: Data) -> UIImage? {
         return UIImage(data: data)
     }
 }
 
 /// A `ResponseHandler` for `NSData`
-public class DataResponseHandler: ResponseHandler {
+open class DataResponseHandler: ResponseHandler {
 
-    public typealias ResponseType = NSData
+    public typealias ResponseType = Data
 
-    public let acceptHeaderValue = "*/*"
+    open let acceptHeaderValue = "*/*"
 
     public required init() { }
 
-    public func transform(data: NSData) -> NSData? {
+    open func transform(data: Data) -> Data? {
         return data
     }
 }

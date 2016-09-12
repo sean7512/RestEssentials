@@ -11,10 +11,13 @@ import Foundation
 /// Represents any valid JSON type: another JSON object, an array, a string, a number, or a boolean.
 public struct JSONValue : CustomStringConvertible {
 
-    internal let value: AnyObject
+    internal let value: Any
 
     public var description: String {
-        return value.description
+        if value is AnyObject {
+            return (value as AnyObject).description
+        }
+        return ""
     }
 
     /// Used if this value represents a `JSONObject` and returns the value associated with the gen key.
@@ -37,7 +40,7 @@ public struct JSONValue : CustomStringConvertible {
     ///
     /// - returns: The `JSONObject` this value represents or `nil` if this value is not a `JSONObject`.
     public var jsonObject: JSONObject? {
-        if let dict = value as? [String : AnyObject] {
+        if let dict = value as? [String : Any] {
             return JSONObject(jsonDict: dict)
         }
         return nil
@@ -47,7 +50,7 @@ public struct JSONValue : CustomStringConvertible {
     ///
     /// - returns: The `JSONArray` this value represents or `nil` if this value is not a `JSONArray`.
     public var jsonArray: JSONArray? {
-        if let jsonArray = value as? [AnyObject] {
+        if let jsonArray = value as? [Any] {
             return JSONArray(jsonArray: jsonArray)
         }
         return nil
@@ -71,7 +74,7 @@ public struct JSONValue : CustomStringConvertible {
     ///
     /// - returns: The `Int` this value represents or `nil` if this value is not a `Int`. If the value contains a decimal, then the decimal portion will be removed.
     public var integerValue: Int? {
-        return numericalValue?.integerValue
+        return numericalValue?.intValue
     }
 
     /// Get the `Double` from this value.
@@ -115,15 +118,15 @@ public final class JSON : CustomStringConvertible {
     /// Creates a new `JSON` that is a `JSONArray` at the root.
     ///
     /// - parameter array: The array this `JSON` contains.
-    public init(array: [AnyObject]) {
-        jsonValue = JSONValue(value: array)
+    public init(array: [Any]) {
+        jsonValue = JSONValue(value: array as Any)
     }
 
     /// Creates a new `JSON` that is a `JSONObject` at the root.
     ///
     /// - parameter dict: The dictionary this `JSON` contains.
-    public init(dict: [String : AnyObject]) {
-        jsonValue = JSONValue(value: dict)
+    public init(dict: [String : Any]) {
+        jsonValue = JSONValue(value: dict as Any)
     }
 
     /// Used if this represents a `JSONObject` and returns the value associated with the gen key.
@@ -144,9 +147,9 @@ public final class JSON : CustomStringConvertible {
 }
 
 /// Represents an array of `JSONValue`s.
-public final class JSONArray : CustomStringConvertible, SequenceType {
+public final class JSONArray : CustomStringConvertible, Sequence {
 
-    private let backingArray: [JSONValue]
+    fileprivate let backingArray: [JSONValue]
 
     /// The number of elements in this JSONArray.
     public var count: Int {
@@ -158,7 +161,7 @@ public final class JSONArray : CustomStringConvertible, SequenceType {
     }
 
     /// Creates a new `JSONArray` that contains the given array.
-    public init(jsonArray: [AnyObject]) {
+    public init(jsonArray: [Any]) {
         backingArray = jsonArray.map { JSONValue(value: $0) }
     }
 
@@ -173,22 +176,22 @@ public final class JSONArray : CustomStringConvertible, SequenceType {
         return nil
     }
 
-    public func generate() -> IndexingGenerator<[JSONValue]> {
-        return backingArray.generate()
+    public func makeIterator() -> IndexingIterator<[JSONValue]> {
+        return backingArray.makeIterator()
     }
 }
 
 /// Represents a dictionary of key->`JSONValue`
 public final class JSONObject : CustomStringConvertible {
 
-    private let backingDict: [String : JSONValue]
+    fileprivate let backingDict: [String : JSONValue]
 
     public var description: String {
         return backingDict.description
     }
 
     /// Creates a new `JSONObject` that contains the given dictionary
-    public init(jsonDict: [String : AnyObject]) {
+    public init(jsonDict: [String : Any]) {
         var jsonDictionary = [String : JSONValue]()
         for (key, value) in jsonDict {
             jsonDictionary[key] = JSONValue(value: value)
@@ -209,7 +212,7 @@ public final class JSONObject : CustomStringConvertible {
     /// - parameter key: The key to get the `JSONObject` for.
     /// - parameter defaultValue The default value to return if no object exists for the key.
     /// - returns: The `JSONObject` for the given key or the `defaultValue` if no object exists for the given key.
-    public func getJSONObject(key: String, withDefaultValue defaultValue: JSONObject) -> JSONObject {
+    public func getJSONObject(_ key: String, withDefaultValue defaultValue: JSONObject) -> JSONObject {
         return self[key]?.jsonObject ?? defaultValue
     }
 
@@ -218,7 +221,7 @@ public final class JSONObject : CustomStringConvertible {
     /// - parameter key: The key to get the `JSONArray` for.
     /// - parameter defaultValue The default value to return if no array exists for the key.
     /// - returns: The `JSONArray` for the given key or the `defaultValue` if no array exists for the given key.
-    public func getJSONArray(key: String, withDefaultValue defaultValue: JSONArray) -> JSONArray {
+    public func getJSONArray(_ key: String, withDefaultValue defaultValue: JSONArray) -> JSONArray {
         return self[key]?.jsonArray ?? defaultValue
     }
 
@@ -227,7 +230,7 @@ public final class JSONObject : CustomStringConvertible {
     /// - parameter key: The key to get the `String` for.
     /// - parameter defaultValue The default value to return if no string exists for the key.
     /// - returns: The `String` for the given key or the `defaultValue` if no string exists for the given key.
-    public func getString(key: String, withDefaultValue defaultValue: String) -> String {
+    public func getString(_ key: String, withDefaultValue defaultValue: String) -> String {
         return self[key]?.stringValue ?? defaultValue
     }
 
@@ -236,7 +239,7 @@ public final class JSONObject : CustomStringConvertible {
     /// - parameter key: The key to get the `NSNumber` for.
     /// - parameter defaultValue The default value to return if no number exists for the key.
     /// - returns: The `NSNumber` for the given key or the `defaultValue` if no number exists for the given key.
-    public func getNumber(key: String, withDefaultValue defaultValue: NSNumber) -> NSNumber {
+    public func getNumber(_ key: String, withDefaultValue defaultValue: NSNumber) -> NSNumber {
         return self[key]?.numericalValue ?? defaultValue
     }
 
@@ -245,18 +248,18 @@ public final class JSONObject : CustomStringConvertible {
     /// - parameter key: The key to get the `Bool` for.
     /// - parameter defaultValue The default value to return if no bool exists for the key.
     /// - returns: The `Bool` for the given key or the `defaultValue` if no bool exists for the given key.
-    public func getBool(key: String, withDefaultValue defaultValue: Bool) -> Bool {
+    public func getBool(_ key: String, withDefaultValue defaultValue: Bool) -> Bool {
         return self[key]?.boolValue ?? defaultValue
     }
 }
 
 internal extension JSON {
-    convenience internal init?(fromData data: NSData) {
+    convenience internal init?(fromData data: Data) {
         do {
-            let json = try  NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers)
-            if let jsonObj = json as? [String : AnyObject] {
+            let json = try  JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+            if let jsonObj = json as? [String : Any] {
                 self.init(dict: jsonObj)
-            } else if let jsonArray = json as? [AnyObject] {
+            } else if let jsonArray = json as? [Any] {
                 self.init(array: jsonArray)
             } else {
                 print("Unknown json data type: \(json)")
@@ -268,7 +271,7 @@ internal extension JSON {
         }
     }
 
-    func createNSData() throws -> NSData {
-        return try NSJSONSerialization.dataWithJSONObject(jsonValue.value, options: [])
+    func createData() throws -> Data {
+        return try JSONSerialization.data(withJSONObject: jsonValue.value, options: [])
     }
 }
