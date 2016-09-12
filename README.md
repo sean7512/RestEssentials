@@ -1,6 +1,8 @@
 RestEssentials is an extremely lightweight REST and JSON library for Swift 2.2.
 
-**NOTE:** RestEssentials is **NOT** compatible with the beta versions of Swift 2.3 or 3.0. RestEssentials will be updated for Swift 3.0 once it is released.
+**Swift 3:** The current release of RestEssentials is **NOT** compatible with Swift 3. If you need to use Swift 3, please use the *swift3* branch. While the branch works fine in Swift 3, effort is undergoing to update the API to conform to the Swift 3 style guidelines. A new release of ReseEssentials will be out soon with full support of Swift 3.
+
+**NOTE:** RestEssentials is **NOT** compatible with Swift 2.3 - as 2.3 is a small stepping stone to allow developers time to move to Swift 3. We recommend using Swift 3 where possbile.
 
 ## Features
 
