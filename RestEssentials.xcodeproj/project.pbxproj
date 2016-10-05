@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9EDB79A21D42571700DF8D92 /* ResponseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDB79A11D42571700DF8D92 /* ResponseHandler.swift */; };
+		9EDB79A21D42571700DF8D92 /* Deserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDB79A11D42571700DF8D92 /* Deserializer.swift */; };
 		E08F8D061B6A44EE00A190D6 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D011B6A44EE00A190D6 /* JSON.swift */; };
 		E08F8D071B6A44EE00A190D6 /* RestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F8D021B6A44EE00A190D6 /* RestController.swift */; };
 		E08F8D081B6A44EE00A190D6 /* RestEssentials.h in Headers */ = {isa = PBXBuildFile; fileRef = E08F8D031B6A44EE00A190D6 /* RestEssentials.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -26,7 +26,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9EDB79A11D42571700DF8D92 /* ResponseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResponseHandler.swift; path = Source/ResponseHandler.swift; sourceTree = SOURCE_ROOT; };
+		9EDB79A11D42571700DF8D92 /* Deserializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Deserializer.swift; path = Source/Deserializer.swift; sourceTree = SOURCE_ROOT; };
 		E06E5C601B6A3AD3007EA8B8 /* RestEssentials.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RestEssentials.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E06E5C6A1B6A3AD3007EA8B8 /* RestEssentialsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RestEssentialsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E08F8D001B6A44EE00A190D6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -77,7 +77,7 @@
 		E06E5C621B6A3AD3007EA8B8 /* RestEssentials */ = {
 			isa = PBXGroup;
 			children = (
-				9EDB79A11D42571700DF8D92 /* ResponseHandler.swift */,
+				9EDB79A11D42571700DF8D92 /* Deserializer.swift */,
 				E08F8D001B6A44EE00A190D6 /* Info.plist */,
 				E08F8D011B6A44EE00A190D6 /* JSON.swift */,
 				E08F8D021B6A44EE00A190D6 /* RestController.swift */,
@@ -208,7 +208,7 @@
 			files = (
 				E08F8D091B6A44EE00A190D6 /* Result.swift in Sources */,
 				E08F8D061B6A44EE00A190D6 /* JSON.swift in Sources */,
-				9EDB79A21D42571700DF8D92 /* ResponseHandler.swift in Sources */,
+				9EDB79A21D42571700DF8D92 /* Deserializer.swift in Sources */,
 				E08F8D071B6A44EE00A190D6 /* RestController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

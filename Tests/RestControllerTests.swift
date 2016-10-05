@@ -24,16 +24,17 @@ class RestControllerTests: XCTestCase {
     func testGET() {
         let expectation = self.expectation(description: "GET JSON network call")
 
-        guard let rest = RestController.create(urlString: "http://httpbin.org/get") else {
+        guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
         }
+
 
         rest.get { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
-                XCTAssert(json["url"]?.string == "http://httpbin.org/get")
+                XCTAssert(json["url"].string == "http://httpbin.org/get")
 
                 expectation.fulfill()
             } catch {
@@ -51,20 +52,22 @@ class RestControllerTests: XCTestCase {
     func testPOST() {
         let expectation = self.expectation(description: "POST JSON network call")
 
-        guard let rest = RestController.create(urlString: "http://httpbin.org") else {
+        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.post(relativePath: "post", json: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+        rest.post(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true, "key5": [1, 2, 3, 4]]), at: "post") { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
-                XCTAssert(json["url"]?.string == "http://httpbin.org/post")
-                XCTAssert(json["json"]?["key1"]?.string == "value1")
-                XCTAssert(json["json"]?["key2"]?.int == 2)
-                XCTAssert(json["json"]?["key3"]?.double == 4.5)
-                XCTAssert(json["json"]?["key4"]?.bool == true)
+                XCTAssert(json["url"].string == "http://httpbin.org/post")
+                XCTAssert(json["json"]["key1"].string == "value1")
+                XCTAssert(json["json"]["key2"].int == 2)
+                XCTAssert(json["json"]["key3"].double == 4.5)
+                XCTAssert(json["json"]["key4"].bool == true)
+                XCTAssert(json["json"]["key5"][2].numerical == 3)
+                XCTAssert(json["json"]["key6"].string == nil)
 
                 expectation.fulfill()
             } catch {
@@ -82,16 +85,16 @@ class RestControllerTests: XCTestCase {
     func testPUT() {
         let expectation = self.expectation(description: "PUT JSON network call")
 
-        guard let rest = RestController.create(urlString: "http://httpbin.org") else {
+        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.put(relativePath: "put", json: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+        rest.put(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]), at: "put") { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
-                XCTAssert(json["url"]?.string == "http://httpbin.org/put")
+                XCTAssert(json["url"].string == "http://httpbin.org/put")
 
                 expectation.fulfill()
             } catch {
@@ -109,12 +112,12 @@ class RestControllerTests: XCTestCase {
     func testGetImage() {
         let expectation = self.expectation(description: "GET Image network call")
 
-        guard let rest = RestController.create(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
+        guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.get(responseHandler: ImageResponseHandler()) { result, httpResponse in
+        rest.get(withDeserializer: ImageDeserializer()) { result, httpResponse in
             do {
                 let img = try result.value()
                 XCTAssert(img is UIImage)
@@ -135,12 +138,12 @@ class RestControllerTests: XCTestCase {
     func testVoidResponse() {
         let expectation = self.expectation(description: "GET Void network call")
 
-        guard let rest = RestController.create(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
+        guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.get(responseHandler: VoidResponseHandler()) { _, httpResponse in
+        rest.get(withDeserializer: VoidDeserializer()) { _, httpResponse in
             expectation.fulfill()
         }
 
@@ -154,12 +157,12 @@ class RestControllerTests: XCTestCase {
     func testDataResponse() {
         let expectation = self.expectation(description: "GET Data network call")
 
-        guard let rest = RestController.create(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
+        guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.get(responseHandler: DataResponseHandler()) { result, httpResponse in
+        rest.get(withDeserializer: DataDeserializer()) { result, httpResponse in
             do {
                 let data = try result.value()
                 XCTAssert(data is Data)

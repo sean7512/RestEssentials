@@ -1,5 +1,5 @@
 //
-//  ResponseHandler.swift
+//  Deserializer.swift
 //  RestEssentials
 //
 //  Created by Sean Kosanovich on 7/13/16.
@@ -9,23 +9,23 @@
 import Foundation
 
 /// Protocol for de-serializing responses from the web server.
-public protocol ResponseHandler {
+public protocol Deserializer {
 
     associatedtype ResponseType = Any
 
-    /// The `Accept` Hader, ex: `application/json`
+    /// The `Accept` Hader to send in the request, ex: `application/json`
     var acceptHeader: String { get }
 
     init()
 
-    /// Transforms the data returned by the web server to the desired type.
+    /// Deserializes the data returned by the web server to the desired type.
     /// - parameter data: The data returned by the server.
-    /// - returns: The transformed type of the desired type.
-    func transform(data: Data) -> ResponseType?
+    /// - returns: The deserialized value of the desired type.
+    func deserialize(_ data: Data) -> ResponseType?
 }
 
-/// A `ResponseHandler` for `JSON`
-public class JSONResponseHandler: ResponseHandler {
+/// A `Deserializer` for `JSON`
+public class JSONDeserializer: Deserializer {
 
     public typealias ResponseType = JSON
 
@@ -33,13 +33,13 @@ public class JSONResponseHandler: ResponseHandler {
 
     public required init() { }
 
-    public func transform(data: Data) -> JSON? {
+    public func deserialize(_ data: Data) -> JSON? {
         return JSON(fromData: data)
     }
 }
 
-/// A `ResponseHandler` for `Void` (for use with servers that return no data).
-public class VoidResponseHandler: ResponseHandler {
+/// A `Deserializer` for `Void` (for use with servers that return no data).
+public class VoidDeserializer: Deserializer {
 
     public typealias ResponseType = Void
 
@@ -47,14 +47,14 @@ public class VoidResponseHandler: ResponseHandler {
 
     public required init() { }
 
-    public func transform(data: Data) -> Void? {
+    public func deserialize(_ data: Data) -> Void? {
         // do nothing
         return Void()
     }
 }
 
-/// A `ResponseHandler` for `UIImage`
-public class ImageResponseHandler: ResponseHandler {
+/// A `Deserializer` for `UIImage`
+public class ImageDeserializer: Deserializer {
 
     public typealias ResponseType = UIImage
 
@@ -62,13 +62,13 @@ public class ImageResponseHandler: ResponseHandler {
 
     public required init() { }
 
-    public func transform(data: Data) -> UIImage? {
+    public func deserialize(_ data: Data) -> UIImage? {
         return UIImage(data: data)
     }
 }
 
-/// A `ResponseHandler` for `Data`
-public class DataResponseHandler: ResponseHandler {
+/// A `Deserializer` for `Data`
+public class DataDeserializer: Deserializer {
 
     public typealias ResponseType = Data
 
@@ -76,7 +76,7 @@ public class DataResponseHandler: ResponseHandler {
 
     public required init() { }
 
-    public func transform(data: Data) -> Data? {
+    public func deserialize(_ data: Data) -> Data? {
         return data
     }
 }
