@@ -11,7 +11,13 @@ import Foundation
 public typealias JSONValue = Any
 
 /// Represents any valid JSON type: another JSON object, an array, a string, a number, or a boolean.
-public struct JSON : CustomStringConvertible, Equatable {
+public struct JSON : CustomStringConvertible, ExpressibleByArrayLiteral, ExpressibleByDictionaryLiteral {
+    
+    public typealias Element = JSONValue
+    
+    public typealias Key = String
+    
+    public typealias Value = JSONValue
 
     private static let kJSONNull = JSON(rawValue: Void())
 
@@ -21,6 +27,7 @@ public struct JSON : CustomStringConvertible, Equatable {
         return (raw as AnyObject).description
     }
 
+    /// Represents a Null JSON value
     public static var Null: JSON {
         return kJSONNull
     }
@@ -29,6 +36,20 @@ public struct JSON : CustomStringConvertible, Equatable {
         raw = rawValue
     }
 
+    /// Creates an instance initialized with the given elements.
+    public init(arrayLiteral elements: JSONValue...) {
+        self.init(array: elements)
+    }
+    
+    /// Creates an instance initialized with the given key-value pairs.
+    public init(dictionaryLiteral elements: (String, JSONValue)...) {
+        var jsonDict = [String: JSONValue]()
+        for (key, value) in elements {
+            jsonDict[key] = value
+        }
+        self.init(dict: jsonDict)
+    }
+    
     /// Creates a new `JSON` that is a `JSONArray` at the root.
     ///
     /// - parameter array: The array this `JSON` contains.
@@ -52,11 +73,11 @@ public struct JSON : CustomStringConvertible, Equatable {
             return JSON.Null
         }
 
-        guard let raw = dict[key] else {
+        guard let rawValue = dict[key] else {
             return JSON.Null
         }
 
-        return JSON(rawValue: raw)
+        return JSON(rawValue: rawValue)
     }
 
     /// Used if this value represents a `JSONArray` and returns the value at the given index.
@@ -65,14 +86,6 @@ public struct JSON : CustomStringConvertible, Equatable {
     /// - returns: The value at the index if this value is a `JSONArray` and if the array contains a value at the given index; otherwise `JSON.Null` is returned.
     public subscript (index: Int) -> JSON {
         return array?[index] ?? JSON.Null
-    }
-
-    public static func ==(lhs: JSON, rhs: JSON) -> Bool {
-        guard let lhsEquatable = lhs.raw as? Equatable, let rhsEquatable = rhs.raw as? Equatable else {
-            // can't compare
-            return false
-        }
-        return lhsEquatable == rhsEquatable
     }
 
     /// Get the JSON object from this value.
@@ -158,7 +171,7 @@ public class JSONArray : CustomStringConvertible, Sequence {
         return JSON.Null
     }
 
-    public func makeIterator() -> IndexingIterator<[Any]> {
+    public func makeIterator() -> IndexingIterator<[JSONValue]> {
         return backingArray.makeIterator()
     }
 }

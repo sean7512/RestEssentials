@@ -33,7 +33,6 @@ class RestControllerTests: XCTestCase {
         rest.get { result, httpResponse in
             do {
                 let json = try result.value()
-                print(json)
                 XCTAssert(json["url"].string == "http://httpbin.org/get")
 
                 expectation.fulfill()
@@ -57,10 +56,10 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        rest.post(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true, "key5": [1, 2, 3, 4]]), at: "post") { result, httpResponse in
+        let json: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true, "key5": [1, 2, 3, 4]]
+        rest.post(json, at: "post") { result, httpResponse in
             do {
                 let json = try result.value()
-                print(json)
                 XCTAssert(json["url"].string == "http://httpbin.org/post")
                 XCTAssert(json["json"]["key1"].string == "value1")
                 XCTAssert(json["json"]["key2"].int == 2)
@@ -93,7 +92,6 @@ class RestControllerTests: XCTestCase {
         rest.put(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]), at: "put") { result, httpResponse in
             do {
                 let json = try result.value()
-                print(json)
                 XCTAssert(json["url"].string == "http://httpbin.org/put")
 
                 expectation.fulfill()

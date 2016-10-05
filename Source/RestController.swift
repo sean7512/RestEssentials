@@ -183,7 +183,7 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter responseDeserializer: A `Deserializer` to handle de-serializing the response to.
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
-    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func get<T: Deserializer>(withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath, httpMethod: RestController.kGetType, json: nil, responseDeserializer: responseDeserializer, options: options, callback: callback)
     }
@@ -207,7 +207,7 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter responseDeserializer: A `Deserializer` to handle de-serializing the response to.
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
-    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func post<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath, httpMethod: RestController.kPostType, json: json, responseDeserializer: responseDeserializer, options: options, callback: callback)
     }
@@ -232,7 +232,7 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter responseDeserializer: A `Deserializer` to handle de-serializing the response to.
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
-    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func put<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath, httpMethod: RestController.kPutType, json: json, responseDeserializer: responseDeserializer, options: options, callback: callback)
     }
@@ -257,7 +257,7 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter responseDeserializer: A `Deserializer` to handle de-serializing the response to.
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
-    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.n the main thread.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.n the main thread.
     public func delete<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath, httpMethod: RestController.kDeleteType, json: json, responseDeserializer: responseDeserializer, options: options, callback: callback)
     }
@@ -282,7 +282,7 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter responseDeserializer: A `Deserializer` to handle de-serializing the response to.
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
-    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func patch<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath, httpMethod: RestController.kPatchType, json: json, responseDeserializer: responseDeserializer, options: options, callback: callback)
     }
