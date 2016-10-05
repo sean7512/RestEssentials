@@ -144,7 +144,7 @@ public struct JSON : CustomStringConvertible, ExpressibleByArrayLiteral, Express
 /// Represents an array of `JSONValue`s.
 public class JSONArray : CustomStringConvertible, Sequence {
 
-    fileprivate let backingArray: [JSONValue]
+    fileprivate let backingArray: [JSON]
 
     /// The number of elements in this JSONArray.
     public var count: Int {
@@ -157,7 +157,7 @@ public class JSONArray : CustomStringConvertible, Sequence {
 
     /// Creates a new `JSONArray` that contains the given array.
     public init(array: [JSONValue]) {
-        backingArray = array
+        backingArray = array.map { JSON(rawValue: $0) }
     }
 
     /// Gets the `JSON` at the given index.
@@ -166,12 +166,12 @@ public class JSONArray : CustomStringConvertible, Sequence {
     /// - returns: The `JSON` at the index if the array contains a value at the given index; otherwise `JSON.Null` is returned.
     public subscript (index: Int) -> JSON {
         if backingArray.count > index {
-            return JSON(rawValue: backingArray[index])
+            return backingArray[index]
         }
         return JSON.Null
     }
 
-    public func makeIterator() -> IndexingIterator<[JSONValue]> {
+    public func makeIterator() -> IndexingIterator<[JSON]> {
         return backingArray.makeIterator()
     }
 }

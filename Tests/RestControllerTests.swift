@@ -68,6 +68,15 @@ class RestControllerTests: XCTestCase {
                 XCTAssert(json["json"]["key5"][2].numerical == 3)
                 XCTAssert(json["json"]["key6"].string == nil)
 
+                guard let jsonArray = json["json"]["key5"].array else {
+                    XCTFail("Array not returned in JSON")
+                    return
+                }
+
+                for item in jsonArray {
+                    XCTAssert(item.numerical != nil)
+                }
+
                 expectation.fulfill()
             } catch {
                 XCTFail("Error performing POST: \(error)")

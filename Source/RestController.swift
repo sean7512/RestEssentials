@@ -36,7 +36,7 @@ public struct RestOptions {
 
     /// The amount of time in `seconds` until the request times out.
     public var requestTimeoutSeconds = RestController.kDefaultRequestTimeout
-    
+
     public init() {}
 }
 
@@ -74,7 +74,7 @@ public class RestController : NSObject, URLSessionDelegate {
     ///
     /// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately for the server.
     /// - parameter urlString: The URL of the server to send requests to.
-    /// - returns: If the given URL string represents a valid `NSURL`, then a `RestController` for the URL will be returned; it not then `nil` will be returned.
+    /// - returns: If the given URL string represents a valid `URL`, then a `RestController` for the URL will be returned; it not then `nil` will be returned.
     public static func make(urlString: String) -> RestController? {
         if let validURL = URL(string: urlString) {
             return make(url: validURL)

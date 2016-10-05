@@ -1,11 +1,11 @@
-RestEssentials is an extremely lightweight REST and JSON library for Swift 2.2.
+RestEssentials is an extremely lightweight REST and JSON library for Swift 3.0+
 
-**NOTE:** RestEssentials is **NOT** compatible with the beta versions of Swift 2.3 or 3.0. RestEssentials will be updated for Swift 3.0 once it is released.
+**NOTE:** RestEssentials is **ONLY** compatible with Swift 3.0 and above. If you are using Swift 2.2, you must use RestEssentials 2.0.0. Swift 2.3 is NOT supported by any version.
 
 ## Features
 
 - [x] Easily perform asynchronous REST networking calls (GET, POST, PUT, PATCH, or DELETE) that send JSON
-- [x] Supports JSON, Void, UIImage, and NSData resposne types
+- [x] Supports JSON, Void, UIImage, and Data resposne types
 - [x] Full JSON parsing capabilities
 - [x] HTTP response validation
 - [x] Send custom HTTP headers
@@ -17,7 +17,7 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift 2.2.
 ## Requirements
 
 - iOS 8.0+
-- Xcode 7.3+
+- Xcode 8.0+
 
 ## Communication
 
@@ -48,7 +48,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'RestEssentials', '~> 2.0.0'
+pod 'RestEssentials', '~> 3.0.0'
 ```
 
 Then, run the following command:
@@ -92,7 +92,7 @@ If you prefer to rock it old-school, RestEssentials can be integrated by adding 
 ```swift
 import RestEssentials
 
-guard let rest = RestController.createFromURLString("http://httpbin.org/get") else {
+guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
     print("Bad URL")
     return
 }
@@ -100,8 +100,7 @@ guard let rest = RestController.createFromURLString("http://httpbin.org/get") el
 rest.get { result, httpResponse in
     do {
         let json = try result.value()
-        print(json)
-        print(json["url"]?.stringValue) // "http://httpbin.org/get"
+        print(json["url"].string) // "http://httpbin.org/get"
     } catch {
         print("Error performing GET: \(error)")
     }
@@ -113,20 +112,22 @@ rest.get { result, httpResponse in
 ```swift
 import RestEssentials
 
-guard let rest = RestController.createFromURLString("http://httpbin.org/post") else {
+guard let rest = RestController.make(urlString: "http://httpbin.org") else {
     print("Bad URL")
     return
 }
 
-def postData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
-rest.post(withJSON: postData) { result, httpResponse in
+let postData: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true, "key5": [1, 2, 3, 4]]
+rest.post(json, at: "post") { result, httpResponse in { result, httpResponse in
     do {
         let json = try result.value()
-        print(json["url"]?.stringValue) // "http://httpbin.org/post"
-        print(json["json"]?["key1"]?.stringValue) // "value1"
-        print(json["json"]?["key2"]?.integerValue) // 2
-        print(json["json"]?["key3"]?.doubleValue) // 4.5
-        print(json["json"]?["key4"]?.boolValue) // true
+        print(json["url"].string // "http://httpbin.org/post"
+        print(json["json"]["key1"].string // "value1"
+        print(json["json"]["key2"].int // 2
+        print(json["json"]["key3"].double // 4.5
+        print(json["json"]["key4"].bool // true
+        print(json["json"]["key5"][2].numerical // 3
+        print(json["json"]["key6"].string // nil
     } catch {
         print("Error performing POST: \(error)")
     }
@@ -138,16 +139,16 @@ rest.post(withJSON: postData) { result, httpResponse in
 ```swift
 import RestEssentials
 
-guard let rest = RestController.createFromURLString("http://httpbin.org/put") else {
+guard let rest = RestController.make(urlString: "http://httpbin.org/put") else {
     print("Bad URL")
     return
 }
 
-def putData = JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])
-rest.put(withJSON: putData) { result, httpResponse in
+let putData: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]
+rest.put(putData) { result, httpResponse in
     do {
         let json = try result.value()
-        print(json["url"]?.stringValue) // "http://httpbin.org/put"
+        print(json["url"].string) // "http://httpbin.org/put"
     } catch {
         print("Error performing PUT: \(error)")
     }
@@ -159,15 +160,15 @@ rest.put(withJSON: putData) { result, httpResponse in
 ```swift
 import RestEssentials
 
-guard let rest = RestController.createFromURLString("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
+guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
     print("Bad URL")
     return
 }
 
-rest.get(withResponseHandler: ImageResponseHandler()) { result, httpResponse in
+rest.get(withDeserializer: ImageDeserializer()) { result, httpResponse in
     do {
         let img = try result.value()
-        img.isKindOfClass(UIImage.self) // true
+        let isImage = img is UIImage // true
     } catch {
         print("Error performing GET: \(error)")
     }
@@ -175,15 +176,15 @@ rest.get(withResponseHandler: ImageResponseHandler()) { result, httpResponse in
 ```
 
 ### Other Notes
-If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the `VoidResponseHandler`.  If you want to return a different data type than JSON, NSData, and UIImage; create a new implementation of `ResponseHandler` and use that.
+If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the `VoidDeserializer`.  If you want to return a different data type than JSON, Data, or UIImage; create a new implementation of `Deserializer` and use that.
 
 The callbacks are **NOT** on the main thread, JSON parsing should happen in the callback and then passed back to the main thread as needed (after parsing).
 
-There is an alternative static function to instantiate a `RestController` object: `createFromURL:NSURL` This variation does not return an `Optional` like the `String` version.  This is useful for easily constructing your URL with query parameters (typically for a `GET` request).
+There is an alternative static function to instantiate a `RestController` object: `make:URL` This variation does not return an `Optional` like the `String` version.  This is useful for easily constructing your URL with query parameters (typically for a `GET` request).
 
 All of the operations can take an optional `RestOptions` object, which allow you to configure the expected HTTP status code, optional HTTP headers to include in the request, and the timeout on the request in seconds.
 
-All of the operations can also take a relative path to be used.  If your `RestController` object is for *http://foo.com* you can pass in *some/relative/path* as the first argument, then the request will go to *http://foo.com/some/relative/path*.  This enables you to use a single `RestController` object for all REST calls to the same host.  This **IS** the preferred behavior isntead of creating a new `RestController` for every call.
+All of the operations can also take a relative path to be used.  If your `RestController` object is for *http://foo.com* you can pass in *some/relative/path*, then the request will go to *http://foo.com/some/relative/path*.  This enables you to use a single `RestController` object for all REST calls to the same host.  This **IS** the preferred behavior isntead of creating a new `RestController` for every call.
 
 You can optionally allow the framework to accept a self-signed SSL certificate from the host using the *acceptSelfSignedCertificate* property on the `RestController` instance.  If being used on iOS 9.0+, you must properly configure App Transport Security.
 
@@ -197,7 +198,7 @@ If you're starting a new project in Swift, and want to take full advantage of it
 
 ### When should I use Alamofire?
 
-Alamofire is a more fully featured networking library and is also written in Swift.  It adds support for multi-part file uploads and the ability to configure your own `NSURLSessionConfiguration` (which most probably won't need to do).
+Alamofire is a more fully featured networking library and is also written in Swift.  It adds support for multi-part file uploads and the ability to configure your own `URLSessionConfiguration` (which most probably won't need to do).
 
 ### When should I use AFNetworking?
 
