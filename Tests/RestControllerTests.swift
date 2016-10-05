@@ -3,7 +3,7 @@
 //  RestEssentialsTests
 //
 //  Created by Sean Kosanovich on 7/30/15.
-//  Copyright © 2015 Sean Kosanovich. All rights reserved.
+//  Copyright © 2016 Sean Kosanovich. All rights reserved.
 //
 
 import XCTest
@@ -33,7 +33,7 @@ class RestControllerTests: XCTestCase {
             do {
                 let json = try result.value()
                 print(json)
-                XCTAssert(json["url"]?.stringValue == "http://httpbin.org/get")
+                XCTAssert(json["url"]?.string == "http://httpbin.org/get")
 
                 expectation.fulfill()
             } catch {
@@ -56,15 +56,15 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        rest.post(relativePath: "post", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+        rest.post(relativePath: "post", json: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
-                XCTAssert(json["url"]?.stringValue == "http://httpbin.org/post")
-                XCTAssert(json["json"]?["key1"]?.stringValue == "value1")
-                XCTAssert(json["json"]?["key2"]?.integerValue == 2)
-                XCTAssert(json["json"]?["key3"]?.doubleValue == 4.5)
-                XCTAssert(json["json"]?["key4"]?.boolValue == true)
+                XCTAssert(json["url"]?.string == "http://httpbin.org/post")
+                XCTAssert(json["json"]?["key1"]?.string == "value1")
+                XCTAssert(json["json"]?["key2"]?.int == 2)
+                XCTAssert(json["json"]?["key3"]?.double == 4.5)
+                XCTAssert(json["json"]?["key4"]?.bool == true)
 
                 expectation.fulfill()
             } catch {
@@ -87,11 +87,11 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        rest.put(relativePath: "put", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+        rest.put(relativePath: "put", json: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
             do {
                 let json = try result.value()
                 print(json)
-                XCTAssert(json["url"]?.stringValue == "http://httpbin.org/put")
+                XCTAssert(json["url"]?.string == "http://httpbin.org/put")
 
                 expectation.fulfill()
             } catch {
@@ -114,7 +114,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        rest.get(withResponseHandler: ImageResponseHandler()) { result, httpResponse in
+        rest.get(responseHandler: ImageResponseHandler()) { result, httpResponse in
             do {
                 let img = try result.value()
                 XCTAssert(img is UIImage)
@@ -140,7 +140,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        rest.get(withResponseHandler: VoidResponseHandler()) { _, httpResponse in
+        rest.get(responseHandler: VoidResponseHandler()) { _, httpResponse in
             expectation.fulfill()
         }
 
@@ -159,7 +159,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        rest.get(withResponseHandler: DataResponseHandler()) { result, httpResponse in
+        rest.get(responseHandler: DataResponseHandler()) { result, httpResponse in
             do {
                 let data = try result.value()
                 XCTAssert(data is Data)

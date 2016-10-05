@@ -3,7 +3,7 @@
 //  RestEssentials
 //
 //  Created by Sean Kosanovich on 6/8/15.
-//  Copyright © 2015 Sean Kosanovich. All rights reserved.
+//  Copyright © 2016 Sean Kosanovich. All rights reserved.
 //
 
 import Foundation
@@ -11,16 +11,13 @@ import Foundation
 /// Represents any valid JSON type: another JSON object, an array, a string, a number, or a boolean.
 public struct JSONValue : CustomStringConvertible {
 
-    internal let value: Any
+    fileprivate let value: Any
 
     public var description: String {
-        if value is AnyObject {
-            return (value as AnyObject).description
-        }
-        return ""
+        return (value as AnyObject).description
     }
 
-    /// Used if this value represents a `JSONObject` and returns the value associated with the gen key.
+    /// Used if this value represents a `JSONObject` and returns the value associated with the key.
     ///
     /// - parameter key: The key of the value to retrieve.
     /// - returns: The value if this value is a `JSONObject` and if the key exists; otherwise `nil`.
@@ -41,7 +38,7 @@ public struct JSONValue : CustomStringConvertible {
     /// - returns: The `JSONObject` this value represents or `nil` if this value is not a `JSONObject`.
     public var jsonObject: JSONObject? {
         if let dict = value as? [String : Any] {
-            return JSONObject(jsonDict: dict)
+            return JSONObject(dict: dict)
         }
         return nil
     }
@@ -51,7 +48,7 @@ public struct JSONValue : CustomStringConvertible {
     /// - returns: The `JSONArray` this value represents or `nil` if this value is not a `JSONArray`.
     public var jsonArray: JSONArray? {
         if let jsonArray = value as? [Any] {
-            return JSONArray(jsonArray: jsonArray)
+            return JSONArray(array: jsonArray)
         }
         return nil
     }
@@ -59,74 +56,74 @@ public struct JSONValue : CustomStringConvertible {
     /// Get the `String` from this value.
     ///
     /// - returns: The `String` this value represents or `nil` if this value is not a `String`.
-    public var stringValue: String? {
+    public var string: String? {
         return value as? String
     }
 
     /// Get the `NSNumber` from this value.
     ///
     /// - returns: The `NSNumber` this value represents or `nil` if this value is not a `NSNumber`.
-    public var numericalValue: NSNumber? {
+    public var numberical: NSNumber? {
         return value as? NSNumber
     }
 
     /// Get the `Int` from this value.
     ///
     /// - returns: The `Int` this value represents or `nil` if this value is not a `Int`. If the value contains a decimal, then the decimal portion will be removed.
-    public var integerValue: Int? {
-        return numericalValue?.intValue
+    public var int: Int? {
+        return numberical?.intValue
     }
 
     /// Get the `Double` from this value.
     ///
     /// - returns: The `Double` this value represents or `nil` if this value is not a `Double`.
-    public var doubleValue: Double? {
-        return numericalValue?.doubleValue
+    public var double: Double? {
+        return numberical?.doubleValue
     }
 
     /// Get the `Bool` from this value.
     ///
     /// - returns: The `Bool` this value represents or `nil` if this value is not a `Bool`.
-    public var boolValue: Bool? {
+    public var bool: Bool? {
         return value as? Bool
     }
 }
 
 /// Represents a root JSON type, which can either be a `JSONObject` or a `JSONArray`.
-public final class JSON : CustomStringConvertible {
+public class JSON : CustomStringConvertible {
 
-    internal let jsonValue: JSONValue
+    private let value: JSONValue
 
     public var description: String {
-        return jsonValue.description
+        return value.description
     }
 
     /// Get the `JSONObject` from this value.
     ///
     /// - returns: The `JSONObject` this value represents or `nil` if this value is not a `JSONObject`.
     public var jsonObject: JSONObject? {
-        return jsonValue.jsonObject
+        return value.jsonObject
     }
 
     /// Get the `JSONArray` from this value.
     ///
     /// - returns: The `JSONArray` this value represents or `nil` if this value is not a `JSONArray`.
     public var jsonArray: JSONArray? {
-        return jsonValue.jsonArray
+        return value.jsonArray
     }
 
     /// Creates a new `JSON` that is a `JSONArray` at the root.
     ///
     /// - parameter array: The array this `JSON` contains.
     public init(array: [Any]) {
-        jsonValue = JSONValue(value: array as Any)
+        value = JSONValue(value: array)
     }
 
     /// Creates a new `JSON` that is a `JSONObject` at the root.
     ///
     /// - parameter dict: The dictionary this `JSON` contains.
     public init(dict: [String : Any]) {
-        jsonValue = JSONValue(value: dict as Any)
+        value = JSONValue(value: dict)
     }
 
     /// Used if this represents a `JSONObject` and returns the value associated with the gen key.
@@ -144,10 +141,14 @@ public final class JSON : CustomStringConvertible {
     public subscript (index: Int) -> JSONValue? {
         return jsonArray?[index]
     }
+
+    fileprivate func jsonValue() -> Any {
+        return value.value
+    }
 }
 
 /// Represents an array of `JSONValue`s.
-public final class JSONArray : CustomStringConvertible, Sequence {
+public class JSONArray : CustomStringConvertible, Sequence {
 
     fileprivate let backingArray: [JSONValue]
 
@@ -161,8 +162,8 @@ public final class JSONArray : CustomStringConvertible, Sequence {
     }
 
     /// Creates a new `JSONArray` that contains the given array.
-    public init(jsonArray: [Any]) {
-        backingArray = jsonArray.map { JSONValue(value: $0) }
+    public init(array: [Any]) {
+        backingArray = array.map { JSONValue(value: $0) }
     }
 
     /// Gets the `JSONValue` at the given index.
@@ -182,7 +183,7 @@ public final class JSONArray : CustomStringConvertible, Sequence {
 }
 
 /// Represents a dictionary of key->`JSONValue`
-public final class JSONObject : CustomStringConvertible {
+public class JSONObject : CustomStringConvertible {
 
     fileprivate let backingDict: [String : JSONValue]
 
@@ -191,9 +192,9 @@ public final class JSONObject : CustomStringConvertible {
     }
 
     /// Creates a new `JSONObject` that contains the given dictionary
-    public init(jsonDict: [String : Any]) {
+    public init(dict: [String : Any]) {
         var jsonDictionary = [String : JSONValue]()
-        for (key, value) in jsonDict {
+        for (key, value) in dict {
             jsonDictionary[key] = JSONValue(value: value)
         }
         backingDict = jsonDictionary
@@ -205,51 +206,6 @@ public final class JSONObject : CustomStringConvertible {
     /// - returns: The value for the given key if this object contains a value for the key; otherwise `nil`.
     public subscript (key: String) -> JSONValue? {
         return backingDict[key]
-    }
-
-    /// Gets the `JSONObject` for the given key or the `defaultValue` if there is no `JSONObject` at the given key.
-    ///
-    /// - parameter key: The key to get the `JSONObject` for.
-    /// - parameter defaultValue The default value to return if no object exists for the key.
-    /// - returns: The `JSONObject` for the given key or the `defaultValue` if no object exists for the given key.
-    public func getJSONObject(_ key: String, withDefaultValue defaultValue: JSONObject) -> JSONObject {
-        return self[key]?.jsonObject ?? defaultValue
-    }
-
-    /// Gets the `JSONArray` for the given key or the `defaultValue` if there is no `JSONArray` at the given key.
-    ///
-    /// - parameter key: The key to get the `JSONArray` for.
-    /// - parameter defaultValue The default value to return if no array exists for the key.
-    /// - returns: The `JSONArray` for the given key or the `defaultValue` if no array exists for the given key.
-    public func getJSONArray(_ key: String, withDefaultValue defaultValue: JSONArray) -> JSONArray {
-        return self[key]?.jsonArray ?? defaultValue
-    }
-
-    /// Gets the `String` for the given key or the `defaultValue` if there is no `String` at the given key.
-    ///
-    /// - parameter key: The key to get the `String` for.
-    /// - parameter defaultValue The default value to return if no string exists for the key.
-    /// - returns: The `String` for the given key or the `defaultValue` if no string exists for the given key.
-    public func getString(_ key: String, withDefaultValue defaultValue: String) -> String {
-        return self[key]?.stringValue ?? defaultValue
-    }
-
-    /// Gets the `NSNumber` for the given key or the `defaultValue` if there is no `NSNumber` at the given key.
-    ///
-    /// - parameter key: The key to get the `NSNumber` for.
-    /// - parameter defaultValue The default value to return if no number exists for the key.
-    /// - returns: The `NSNumber` for the given key or the `defaultValue` if no number exists for the given key.
-    public func getNumber(_ key: String, withDefaultValue defaultValue: NSNumber) -> NSNumber {
-        return self[key]?.numericalValue ?? defaultValue
-    }
-
-    /// Gets the `Bool` for the given key or the `defaultValue` if there is no `Bool` at the given key.
-    ///
-    /// - parameter key: The key to get the `Bool` for.
-    /// - parameter defaultValue The default value to return if no bool exists for the key.
-    /// - returns: The `Bool` for the given key or the `defaultValue` if no bool exists for the given key.
-    public func getBool(_ key: String, withDefaultValue defaultValue: Bool) -> Bool {
-        return self[key]?.boolValue ?? defaultValue
     }
 }
 
@@ -271,7 +227,7 @@ internal extension JSON {
         }
     }
 
-    func createData() throws -> Data {
-        return try JSONSerialization.data(withJSONObject: jsonValue.value, options: [])
+    internal func createData() throws -> Data {
+        return try JSONSerialization.data(withJSONObject: jsonValue(), options: [])
     }
 }

@@ -3,7 +3,7 @@
 //  RestEssentials
 //
 //  Created by Sean Kosanovich on 6/7/15.
-//  Copyright © 2015 Sean Kosanovich. All rights reserved.
+//  Copyright © 2016 Sean Kosanovich. All rights reserved.
 //
 
 import UIKit
@@ -40,32 +40,32 @@ public struct RestOptions {
     public init() {}
 }
 
-/// Allos users to create HTTP REST networking calls that deal with JSON.
+/// Allows users to create HTTP REST networking calls that deal with JSON.
 ///
 /// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately.
-open class RestController : NSObject, URLSessionDelegate {
+public class RestController : NSObject, URLSessionDelegate {
 
-    fileprivate static let kPostType = "POST"
-    fileprivate static let kPatchType = "PATCH"
-    fileprivate static let kGetType = "GET"
-    fileprivate static let kPutType = "PUT"
-    fileprivate static let kDeleteType = "DELETE"
-    fileprivate static let kJsonType = "application/json"
-    fileprivate static let kContentType = "Content-Type"
-    fileprivate static let kAcceptKey = "Accept"
     fileprivate static let kDefaultRequestTimeout = 60 as TimeInterval
+    private static let kPostType = "POST"
+    private static let kPatchType = "PATCH"
+    private static let kGetType = "GET"
+    private static let kPutType = "PUT"
+    private static let kDeleteType = "DELETE"
+    private static let kJsonType = "application/json"
+    private static let kContentType = "Content-Type"
+    private static let kAcceptKey = "Accept"
 
-    fileprivate let url: URL
-    fileprivate var session: URLSession
+    private let url: URL
+    private var session: URLSession
 
     /// If set to *true*, then self signed SSL certificates will be accepted from the **SAME** host only.
     ///
     /// If you are making a request to *https://foo.com* and you get redirected to *https://bar.com* (where bar.com uses a self signed SSL certificate), then the request will fail; as the SSL host of *bar.com* does not match the intended host of *foo.com*.
     ///
     /// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately.
-    open var acceptSelfSignedCertificate = false
+    public var acceptSelfSignedCertificate = false
 
-    fileprivate init(url: URL) {
+    private init(url: URL) {
         self.url = url
         self.session = Foundation.URLSession.shared
     }
@@ -75,7 +75,7 @@ open class RestController : NSObject, URLSessionDelegate {
     /// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately for the server.
     /// - parameter urlString: The URL of the server to send requests to.
     /// - returns: If the given URL string represents a valid `NSURL`, then a `RestController` for the URL will be returned; it not then `nil` will be returned.
-    open static func create(urlString: String) -> RestController? {
+    public static func create(urlString: String) -> RestController? {
         if let validURL = URL(string: urlString) {
             return create(url: validURL)
         }
@@ -88,13 +88,13 @@ open class RestController : NSObject, URLSessionDelegate {
     /// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately for the server.
     /// - parameter url: The URL of the server to send requests to.
     /// - returns: A `RestController` for the given URL.
-    open static func create(url: URL) -> RestController {
+    public static func create(url: URL) -> RestController {
         let restController = RestController(url: url)
         restController.session = Foundation.URLSession(configuration: URLSessionConfiguration.default, delegate: restController, delegateQueue: nil)
         return restController
     }
 
-    @objc public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: (Foundation.URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    @objc public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if(acceptSelfSignedCertificate && challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust && challenge.protectionSpace.host == url.host) {
             let credential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
             completionHandler(.useCredential, credential);
@@ -103,7 +103,7 @@ open class RestController : NSObject, URLSessionDelegate {
         }
     }
 
-    fileprivate func dataTask(relativePath: String?, httpMethod: String, accept: String, json: JSON?, options: RestOptions, callback: @escaping (Result<Data>, HTTPURLResponse?) -> ()) throws {
+    private func dataTask(relativePath: String?, httpMethod: String, accept: String, json: JSON?, options: RestOptions, callback: @escaping (Result<Data>, HTTPURLResponse?) -> ()) throws {
         let restURL: URL;
         if let relativeURL = relativePath {
             restURL = url.appendingPathComponent(relativeURL)
@@ -156,9 +156,9 @@ open class RestController : NSObject, URLSessionDelegate {
         }.resume()
     }
 
-    fileprivate func makeCall<T: ResponseHandler>(relativePath: String?, httpMethod: String, json: JSON?, responseHandler: T, options: RestOptions, callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
+    private func makeCall<T: ResponseHandler>(relativePath: String?, httpMethod: String, json: JSON?, responseHandler: T, options: RestOptions, callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
         do {
-            try dataTask(relativePath: relativePath, httpMethod: httpMethod, accept: responseHandler.acceptHeaderValue, json: json, options: options) { (result, httpResponse) -> () in
+            try dataTask(relativePath: relativePath, httpMethod: httpMethod, accept: responseHandler.acceptHeader, json: json, options: options) { (result, httpResponse) -> () in
                 do {
                     let data = try result.value()
                     guard let transformedResponse = responseHandler.transform(data: data) else {
@@ -181,11 +181,11 @@ open class RestController : NSObject, URLSessionDelegate {
     /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
     ///
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
-    /// - parameter handler: A `ResponseHandler` to handle de-serializing the response to.
+    /// - parameter responseHandler: A `ResponseHandler` to handle de-serializing the response to.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    open func get<T: ResponseHandler>(relativePath: String? = nil, withResponseHandler handler: T, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath: relativePath, httpMethod: RestController.kGetType, json: nil, responseHandler: handler, options: options, callback: callback)
+    public func get<T: ResponseHandler>(relativePath: String? = nil, responseHandler: T, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
+        makeCall(relativePath: relativePath, httpMethod: RestController.kGetType, json: nil, responseHandler: responseHandler, options: options, callback: callback)
     }
 
     /// Performs a GET request to the server, capturing the `JSON` response from the server.
@@ -195,7 +195,7 @@ open class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    open func get(relativePath: String? = nil, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
+    public func get(relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath: relativePath, httpMethod: RestController.kGetType, json: nil, responseHandler: JSONResponseHandler(), options: options, callback: callback)
     }
 
@@ -205,11 +205,11 @@ open class RestController : NSObject, URLSessionDelegate {
     ///
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter json: The JSON body of the request.
-    /// - parameter handler: A `ResponseHandler` to handle de-serializing the response to.
+    /// - parameter responseHandler: A `ResponseHandler` to handle de-serializing the response to.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    open func post<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResponseHandler handler: T, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath: relativePath, httpMethod: RestController.kPostType, json: json, responseHandler: handler, options: options, callback: callback)
+    public func post<T: ResponseHandler>(relativePath: String? = nil, json: JSON, responseHandler: T, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
+        makeCall(relativePath: relativePath, httpMethod: RestController.kPostType, json: json, responseHandler: responseHandler, options: options, callback: callback)
     }
 
     /// Performs a POST request to the server, capturing the `JSON` response from the server.
@@ -220,7 +220,7 @@ open class RestController : NSObject, URLSessionDelegate {
     /// - parameter json: The JSON body of the request.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    open func post(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
+    public func post(relativePath: String? = nil, json: JSON, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath: relativePath, httpMethod: RestController.kPostType, json: json, responseHandler: JSONResponseHandler(), options: options, callback: callback)
     }
 
@@ -230,11 +230,11 @@ open class RestController : NSObject, URLSessionDelegate {
     ///
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter json: The JSON body of the request.
-    /// - parameter handler: A `ResponseHandler` to handle de-serializing the response to.
+    /// - parameter responseHandler: A `ResponseHandler` to handle de-serializing the response to.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    open func put<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResponseHandler handler: T, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath: relativePath, httpMethod: RestController.kPutType, json: json, responseHandler: handler, options: options, callback: callback)
+    public func put<T: ResponseHandler>(relativePath: String? = nil, json: JSON, responseHandler: T, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
+        makeCall(relativePath: relativePath, httpMethod: RestController.kPutType, json: json, responseHandler: responseHandler, options: options, callback: callback)
     }
 
     /// Performs a PUT request to the server, capturing the `JSON` response from the server.
@@ -245,7 +245,7 @@ open class RestController : NSObject, URLSessionDelegate {
     /// - parameter json: The JSON body of the request.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    open func put(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
+    public func put(relativePath: String? = nil, json: JSON, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath: relativePath, httpMethod: RestController.kPutType, json: json, responseHandler: JSONResponseHandler(), options: options, callback: callback)
     }
 
@@ -255,11 +255,11 @@ open class RestController : NSObject, URLSessionDelegate {
     ///
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter json: The JSON body of the request.
-    /// - parameter handler: A `ResponseHandler` to handle de-serializing the response to.
+    /// - parameter responseHandler: A `ResponseHandler` to handle de-serializing the response to.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.n the main thread.
-    open func delete<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResponseHandler handler: T, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath: relativePath, httpMethod: RestController.kDeleteType, json: json, responseHandler: handler, options: options, callback: callback)
+    public func delete<T: ResponseHandler>(relativePath: String? = nil, json: JSON, responseHandler: T, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
+        makeCall(relativePath: relativePath, httpMethod: RestController.kDeleteType, json: json, responseHandler: responseHandler, options: options, callback: callback)
     }
 
     /// Performs a DELETE request to the server, capturing the `JSON` response from the server.
@@ -270,7 +270,7 @@ open class RestController : NSObject, URLSessionDelegate {
     /// - parameter json: The JSON body of the request.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    open func delete(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
+    public func delete(relativePath: String? = nil, json: JSON, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath: relativePath, httpMethod: RestController.kDeleteType, json: json, responseHandler: JSONResponseHandler(), options: options, callback: callback)
     }
 
@@ -280,11 +280,11 @@ open class RestController : NSObject, URLSessionDelegate {
     ///
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter json: The JSON body of the request.
-    /// - parameter handler: A `ResponseHandler` to handle de-serializing the response to.
+    /// - parameter responseHandler: A `ResponseHandler` to handle de-serializing the response to.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<Any>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    open func patch<T: ResponseHandler>(relativePath: String? = nil, withJSON json: JSON, withResponseHandler handler: T, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath: relativePath, httpMethod: RestController.kPatchType, json: json, responseHandler: handler, options: options, callback: callback)
+    public func patch<T: ResponseHandler>(relativePath: String? = nil, json: JSON, responseHandler: T, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
+        makeCall(relativePath: relativePath, httpMethod: RestController.kPatchType, json: json, responseHandler: responseHandler, options: options, callback: callback)
     }
 
     /// Performs a PATCH request to the server, capturing the `JSON` response from the server.
@@ -295,7 +295,7 @@ open class RestController : NSObject, URLSessionDelegate {
     /// - parameter json: The JSON body of the request.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    open func patch(relativePath: String? = nil, withJSON json: JSON, withOptions options: RestOptions = RestOptions(), withCallback callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
+    public func patch(relativePath: String? = nil, json: JSON, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
         makeCall(relativePath: relativePath, httpMethod: RestController.kPatchType, json: json, responseHandler: JSONResponseHandler(), options: options, callback: callback)
     }
 }
