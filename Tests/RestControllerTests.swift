@@ -3,7 +3,7 @@
 //  RestEssentialsTests
 //
 //  Created by Sean Kosanovich on 7/30/15.
-//  Copyright © 2015 Sean Kosanovich. All rights reserved.
+//  Copyright © 2016 Sean Kosanovich. All rights reserved.
 //
 
 import XCTest
@@ -22,18 +22,18 @@ class RestControllerTests: XCTestCase {
     }
     
     func testGET() {
-        let expectation = expectationWithDescription("GET JSON network call")
+        let expectation = self.expectation(description: "GET JSON network call")
 
-        guard let rest = RestController.createFromURLString("http://httpbin.org/get") else {
+        guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
         }
 
+
         rest.get { result, httpResponse in
             do {
                 let json = try result.value()
-                print(json)
-                XCTAssert(json["url"]?.stringValue == "http://httpbin.org/get")
+                XCTAssert(json["url"].string == "http://httpbin.org/get")
 
                 expectation.fulfill()
             } catch {
@@ -41,7 +41,7 @@ class RestControllerTests: XCTestCase {
             }
         }
         
-        waitForExpectationsWithTimeout(5) { (error) -> Void in
+        waitForExpectations(timeout: 5) { (error) -> Void in
             if let _ = error {
                 XCTFail("Test timeout reached")
             }
@@ -49,22 +49,33 @@ class RestControllerTests: XCTestCase {
     }
     
     func testPOST() {
-        let expectation = expectationWithDescription("POST JSON network call")
+        let expectation = self.expectation(description: "POST JSON network call")
 
-        guard let rest = RestController.createFromURLString("http://httpbin.org") else {
+        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.post("post", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+        let json: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true, "key5": [1, 2, 3, 4]]
+        rest.post(json, at: "post") { result, httpResponse in
             do {
                 let json = try result.value()
-                print(json)
-                XCTAssert(json["url"]?.stringValue == "http://httpbin.org/post")
-                XCTAssert(json["json"]?["key1"]?.stringValue == "value1")
-                XCTAssert(json["json"]?["key2"]?.integerValue == 2)
-                XCTAssert(json["json"]?["key3"]?.doubleValue == 4.5)
-                XCTAssert(json["json"]?["key4"]?.boolValue == true)
+                XCTAssert(json["url"].string == "http://httpbin.org/post")
+                XCTAssert(json["json"]["key1"].string == "value1")
+                XCTAssert(json["json"]["key2"].int == 2)
+                XCTAssert(json["json"]["key3"].double == 4.5)
+                XCTAssert(json["json"]["key4"].bool == true)
+                XCTAssert(json["json"]["key5"][2].numerical == 3)
+                XCTAssert(json["json"]["key6"].string == nil)
+
+                guard let jsonArray = json["json"]["key5"].array else {
+                    XCTFail("Array not returned in JSON")
+                    return
+                }
+
+                for item in jsonArray {
+                    XCTAssert(item.numerical != nil)
+                }
 
                 expectation.fulfill()
             } catch {
@@ -72,7 +83,7 @@ class RestControllerTests: XCTestCase {
             }
         }
 
-        waitForExpectationsWithTimeout(5) { (error) -> Void in
+        waitForExpectations(timeout: 5) { (error) -> Void in
             if let _ = error {
                 XCTFail("Test timeout reached")
             }
@@ -80,18 +91,17 @@ class RestControllerTests: XCTestCase {
     }
 
     func testPUT() {
-        let expectation = expectationWithDescription("PUT JSON network call")
+        let expectation = self.expectation(description: "PUT JSON network call")
 
-        guard let rest = RestController.createFromURLString("http://httpbin.org") else {
+        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.put("put", withJSON: JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true])) { result, httpResponse in
+        rest.put(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]), at: "put") { result, httpResponse in
             do {
                 let json = try result.value()
-                print(json)
-                XCTAssert(json["url"]?.stringValue == "http://httpbin.org/put")
+                XCTAssert(json["url"].string == "http://httpbin.org/put")
 
                 expectation.fulfill()
             } catch {
@@ -99,7 +109,7 @@ class RestControllerTests: XCTestCase {
             }
         }
 
-        waitForExpectationsWithTimeout(5) { (error) -> Void in
+        waitForExpectations(timeout: 5) { (error) -> Void in
             if let _ = error {
                 XCTFail("Test timeout reached")
             }
@@ -107,17 +117,17 @@ class RestControllerTests: XCTestCase {
     }
 
     func testGetImage() {
-        let expectation = expectationWithDescription("GET Image network call")
+        let expectation = self.expectation(description: "GET Image network call")
 
-        guard let rest = RestController.createFromURLString("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
+        guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.get(withResponseHandler: ImageResponseHandler()) { result, httpResponse in
+        rest.get(withDeserializer: ImageDeserializer()) { result, httpResponse in
             do {
                 let img = try result.value()
-                XCTAssert(img.isKindOfClass(UIImage.self))
+                XCTAssert(img is UIImage)
 
                 expectation.fulfill()
             } catch {
@@ -125,7 +135,7 @@ class RestControllerTests: XCTestCase {
             }
         }
 
-        waitForExpectationsWithTimeout(5) { (error) -> Void in
+        waitForExpectations(timeout: 5) { (error) -> Void in
             if let _ = error {
                 XCTFail("Test timeout reached")
             }
@@ -133,18 +143,18 @@ class RestControllerTests: XCTestCase {
     }
 
     func testVoidResponse() {
-        let expectation = expectationWithDescription("GET Void network call")
+        let expectation = self.expectation(description: "GET Void network call")
 
-        guard let rest = RestController.createFromURLString("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
+        guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.get(withResponseHandler: VoidResponseHandler()) { _, httpResponse in
+        rest.get(withDeserializer: VoidDeserializer()) { _, httpResponse in
             expectation.fulfill()
         }
 
-        waitForExpectationsWithTimeout(5) { (error) -> Void in
+        waitForExpectations(timeout: 5) { (error) -> Void in
             if let _ = error {
                 XCTFail("Test timeout reached")
             }
@@ -152,17 +162,17 @@ class RestControllerTests: XCTestCase {
     }
 
     func testDataResponse() {
-        let expectation = expectationWithDescription("GET Data network call")
+        let expectation = self.expectation(description: "GET Data network call")
 
-        guard let rest = RestController.createFromURLString("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
+        guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
-        rest.get(withResponseHandler: DataResponseHandler()) { result, httpResponse in
+        rest.get(withDeserializer: DataDeserializer()) { result, httpResponse in
             do {
                 let data = try result.value()
-                XCTAssert(data.isKindOfClass(NSData.self))
+                XCTAssert(data is Data)
 
                 expectation.fulfill()
             } catch {
@@ -170,7 +180,7 @@ class RestControllerTests: XCTestCase {
             }
         }
 
-        waitForExpectationsWithTimeout(5) { (error) -> Void in
+        waitForExpectations(timeout: 5) { (error) -> Void in
             if let _ = error {
                 XCTFail("Test timeout reached")
             }
