@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name = 'RestEssentials'
-  s.version = '2.0.0'
+  s.version = '3.0.0'
   s.license = 'MIT'
-  s.summary = 'RestEssentials is a lightweight REST and JSON library for Swift 2.2'
+  s.summary = 'RestEssentials is a lightweight REST and JSON library for Swift 3.0+'
   s.homepage = 'https://github.com/sean7512/RestEssentials'
   s.authors = 'sean7512'
   s.source = { :git => 'https://github.com/sean7512/RestEssentials.git', :tag => s.version }
