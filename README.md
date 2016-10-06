@@ -35,7 +35,7 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift 3.0+
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects and is the preferred method of installation.
 
-CocoaPods 0.36 adds supports for Swift and embedded frameworks. You can install it with the following command:
+Install the latest version of CocoaPods with the following command:
 
 ```bash
 $ gem install cocoapods
