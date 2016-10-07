@@ -123,8 +123,7 @@ public class RestController : NSObject, URLSessionDelegate {
 
         if let jsonObj = json {
             request.setValue(RestController.kJsonType, forHTTPHeaderField: RestController.kContentType)
-            let jsonData = try jsonObj.makeData()
-            request.httpBody = jsonData as Data
+            request.httpBody = try jsonObj.makeData()
         }
 
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
