@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.authors = 'sean7512'
   s.source = { :git => 'https://github.com/sean7512/RestEssentials.git', :tag => s.version }
 
-  s.ios.deployment_target = '8.0'
+  s.platforms = { :ios => "8.0", :tvos => "9.0" }
 
   s.source_files = 'Source/*.swift'
 
