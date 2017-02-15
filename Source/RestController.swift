@@ -126,11 +126,16 @@ public class RestController : NSObject, URLSessionDelegate {
             request.httpBody = try jsonObj.makeData()
         }
 
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        #if !os(tvOS)
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        #endif
+
 
         session.dataTask(with: request) { (data, response, error) -> Void in
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-
+            #if !os(tvOS)
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            #endif
+                                         
             if let err = error {
                 callback(.failure(err), nil)
                 return
