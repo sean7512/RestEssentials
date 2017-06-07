@@ -21,7 +21,7 @@ public struct JSON : CustomStringConvertible, ExpressibleByArrayLiteral, Express
 
     private static let kJSONNull = JSON(rawValue: Void())
 
-    fileprivate let raw: JSONValue
+    private let raw: JSONValue
 
     public var description: String {
         return (raw as AnyObject).description
