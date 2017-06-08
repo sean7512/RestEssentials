@@ -13,14 +13,17 @@ import MobileCoreServices
 /// Errors related to the networking for `RestController`
 public enum NetworkingError: Error {
     /// Indicates the server responded with an unexpected statuscode.
-    /// - parameter int: The status code the server respodned with.
-    case unexpectedStatusCode(Int)
+    /// - parameter Int: The status code the server respodned with.
+    /// - parameter Data?: The raw returned data from the server
+    case unexpectedStatusCode(Int, Data?)
 
     /// Indicates that the server responded using an unknown protocol.
-    case badResponse
+    /// - parameter Data?: The raw returned data from the server
+    case badResponse(Data?)
 
     /// Indicates the server's response could not be parsed to `JSON`.
-    case malformedResponse
+    /// - parameter Data?: The raw returned data from the server
+    case malformedResponse(Data?)
 
     /// Inidcates the server did not respond to the request.
     case noResponse
@@ -137,12 +140,12 @@ public class RestController : NSObject, URLSessionDelegate {
             }
 
             guard let httpResponse = response as? HTTPURLResponse else {
-                callback(.failure(NetworkingError.badResponse), nil)
+                callback(.failure(NetworkingError.badResponse(data)), nil)
                 return
             }
 
             if let expectedStatusCode = options.expectedStatusCode , httpResponse.statusCode != expectedStatusCode {
-                callback(.failure(NetworkingError.unexpectedStatusCode(httpResponse.statusCode)), httpResponse)
+                callback(.failure(NetworkingError.unexpectedStatusCode(httpResponse.statusCode, data)), httpResponse)
                 return
             }
 
@@ -161,7 +164,7 @@ public class RestController : NSObject, URLSessionDelegate {
                 do {
                     let data = try result.value()
                     guard let transformedResponse = responseDeserializer.deserialize(data) else {
-                        callback(.failure(NetworkingError.malformedResponse), httpResponse)
+                        callback(.failure(NetworkingError.malformedResponse(data)), httpResponse)
                         return
                     }
 
