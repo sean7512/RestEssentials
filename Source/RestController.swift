@@ -106,7 +106,7 @@ public class RestController : NSObject, URLSessionDelegate {
         }
     }
 
-    private func dataTask(relativePath: String?, httpMethod: String, accept: String, json: JSON?, options: RestOptions, callback: @escaping (Result<Data>, HTTPURLResponse?) -> ()) throws {
+    private func dataTask(relativePath: String?, httpMethod: String, accept: String, payload: Data?, options: RestOptions, callback: @escaping (Result<Data>, HTTPURLResponse?) -> ()) throws {
         let restURL: URL;
         if let relativeURL = relativePath {
             restURL = url.appendingPathComponent(relativeURL)
@@ -124,9 +124,9 @@ public class RestController : NSObject, URLSessionDelegate {
             }
         }
 
-        if let jsonObj = json {
+        if let payloadToSend = payload {
             request.setValue(RestController.kJsonType, forHTTPHeaderField: RestController.kContentType)
-            request.httpBody = try jsonObj.makeData()
+            request.httpBody = payloadToSend
         }
 
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -155,12 +155,12 @@ public class RestController : NSObject, URLSessionDelegate {
             }
 
             callback(.success(returnedData), httpResponse)
-        }.resume()
+            }.resume()
     }
 
-    private func makeCall<T: Deserializer>(_ relativePath: String?, httpMethod: String, json: JSON?, responseDeserializer: T, options: RestOptions, callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
+    private func makeCall<T: Deserializer>(_ relativePath: String?, httpMethod: String, payload: Data?, responseDeserializer: T, options: RestOptions, callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
         do {
-            try dataTask(relativePath: relativePath, httpMethod: httpMethod, accept: responseDeserializer.acceptHeader, json: json, options: options) { (result, httpResponse) -> () in
+            try dataTask(relativePath: relativePath, httpMethod: httpMethod, accept: responseDeserializer.acceptHeader, payload: payload, options: options) { (result, httpResponse) -> () in
                 do {
                     let data = try result.value()
                     guard let transformedResponse = responseDeserializer.deserialize(data) else {
@@ -187,7 +187,7 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func get<T: Deserializer>(withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kGetType, json: nil, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: responseDeserializer, options: options, callback: callback)
     }
 
     /// Performs a GET request to the server, capturing the `JSON` response from the server.
@@ -198,7 +198,7 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func get(at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kGetType, json: nil, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
     }
 
     /// Performs a POST request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -211,7 +211,12 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func post<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kPostType, json: json, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        do {
+            let payload = try json.makeData()
+            makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
     }
 
     /// Performs a POST request to the server, capturing the `JSON` response from the server.
@@ -223,7 +228,12 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func post(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kPostType, json: json, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        do {
+            let payload = try json.makeData()
+            makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
     }
 
     /// Performs a PUT request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -236,7 +246,12 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func put<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kPutType, json: json, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        do {
+            let payload = try json.makeData()
+            makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
     }
 
     /// Performs a PUT request to the server, capturing the `JSON` response from the server.
@@ -248,7 +263,12 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func put(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kPutType, json: json, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        do {
+            let payload = try json.makeData()
+            makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
     }
 
     /// Performs a DELETE request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -261,7 +281,12 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.n the main thread.
     public func delete<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kDeleteType, json: json, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        do {
+            let payload = try json.makeData()
+            makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
     }
 
     /// Performs a DELETE request to the server, capturing the `JSON` response from the server.
@@ -273,7 +298,12 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func delete(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kDeleteType, json: json, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        do {
+            let payload = try json.makeData()
+            makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
     }
 
     /// Performs a PATCH request to the server, capturing the output of the server using the supplied `ResponseHandler`.
@@ -286,7 +316,12 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func patch<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kPatchType, json: json, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        do {
+            let payload = try json.makeData()
+            makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
     }
 
     /// Performs a PATCH request to the server, capturing the `JSON` response from the server.
@@ -298,6 +333,11 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func patch(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kPatchType, json: json, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        do {
+            let payload = try json.makeData()
+            makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
     }
 }

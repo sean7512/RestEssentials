@@ -48,9 +48,8 @@ public class JSONDecodableDeserializer<T: Decodable>: Deserializer {
     public required init() { }
 
     public func deserialize(_ data: Data) -> T? {
-        let decoder = JSONDecoder()
         do {
-            return try decoder.decode(T.self, from: data)
+            return try JSONDecoder().decode(T.self, from: data)
         } catch {
             print("Error decoding to JSON object \(error.localizedDescription)")
             return nil
