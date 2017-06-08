@@ -187,4 +187,48 @@ class RestControllerTests: XCTestCase {
         }
     }
 
+    func testDecodableResponse() {
+        let expectation = self.expectation(description: "POST JSON network call and decodable object is returned")
+
+        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
+            XCTFail("Bad URL")
+            return
+        }
+
+        struct HttpBinResponse: Codable {
+            let url: String
+            let json: SomeObject
+
+            struct SomeObject: Codable {
+                let someString: String
+                let someInt: Int
+                let someDouble: Double
+                let someBoolean: Bool
+                let someNumberArray: [Int]
+            }
+        }
+        let json: JSON = ["someString": "value1", "someInt": 2, "someDouble": 4.5, "someBoolean": true, "someNumberArray": [1, 2, 3, 4]]
+        rest.post(json, withDeserializer: JSONDecodableDeserializer<HttpBinResponse>(), at: "post") { result, httpResponse in
+            do {
+                let response = try result.value()
+                XCTAssert(response is HttpBinResponse)
+                XCTAssert(response.url == "http://httpbin.org/post")
+                XCTAssert(response.json.someString == "value1")
+                XCTAssert(response.json.someInt == 2)
+                XCTAssert(response.json.someDouble == 4.5)
+                XCTAssert(response.json.someBoolean == true)
+                XCTAssert(response.json.someNumberArray[2] == 3)
+
+                expectation.fulfill()
+            } catch {
+                XCTFail("Error performing POST: \(error)")
+            }
+        }
+
+        waitForExpectations(timeout: 5) { (error) -> Void in
+            if let _ = error {
+                XCTFail("Test timeout reached")
+            }
+        }
+    }
 }

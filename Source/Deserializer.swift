@@ -38,6 +38,26 @@ public class JSONDeserializer: Deserializer {
     }
 }
 
+/// A `Deserializer` for `JSON` using Swift 4's Decodable
+public class JSONDecodableDeserializer<T: Decodable>: Deserializer {
+
+    public typealias ResponseType = T
+
+    public let acceptHeader = "application/json"
+
+    public required init() { }
+
+    public func deserialize(_ data: Data) -> T? {
+        let decoder = JSONDecoder()
+        do {
+            return try decoder.decode(T.self, from: data)
+        } catch {
+            print("Error decoding to JSON object \(error.localizedDescription)")
+            return nil
+        }
+    }
+}
+
 /// A `Deserializer` for `Void` (for use with servers that return no data).
 public class VoidDeserializer: Deserializer {
 
