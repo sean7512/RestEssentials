@@ -190,15 +190,17 @@ public class RestController : NSObject, URLSessionDelegate {
         makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: responseDeserializer, options: options, callback: callback)
     }
 
-    /// Performs a GET request to the server, capturing the `JSON` response from the server.
+    /// Performs a GET request to the server, capturing the data object type response from the server.
     ///
     /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
     ///
+    /// - parameter type: The type of object this get call returns. This type must conform to `Decodable`
     /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
-    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
-    public func get(at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
-        makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    public func get<T: Decodable>(_ type: T.Type, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T>, HTTPURLResponse?) -> ()) {
+        let decodableDeserializer = JSONDecodableDeserializer<T>()
+        makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: decodableDeserializer, options: options, callback: callback)
     }
 
     /// Performs a POST request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -219,6 +221,24 @@ public class RestController : NSObject, URLSessionDelegate {
         }
     }
 
+    /// Performs a POST request to the server, capturing the output of the server using the supplied `Deserializer`.
+    ///
+    /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
+    ///
+    /// - parameter encodable: Any object that can be encoded. Must be of type `Encodable`
+    /// - parameter responseDeserializer: A `Deserializer` to handle de-serializing the response to.
+    /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    public func post<T: Deserializer, E: Encodable>(_ encodable: E, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T.ResponseType>, HTTPURLResponse?) -> ()) {
+        do {
+            let payload = try JSONEncoder().encode(encodable)
+            makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: responseDeserializer, options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
+    }
+
     /// Performs a POST request to the server, capturing the `JSON` response from the server.
     ///
     /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
@@ -230,6 +250,23 @@ public class RestController : NSObject, URLSessionDelegate {
     public func post(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
         do {
             let payload = try json.makeData()
+            makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
+        } catch {
+            callback(.failure(error), nil)
+        }
+    }
+
+    /// Performs a POST request to the server, capturing the `JSON` response from the server.
+    ///
+    /// Note: This is an **asynchronous** call and will return immediately.  The network operation is done in the background.
+    ///
+    /// - parameter encodable: Any object that can be encoded.
+    /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
+    /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
+    /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
+    public func post<E: Encodable>(_ encodable: E, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<JSON>, HTTPURLResponse?) -> ()) {
+        do {
+            let payload = try JSONEncoder().encode(encodable)
             makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: JSONDeserializer(), options: options, callback: callback)
         } catch {
             callback(.failure(error), nil)
