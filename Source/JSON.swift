@@ -12,12 +12,6 @@ public typealias JSONValue = Any
 
 /// Represents any valid JSON type: another JSON object, an array, a string, a number, or a boolean.
 public struct JSON : CustomStringConvertible, ExpressibleByArrayLiteral, ExpressibleByDictionaryLiteral {
-    
-    public typealias Element = JSONValue
-    
-    public typealias Key = String
-    
-    public typealias Value = JSONValue
 
     private static let kJSONNull = JSON(rawValue: Void())
 
