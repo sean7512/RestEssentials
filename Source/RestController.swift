@@ -199,7 +199,7 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - parameter callback: Called when the network operation has ended, giving back a Boxed `Result<T>` and a `NSHTTPURLResponse?` representing the response from the server. Note: The callback is **NOT** called on the main thread.
     public func get<T: Decodable>(_ type: T.Type, at relativePath: String? = nil, options: RestOptions = RestOptions(), callback: @escaping (Result<T>, HTTPURLResponse?) -> ()) {
-        let decodableDeserializer = JSONDecodableDeserializer<T>()
+        let decodableDeserializer = DecodableDeserializer<T>()
         makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: decodableDeserializer, options: options, callback: callback)
     }
 

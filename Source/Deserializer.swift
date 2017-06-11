@@ -38,8 +38,8 @@ public class JSONDeserializer: Deserializer {
     }
 }
 
-/// A `Deserializer` for `Decodable` using Swift 4's Decodable
-public class JSONDecodableDeserializer<T: Decodable>: Deserializer {
+/// A `Deserializer` for Swift 4's `Decodable` protocol
+public class DecodableDeserializer<T: Decodable>: Deserializer {
 
     public typealias ResponseType = T
 
