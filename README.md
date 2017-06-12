@@ -96,6 +96,30 @@ If you prefer to rock it old-school, RestEssentials can be integrated by adding 
 ---
 
 ## Usage
+RestEssentials is **best** used with Swift 4's native JSON support (using the Codable/Encodabe/Decodable protocols).  RestEssentials can be used with the built-in *JSON* parsing and support if your code doesn't use the new Codable protocol.
+
+### Making a GET Request and getting back a Swift 4 *Codable* object.
+```swift
+import RestEssentials
+
+struct HttpBinResponse: Codable {
+    let url: String
+}
+
+guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
+    print("Bad URL")
+    return
+}
+
+rest.get(HttpBinResponse.self) { result, httpResponse in
+    do {
+        let response = try result.value() // response is of type HttpBinResponse
+        print(response.url) // "http://httpbin.org/get"
+    } catch {
+        print("Error performing GET: \(error)")
+    }
+}
+```
 
 ### Making a GET Request and parsing the response.
 
