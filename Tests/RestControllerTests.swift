@@ -34,7 +34,7 @@ class RestControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testGET() {
+    func testGETEncodable() {
         let expectation = self.expectation(description: "GET JSON network call")
 
         guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
@@ -67,8 +67,7 @@ class RestControllerTests: XCTestCase {
             XCTFail("Bad URL")
             return
         }
-
-
+        
         rest.get(withDeserializer: JSONDeserializer()) { result, httpResponse in
             do {
                 let json = try result.value()
@@ -268,7 +267,7 @@ class RestControllerTests: XCTestCase {
         }
 
         let someObject = SomeObject(someString: "value1", someInt: 2, someDouble: 4.5, someBoolean: true, someNumberArray: [1, 2, 3, 4])
-        rest.post(someObject, withDeserializer: DecodableDeserializer<HttpBinResponse>(), at: "post") { result, httpResponse in
+        rest.post(someObject, at: "post", responseType: HttpBinResponse.self) { result, httpResponse in
             do {
                 let response = try result.value()
                 XCTAssert(response is HttpBinResponse)
@@ -285,6 +284,35 @@ class RestControllerTests: XCTestCase {
             }
         }
 
+        waitForExpectations(timeout: 5) { (error) -> Void in
+            if let _ = error {
+                XCTFail("Test timeout reached")
+            }
+        }
+    }
+    
+    func testUnexpectedStatusCode() {
+        let expectation = self.expectation(description: "GET JSON network call")
+        
+        guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
+            XCTFail("Bad URL")
+            return
+        }
+        
+        var options = RestOptions()
+        options.expectedStatusCode = 201
+        rest.get(HttpBinResponse.self, options: options) { result, httpResponse in
+            do {
+                let _ = try result.value()
+                XCTFail("Expected to get an error, but call succeeded")
+            } catch NetworkingError.unexpectedStatusCode(let actualStatusCode, _) {
+                XCTAssert(actualStatusCode != options.expectedStatusCode)
+                expectation.fulfill()
+            } catch {
+                XCTFail("Received unexpected error: \(error)")
+            }
+        }
+        
         waitForExpectations(timeout: 5) { (error) -> Void in
             if let _ = error {
                 XCTFail("Test timeout reached")
