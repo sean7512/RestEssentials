@@ -3,6 +3,7 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift 4.0+
 ## Features
 
 - [x] Easily perform asynchronous REST networking calls (GET, POST, PUT, PATCH, or DELETE) that send JSON
+- [x] Natively integrates with Swift's Decodable and Encodable types
 - [x] Supports JSON, Void, UIImage, and Data resposne types
 - [x] Full JSON parsing capabilities
 - [x] HTTP response validation
@@ -45,7 +46,7 @@ RestEssentials is **ONLY** compatible with Swift 4 and above. See below for a li
 Install the latest version of CocoaPods with the following command:
 
 ```bash
-$ gem install cocoapods
+$ sudo gem install cocoapods
 ```
 
 To integrate RestEssentials into your Xcode project using CocoaPods, specify it in your `Podfile`:
