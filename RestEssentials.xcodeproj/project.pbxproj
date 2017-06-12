@@ -26,6 +26,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9ECF98691EEF0B2E005558B2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		9ECF986A1EEF0B2E005558B2 /* RestEssentials.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = RestEssentials.podspec; sourceTree = "<group>"; };
 		9EDB79A11D42571700DF8D92 /* Deserializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Deserializer.swift; path = Source/Deserializer.swift; sourceTree = SOURCE_ROOT; };
 		E06E5C601B6A3AD3007EA8B8 /* RestEssentials.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RestEssentials.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E06E5C6A1B6A3AD3007EA8B8 /* RestEssentialsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RestEssentialsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +61,8 @@
 		E06E5C561B6A3AD3007EA8B8 = {
 			isa = PBXGroup;
 			children = (
+				9ECF98691EEF0B2E005558B2 /* README.md */,
+				9ECF986A1EEF0B2E005558B2 /* RestEssentials.podspec */,
 				E06E5C621B6A3AD3007EA8B8 /* RestEssentials */,
 				E06E5C6E1B6A3AD3007EA8B8 /* RestEssentialsTests */,
 				E06E5C611B6A3AD3007EA8B8 /* Products */,
