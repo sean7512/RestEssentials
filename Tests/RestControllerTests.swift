@@ -235,7 +235,7 @@ class RestControllerTests: XCTestCase {
         }
 
         let json: JSON = ["someString": "value1", "someInt": 2, "someDouble": 4.5, "someBoolean": true, "someNumberArray": [1, 2, 3, 4]]
-        rest.post(json, withDeserializer: JSONDecodableDeserializer<HttpBinResponse>(), at: "post") { result, httpResponse in
+        rest.post(json, withDeserializer: DecodableDeserializer<HttpBinResponse>(), at: "post") { result, httpResponse in
             do {
                 let response = try result.value()
                 XCTAssert(response is HttpBinResponse)
@@ -268,7 +268,7 @@ class RestControllerTests: XCTestCase {
         }
 
         let someObject = SomeObject(someString: "value1", someInt: 2, someDouble: 4.5, someBoolean: true, someNumberArray: [1, 2, 3, 4])
-        rest.post(someObject, withDeserializer: JSONDecodableDeserializer<HttpBinResponse>(), at: "post") { result, httpResponse in
+        rest.post(someObject, withDeserializer: DecodableDeserializer<HttpBinResponse>(), at: "post") { result, httpResponse in
             do {
                 let response = try result.value()
                 XCTAssert(response is HttpBinResponse)
