@@ -3,7 +3,7 @@
 //  RestEssentials
 //
 //  Created by Sean Kosanovich on 7/30/15.
-//  Copyright © 2015 Sean Kosanovich. All rights reserved.
+//  Copyright © 2017 Sean Kosanovich. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
