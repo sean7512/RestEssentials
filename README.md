@@ -17,12 +17,14 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift 4.0+
 - iOS 8.0+
 - Xcode 8.0+
 
-## Swift Versions Compatibility
-RestEssentials is **ONLY** compatible with Swift 4.0 and above. See below for a list of compatible versions for your version of Swift:
-- Swift 3 -> RestEssentials 3.1.0
-- Swift 2.3 -> Not Supported
-- Swift 2.0-2.2 -> RestEssentials 2.0.0
-- Swift 1 -> RestEssentials 1.0.2
+## Swift Version Compatibility
+
+RestEssentials is **ONLY** compatible with Swift 4 and above. See below for a list of recommended versions for your version of Swift:
+- Swift 4             -> RestEssentials 4.0.0
+- Swift 3             -> RestEssentials 3.1.0
+- Swift 2.3          -> Not Supported
+- Swift 2.0-2.2   -> RestEssentials 2.0.0
+- Swift 1             -> RestEssentials 1.0.2
 
 ## Communication
 
