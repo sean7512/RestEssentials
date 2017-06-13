@@ -96,7 +96,9 @@ If you prefer to rock it old-school, RestEssentials can be integrated by adding 
 ---
 
 ## Usage
-RestEssentials is **best** used with Swift 4's native JSON support (using the Codable/Encodabe/Decodable protocols).  RestEssentials can be used with the built-in *JSON* parsing and support if your code doesn't use the new Codable protocol.
+RestEssentials is **best** used with Swift 4's native JSON support (using the Codable/Encodabe/Decodable protocols).  RestEssentials can be used with the built-in JSON parsing and support if your code doesn't use the new Codable protocol.
+
+The use of the built-in JSON object to RestEssentials and Swift 4's Codable are interchangeable (you can post JSON and expect a Codable object back or you can post a Codable object and get any response type back).
 
 ### Making a GET Request and getting back a Swift 4 *Codable* object.
 ```swift
@@ -121,7 +123,39 @@ rest.get(HttpBinResponse.self) { result, httpResponse in
 }
 ```
 
-### Making a GET Request and parsing the response.
+### Making a POST Request using aSwift 4 *Codable* obkect and getting back a Swift 4 *Codable* object.
+```swift
+import RestEssentials
+
+// httpbin returns json with the url and the posted data under a key called "json"
+struct HttpBinResponse: Codable {
+    let url: String
+    let json: Car
+}
+
+struct Car: Codable {
+    let make: String
+    let model: String
+    let year: Int
+}
+
+guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
+    print("Bad URL")
+    return
+}
+
+let myCar = Car(make: "Jeep", model: "Grand Cherokee", year: 2017)
+rest.post(myCar, at: "post", responseType: HttpBinResponse.self) { result, httpResponse in
+    do {
+        let response = try result.value() // response is of type HttpBinResponse
+        let car = response.json // car is of type Car
+    } catch {
+        print("Error performing GET: \(error)")
+    }
+}
+```
+
+### Making a GET Request and parsing the response as raw JSON (not using Swift 4's Codable).
 
 ```swift
 import RestEssentials
@@ -131,7 +165,7 @@ guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
     return
 }
 
-rest.get { result, httpResponse in
+rest.get(withDeserializer: JSONDeserializer()) { result, httpResponse in
     do {
         let json = try result.value()
         print(json["url"].string) // "http://httpbin.org/get"
@@ -141,7 +175,7 @@ rest.get { result, httpResponse in
 }
 ```
 
-### Making a POST Request and parsing the response.
+### Making a POST Request and parsing the response (not using Swift 4's Codable).
 
 ```swift
 import RestEssentials
@@ -168,7 +202,7 @@ rest.post(json, at: "post") { result, httpResponse in { result, httpResponse in
 }
 ```
 
-### Making a PUT Request and parsing the response.
+### Making a PUT Request and parsing the response (not using Swift 4's Codable)..
 
 ```swift
 import RestEssentials
@@ -210,9 +244,9 @@ rest.get(withDeserializer: ImageDeserializer()) { result, httpResponse in
 ```
 
 ### Other Notes
-If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the `VoidDeserializer`.  If you want to return a different data type than JSON, Data, or UIImage; create a new implementation of `Deserializer` and use that.
+If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the `VoidDeserializer`.  If you want to return a different data type other than a Decodable, JSON, Data, or UIImage; create a new implementation of `Deserializer` and use that.
 
-The callbacks are **NOT** on the main thread, JSON parsing should happen in the callback and then passed back to the main thread as needed (after parsing).
+The callbacks are **NOT** guranteed to be on the main thread (or the calling thread), JSON parsing should happen in the callback and then passed back to the main thread as needed (after parsing).
 
 There is an alternative static function to instantiate a `RestController` object: `make:URL` This variation does not return an `Optional` like the `String` version.  This is useful for easily constructing your URL with query parameters (typically for a `GET` request).
 
