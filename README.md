@@ -139,7 +139,7 @@ struct Car: Codable {
     let year: Int
 }
 
-guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
+guard let rest = RestController.make(urlString: "http://httpbin.org") else {
     print("Bad URL")
     return
 }
@@ -202,7 +202,7 @@ rest.post(json, at: "post") { result, httpResponse in { result, httpResponse in
 }
 ```
 
-### Making a PUT Request and parsing the response (not using Swift 4's Codable)..
+### Making a PUT Request and parsing the response (not using Swift 4's Codable).
 
 ```swift
 import RestEssentials
