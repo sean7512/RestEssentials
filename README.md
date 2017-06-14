@@ -98,9 +98,9 @@ If you prefer to rock it old-school, RestEssentials can be integrated by adding 
 ## Usage
 RestEssentials is **best** used with Swift 4's native JSON support (using the Codable/Encodabe/Decodable protocols).  RestEssentials can be used with the built-in JSON parsing and support if your code doesn't use the new Codable protocol.
 
-The use of the built-in JSON object to RestEssentials and Swift 4's Codable are interchangeable (you can post JSON and expect a Codable object back or you can post a Codable object and get any response type back).
+The use of the built-in JSON object in RestEssentials and Swift 4's Codable are interchangeable (you can post JSON and expect a Codable object back or you can post a Codable object and get any response type back).
 
-### Making a GET Request and getting back a Swift 4 *Codable* object.
+### Making a GET Request and getting back a Swift 4 Codable object.
 ```swift
 import RestEssentials
 
@@ -123,7 +123,7 @@ rest.get(HttpBinResponse.self) { result, httpResponse in
 }
 ```
 
-### Making a POST Request using aSwift 4 *Codable* obkect and getting back a Swift 4 *Codable* object.
+### Making a POST Request using a Swift 4 Codable object and getting back a Swift 4 *Codable* object.
 ```swift
 import RestEssentials
 
