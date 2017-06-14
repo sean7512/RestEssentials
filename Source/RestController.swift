@@ -129,13 +129,12 @@ public class RestController : NSObject, URLSessionDelegate {
             request.httpBody = payloadToSend
         }
 
-        #if !os(tvOS)
+        #if os(iOS)
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         #endif
 
-
         session.dataTask(with: request) { (data, response, error) -> Void in
-            #if !os(tvOS)
+            #if os(iOS)
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
             #endif
                                          
