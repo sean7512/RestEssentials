@@ -3,7 +3,7 @@
 //  RestEssentials
 //
 //  Created by Sean Kosanovich on 6/7/15.
-//  Copyright © 2016 Sean Kosanovich. All rights reserved.
+//  Copyright © 2017 Sean Kosanovich. All rights reserved.
 //
 
 import Foundation

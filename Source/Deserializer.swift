@@ -3,7 +3,7 @@
 //  RestEssentials
 //
 //  Created by Sean Kosanovich on 7/13/16.
-//  Copyright © 2016 Sean Kosanovich. All rights reserved.
+//  Copyright © 2017 Sean Kosanovich. All rights reserved.
 //
 
 import Foundation
@@ -35,6 +35,25 @@ public class JSONDeserializer: Deserializer {
 
     public func deserialize(_ data: Data) -> JSON? {
         return JSON(fromData: data)
+    }
+}
+
+/// A `Deserializer` for Swift 4's `Decodable` protocol
+public class DecodableDeserializer<T: Decodable>: Deserializer {
+
+    public typealias ResponseType = T
+
+    public let acceptHeader = "application/json"
+
+    public required init() { }
+
+    public func deserialize(_ data: Data) -> T? {
+        do {
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            print("Error decoding to JSON object \(error.localizedDescription)")
+            return nil
+        }
     }
 }
 

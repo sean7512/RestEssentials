@@ -3,7 +3,7 @@
 //  RestEssentials
 //
 //  Created by Sean Kosanovich on 6/8/15.
-//  Copyright © 2016 Sean Kosanovich. All rights reserved.
+//  Copyright © 2017 Sean Kosanovich. All rights reserved.
 //
 
 import Foundation
@@ -12,16 +12,10 @@ public typealias JSONValue = Any
 
 /// Represents any valid JSON type: another JSON object, an array, a string, a number, or a boolean.
 public struct JSON : CustomStringConvertible, ExpressibleByArrayLiteral, ExpressibleByDictionaryLiteral {
-    
-    public typealias Element = JSONValue
-    
-    public typealias Key = String
-    
-    public typealias Value = JSONValue
 
     private static let kJSONNull = JSON(rawValue: Void())
 
-    fileprivate let raw: JSONValue
+    private let raw: JSONValue
 
     public var description: String {
         return (raw as AnyObject).description
