@@ -1,4 +1,4 @@
-RestEssentials is an extremely lightweight REST and JSON library for Swift and can be used on iOS, tvOS, watchOS, and macOS.
+RestEssentials is an extremely lightweight REST and JSON library for Swift and can be used on iOS, tvOS, and watchOS.
 
 ## Features
 
@@ -20,7 +20,6 @@ RestEssentials works with any of the supported operating systems listed below wi
 - iOS 8.0+
 - tvOS 9.0+
 - watchOS 2.0+
-- macOS 10.9+
 - Xcode 9.0+
 
 ## Swift Version Compatibility

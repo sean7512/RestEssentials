@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /// Protocol for de-serializing responses from the web server.
 public protocol Deserializer {
