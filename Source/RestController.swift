@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Foundation
-import MobileCoreServices
 
 /// Errors related to the networking for `RestController`
 public enum NetworkingError: Error {
@@ -130,12 +128,16 @@ public class RestController : NSObject, URLSessionDelegate {
         }
 
         #if os(iOS)
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            }
         #endif
 
         session.dataTask(with: request) { (data, response, error) -> Void in
             #if os(iOS)
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                DispatchQueue.main.async {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                }
             #endif
                                          
             if let err = error {

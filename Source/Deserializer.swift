@@ -6,7 +6,6 @@
 //  Copyright © 2017 Sean Kosanovich. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 /// Protocol for de-serializing responses from the web server.

@@ -25,7 +25,7 @@ RestEssentials works with any of the supported operating systems listed below wi
 ## Swift Version Compatibility
 
 RestEssentials is **ONLY** compatible with Swift 4 and above. See below for a list of recommended versions for your version of Swift:
-- Swift 4             -> RestEssentials 4.0.0
+- Swift 4             -> RestEssentials 4.0.1
 - Swift 3             -> RestEssentials 3.1.0
 - Swift 2.3          -> Not Supported
 - Swift 2.0-2.2   -> RestEssentials 2.0.0
@@ -61,7 +61,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'MyApp' do
-    pod 'RestEssentials', '~> 4.0.0'
+    pod 'RestEssentials', '~> 4.0.1'
 end
 ```
 
