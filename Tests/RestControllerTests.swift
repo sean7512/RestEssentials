@@ -3,7 +3,7 @@
 //  RestEssentialsTests
 //
 //  Created by Sean Kosanovich on 7/30/15.
-//  Copyright © 2017 Sean Kosanovich. All rights reserved.
+//  Copyright (c) 2017 Sean Kosanovich. All rights reserved.
 //
 
 import XCTest
@@ -313,6 +313,37 @@ class RestControllerTests: XCTestCase {
             }
         }
         
+        waitForExpectations(timeout: 5) { (error) -> Void in
+            if let _ = error {
+                XCTFail("Test timeout reached")
+            }
+        }
+    }
+
+    func testJsonParsing() {
+        let expectation = self.expectation(description: "POST JSON network call")
+
+        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
+            XCTFail("Bad URL")
+            return
+        }
+
+        let json: JSON = ["error_code": 2, "error_description": "Invalid credentials", "result": 1]
+        rest.post(json, at: "post") { result, httpResponse in
+            do {
+                let json = try result.value()
+                XCTAssert(json["url"].string == "http://httpbin.org/post")
+                if let errorCode = json["json"]["error_code"].int, errorCode != 5 {
+                    XCTAssert(errorCode == 2)
+                    expectation.fulfill()
+                } else {
+                    XCTFail("Error code sent was a 2, should pass")
+                }
+            } catch {
+                XCTFail("Error performing POST: \(error)")
+            }
+        }
+
         waitForExpectations(timeout: 5) { (error) -> Void in
             if let _ = error {
                 XCTFail("Test timeout reached")
