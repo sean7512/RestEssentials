@@ -48,6 +48,8 @@ class RestControllerTests: XCTestCase {
                 XCTAssert(response.url == "http://httpbin.org/get")
 
                 expectation.fulfill()
+            } catch NetworkingError.malformedResponse(let data) {
+                XCTFail("Error performing GET, malformed data response: \(data)")
             } catch {
                 XCTFail("Error performing GET: \(error)")
             }

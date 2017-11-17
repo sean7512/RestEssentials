@@ -20,8 +20,8 @@ public enum NetworkingError: Error {
     case badResponse(Data?)
 
     /// Indicates the server's response could not be parsed to `JSON`.
-    /// - parameter Data?: The raw returned data from the server
-    case malformedResponse(Data?)
+    /// - parameter Data: The raw returned data from the server
+    case malformedResponse(Data)
 
     /// Inidcates the server did not respond to the request.
     case noResponse
