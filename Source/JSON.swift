@@ -173,7 +173,7 @@ public class JSONArray : CustomStringConvertible, Sequence {
 internal extension JSON {
     internal init?(fromData data: Data) {
         do {
-            let json = try  JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+            let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
             if let jsonObj = json as? [String : JSONValue] {
                 self.init(dict: jsonObj)
             } else if let jsonArray = json as? [JSONValue] {
@@ -183,7 +183,7 @@ internal extension JSON {
                 return nil
             }
         } catch {
-            print("An error occurred deserializing data to JSON: \(error)")
+            print("An error occurred deserializing data to JSON: \(error.localizedDescription)")
             return nil
         }
     }
