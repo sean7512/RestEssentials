@@ -169,11 +169,7 @@ public class RestController : NSObject, URLSessionDelegate {
             try dataTask(relativePath: relativePath, httpMethod: httpMethod, accept: responseDeserializer.acceptHeader, payload: payload, options: options) { (result, httpResponse) -> () in
                 do {
                     let data = try result.value()
-                    guard let transformedResponse = responseDeserializer.deserialize(data) else {
-                        callback(.failure(NetworkingError.malformedResponse(data)), httpResponse)
-                        return
-                    }
-
+                    let transformedResponse = try responseDeserializer.deserialize(data)
                     callback(.success(transformedResponse), httpResponse)
                 } catch {
                     callback(.failure(error), httpResponse)
