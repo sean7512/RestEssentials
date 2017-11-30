@@ -25,7 +25,7 @@ RestEssentials works with any of the supported operating systems listed below wi
 ## Swift Version Compatibility
 
 RestEssentials is **ONLY** compatible with Swift 4 and above. See below for a list of recommended versions for your version of Swift:
-- Swift 4             -> RestEssentials 4.0.1
+- Swift 4             -> RestEssentials 4.0.2
 - Swift 3             -> RestEssentials 3.1.0
 - Swift 2.3          -> Not Supported
 - Swift 2.0-2.2   -> RestEssentials 2.0.0
@@ -61,7 +61,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'MyApp' do
-    pod 'RestEssentials', '~> 4.0.1'
+    pod 'RestEssentials', '~> 4.0.2'
 end
 ```
 
@@ -104,7 +104,7 @@ RestEssentials is **best** used with Swift 4's native JSON support (using the Co
 
 The use of the built-in JSON object in RestEssentials and Swift 4's Codable are interchangeable (you can post JSON and expect a Codable object back or you can post a Codable object and get any response type back).
 
-### Making a GET Request and getting back a Swift 4 Codable object.
+### Making a GET Request and getting back a Swift 4 Codable object
 ```swift
 import RestEssentials
 
@@ -127,7 +127,7 @@ rest.get(HttpBinResponse.self) { result, httpResponse in
 }
 ```
 
-### Making a POST Request using a Swift 4 Codable object and getting back a Swift 4 *Codable* object.
+### Making a POST Request using a Swift 4 Codable object and getting back a Swift 4 *Codable* object
 ```swift
 import RestEssentials
 
@@ -159,7 +159,7 @@ rest.post(myCar, at: "post", responseType: HttpBinResponse.self) { result, httpR
 }
 ```
 
-### Making a GET Request and parsing the response as raw JSON (not using Swift 4's Codable).
+### Making a GET Request and parsing the response as raw JSON (not using Swift 4's Codable)
 
 ```swift
 import RestEssentials
@@ -179,7 +179,7 @@ rest.get(withDeserializer: JSONDeserializer()) { result, httpResponse in
 }
 ```
 
-### Making a POST Request and parsing the response (not using Swift 4's Codable).
+### Making a POST Request and parsing the response (not using Swift 4's Codable)
 
 ```swift
 import RestEssentials
@@ -206,7 +206,7 @@ rest.post(json, at: "post") { result, httpResponse in { result, httpResponse in
 }
 ```
 
-### Making a PUT Request and parsing the response (not using Swift 4's Codable).
+### Making a PUT Request and parsing the response (not using Swift 4's Codable)
 
 ```swift
 import RestEssentials
@@ -227,7 +227,7 @@ rest.put(putData) { result, httpResponse in
 }
 ```
 
-### Making a GET Request for an image.
+### Making a GET Request for an image
 
 ```swift
 import RestEssentials
@@ -246,6 +246,31 @@ rest.get(withDeserializer: ImageDeserializer()) { result, httpResponse in
     }
 }
 ```
+
+### Error Handling
+When attempting to retrieve the result value (```try result.value()```), any errors that occurred will be thrown here.  The errors may be one of the built-in ```NetworkingError``` types or they may be ones from Foundation (especially if you are using the ```Codable``` protocol).  The built in error definitions are below for your convenience.
+
+```swift
+/// Errors related to the networking for the `RestController`
+public enum NetworkingError: Error {
+    /// Indicates the server responded with an unexpected status code.
+    /// - parameter Int: The status code the server respodned with.
+    /// - parameter Data?: The raw returned data from the server
+    case unexpectedStatusCode(Int, Data?)
+
+    /// Indicates that the server responded using an unknown protocol.
+    /// - parameter Data?: The raw returned data from the server
+    case badResponse(Data?)
+
+    /// Indicates the server's response could not be deserialized using the given Deserializer.
+    /// - parameter Data: The raw returned data from the server
+    case malformedResponse(Data)
+
+    /// Inidcates the server did not respond to the request.
+    case noResponse
+}
+```
+For information on the ```Codable``` errors, you can vew Apple's documentation at https://developer.apple.com/documentation/swift/encodingerror and https://developer.apple.com/documentation/swift/decodingerror
 
 ### Other Notes
 If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the `VoidDeserializer`.  If you want to return a different data type other than a Decodable, JSON, Data, or UIImage; create a new implementation of `Deserializer` and use that.

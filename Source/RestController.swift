@@ -8,9 +8,9 @@
 
 import UIKit
 
-/// Errors related to the networking for `RestController`
+/// Errors related to the networking for the `RestController`
 public enum NetworkingError: Error {
-    /// Indicates the server responded with an unexpected statuscode.
+    /// Indicates the server responded with an unexpected status code.
     /// - parameter Int: The status code the server respodned with.
     /// - parameter Data?: The raw returned data from the server
     case unexpectedStatusCode(Int, Data?)
@@ -19,7 +19,7 @@ public enum NetworkingError: Error {
     /// - parameter Data?: The raw returned data from the server
     case badResponse(Data?)
 
-    /// Indicates the server's response could not be parsed to `JSON`.
+    /// Indicates the server's response could not be deserialized using the given Deserializer.
     /// - parameter Data: The raw returned data from the server
     case malformedResponse(Data)
 
