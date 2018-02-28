@@ -190,16 +190,16 @@ guard let rest = RestController.make(urlString: "http://httpbin.org") else {
 }
 
 let postData: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true, "key5": [1, 2, 3, 4]]
-rest.post(json, at: "post") { result, httpResponse in { result, httpResponse in
+rest.post(postData, at: "post") { result, httpResponse in
     do {
         let json = try result.value()
-        print(json["url"].string // "http://httpbin.org/post"
-        print(json["json"]["key1"].string // "value1"
-        print(json["json"]["key2"].int // 2
-        print(json["json"]["key3"].double // 4.5
-        print(json["json"]["key4"].bool // true
-        print(json["json"]["key5"][2].numerical // 3
-        print(json["json"]["key6"].string // nil
+        print(json["url"].string) // "http://httpbin.org/post"
+        print(json["json"]["key1"].string) // "value1"
+        print(json["json"]["key2"].int) // 2
+        print(json["json"]["key3"].double) // 4.5
+        print(json["json"]["key4"].bool) // true
+        print(json["json"]["key5"][2].numerical) // 3
+        print(json["json"]["key6"].string) // nil
     } catch {
         print("Error performing POST: \(error)")
     }
