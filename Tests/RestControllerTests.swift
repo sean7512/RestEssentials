@@ -37,7 +37,7 @@ class RestControllerTests: XCTestCase {
     func testGETEncodable() {
         let expectation = self.expectation(description: "GET JSON network call")
 
-        guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
+        guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
         }
@@ -45,7 +45,7 @@ class RestControllerTests: XCTestCase {
         rest.get(HttpBinResponse.self) { result, httpResponse in
             do {
                 let response = try result.value()
-                XCTAssert(response.url == "http://httpbin.org/get")
+                XCTAssert(response.url == "https://httpbin.org/get")
 
                 expectation.fulfill()
             } catch NetworkingError.malformedResponse(let data) {
@@ -65,7 +65,7 @@ class RestControllerTests: XCTestCase {
     func testGETGenericJSON() {
         let expectation = self.expectation(description: "GET JSON network call")
 
-        guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
+        guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
         }
@@ -73,7 +73,7 @@ class RestControllerTests: XCTestCase {
         rest.get(withDeserializer: JSONDeserializer()) { result, httpResponse in
             do {
                 let json = try result.value()
-                XCTAssert(json["url"].string == "http://httpbin.org/get")
+                XCTAssert(json["url"].string == "https://httpbin.org/get")
 
                 expectation.fulfill()
             } catch {
@@ -91,7 +91,7 @@ class RestControllerTests: XCTestCase {
     func testPOST() {
         let expectation = self.expectation(description: "POST JSON network call")
 
-        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
+        guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
@@ -100,7 +100,7 @@ class RestControllerTests: XCTestCase {
         rest.post(json, at: "post") { result, httpResponse in
             do {
                 let json = try result.value()
-                XCTAssert(json["url"].string == "http://httpbin.org/post")
+                XCTAssert(json["url"].string == "https://httpbin.org/post")
                 XCTAssert(json["json"]["key1"].string == "value1")
                 XCTAssert(json["json"]["key2"].int == 2)
                 XCTAssert(json["json"]["key3"].double == 4.5)
@@ -133,7 +133,7 @@ class RestControllerTests: XCTestCase {
     func testPUT() {
         let expectation = self.expectation(description: "PUT JSON network call")
 
-        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
+        guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
@@ -141,7 +141,7 @@ class RestControllerTests: XCTestCase {
         rest.put(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]), at: "put") { result, httpResponse in
             do {
                 let json = try result.value()
-                XCTAssert(json["url"].string == "http://httpbin.org/put")
+                XCTAssert(json["url"].string == "https://httpbin.org/put")
 
                 expectation.fulfill()
             } catch {
@@ -230,7 +230,7 @@ class RestControllerTests: XCTestCase {
     func testDecodableResponse() {
         let expectation = self.expectation(description: "POST JSON network call and decodable object is returned")
 
-        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
+        guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
@@ -240,7 +240,7 @@ class RestControllerTests: XCTestCase {
             do {
                 let response = try result.value()
                 XCTAssert(response is HttpBinResponse)
-                XCTAssert(response.url == "http://httpbin.org/post")
+                XCTAssert(response.url == "https://httpbin.org/post")
                 XCTAssert(response.json?.someString == "value1")
                 XCTAssert(response.json?.someInt == 2)
                 XCTAssert(response.json?.someDouble == 4.5)
@@ -263,7 +263,7 @@ class RestControllerTests: XCTestCase {
     func testEncodableObject() {
         let expectation = self.expectation(description: "POST JSON network call and decodable object is returned")
 
-        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
+        guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
@@ -273,7 +273,7 @@ class RestControllerTests: XCTestCase {
             do {
                 let response = try result.value()
                 XCTAssert(response is HttpBinResponse)
-                XCTAssert(response.url == "http://httpbin.org/post")
+                XCTAssert(response.url == "https://httpbin.org/post")
                 XCTAssert(response.json?.someString == someObject.someString)
                 XCTAssert(response.json?.someInt == someObject.someInt)
                 XCTAssert(response.json?.someDouble == someObject.someDouble)
@@ -296,7 +296,7 @@ class RestControllerTests: XCTestCase {
     func testUnexpectedStatusCode() {
         let expectation = self.expectation(description: "GET JSON network call")
         
-        guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
+        guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
         }
@@ -325,7 +325,7 @@ class RestControllerTests: XCTestCase {
     func testJsonParsing() {
         let expectation = self.expectation(description: "POST JSON network call")
 
-        guard let rest = RestController.make(urlString: "http://httpbin.org") else {
+        guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
@@ -334,7 +334,7 @@ class RestControllerTests: XCTestCase {
         rest.post(json, at: "post") { result, httpResponse in
             do {
                 let json = try result.value()
-                XCTAssert(json["url"].string == "http://httpbin.org/post")
+                XCTAssert(json["url"].string == "https://httpbin.org/post")
                 if let errorCode = json["json"]["error_code"].int, errorCode != 5 {
                     XCTAssert(errorCode == 2)
                     expectation.fulfill()

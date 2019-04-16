@@ -20,11 +20,11 @@ RestEssentials works with any of the supported operating systems listed below wi
 - iOS 8.0+
 - tvOS 9.0+
 - watchOS 2.0+
-- Xcode 9.0+
 
 ## Swift Version Compatibility
 
 RestEssentials is **ONLY** compatible with Swift 4 and above. See below for a list of recommended versions for your version of Swift:
+- Swift 5             -> RestEssentials 4.0.3
 - Swift 4             -> RestEssentials 4.0.2
 - Swift 3             -> RestEssentials 3.1.0
 - Swift 2.3          -> Not Supported

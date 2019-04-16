@@ -171,7 +171,7 @@ public class JSONArray : CustomStringConvertible, Sequence {
 }
 
 internal extension JSON {
-    internal init(fromData data: Data) throws {
+    init(fromData data: Data) throws {
         let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
         if let jsonObj = json as? [String : JSONValue] {
             self.init(dict: jsonObj)
@@ -183,7 +183,7 @@ internal extension JSON {
         }
     }
 
-    internal func makeData() throws -> Data {
+    func makeData() throws -> Data {
         return try JSONSerialization.data(withJSONObject: raw, options: [])
     }
 }
