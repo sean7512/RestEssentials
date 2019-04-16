@@ -61,7 +61,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'MyApp' do
-    pod 'RestEssentials', '~> 4.0.2'
+    pod 'RestEssentials', '~> 4.0.3'
 end
 ```
 
