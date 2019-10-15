@@ -1,0 +1,714 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "RestControllerTests"
+provides-nominal:
+- "19RestEssentialsTests0a10ControllerC0C"
+- "19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV"
+- "19RestEssentialsTests0a10ControllerC0C10SomeObjectV"
+provides-member:
+- ["19RestEssentialsTests0a10ControllerC0C", ""]
+- ["19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV", ""]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", ""]
+provides-dynamic-lookup:
+- "setUp"
+- "tearDown"
+- "testDataResponse"
+- "testDecodableResponse"
+- "testEncodableObject"
+- "testGETEncodable"
+- "testGETGenericJSON"
+- "testGetImage"
+- "testJsonParsing"
+- "testPOST"
+- "testPUT"
+- "testUnexpectedStatusCode"
+- "testVoidResponse"
+depends-top-level:
+- !private "!="
+- "=="
+- "AssignmentPrecedence"
+- "Bool"
+- !private "BooleanLiteralType"
+- !private "CastingPrecedence"
+- "Codable"
+- !private "Data"
+- !private "DataDeserializer"
+- !private "DecodableDeserializer"
+- "Double"
+- !private "FloatLiteralType"
+- !private "ImageDeserializer"
+- "Int"
+- !private "IntegerLiteralType"
+- !private "JSON"
+- !private "JSONDeserializer"
+- !private "NSImage"
+- !private "NetworkingError"
+- !private "RestController"
+- "RestControllerTests"
+- !private "RestOptions"
+- "String"
+- "StringLiteralType"
+- !private "Void"
+- !private "VoidDeserializer"
+- !private "XCTAssert"
+- !private "XCTFail"
+- "XCTestCase"
+- !private "~="
+depends-member:
+- !private ["Sa", "subscript"]
+- !private ["SK", "subscript"]
+- !private ["s7CVarArgP", "DataDeserializer"]
+- !private ["s7CVarArgP", "DecodableDeserializer"]
+- !private ["s7CVarArgP", "HttpBinResponse"]
+- !private ["s7CVarArgP", "ImageDeserializer"]
+- !private ["s7CVarArgP", "JSON"]
+- !private ["s7CVarArgP", "JSONDeserializer"]
+- !private ["s7CVarArgP", "RestController"]
+- !private ["s7CVarArgP", "RestOptions"]
+- !private ["s7CVarArgP", "SomeObject"]
+- !private ["s7CVarArgP", "VoidDeserializer"]
+- !private ["s7CVarArgP", "XCTAssert"]
+- !private ["s7CVarArgP", "XCTFail"]
+- ["s7CVarArgP", ""]
+- !private ["s7CVarArgP", "expectation"]
+- !private ["s7CVarArgP", "fulfill"]
+- !private ["s7CVarArgP", "get"]
+- !private ["s7CVarArgP", "init"]
+- !private ["s7CVarArgP", "make"]
+- !private ["s7CVarArgP", "post"]
+- !private ["s7CVarArgP", "put"]
+- !private ["s7CVarArgP", "setUp"]
+- !private ["s7CVarArgP", "subscript"]
+- !private ["s7CVarArgP", "tearDown"]
+- !private ["s7CVarArgP", "waitForExpectations"]
+- ["s9CodingKeyP", "=="]
+- !private ["s9CodingKeyP", ""]
+- ["s9CodingKeyP", "_rawHashValue"]
+- ["s9CodingKeyP", "debugDescription"]
+- ["s9CodingKeyP", "description"]
+- ["s9CodingKeyP", "hash"]
+- ["s9CodingKeyP", "hashValue"]
+- ["s9CodingKeyP", "init"]
+- ["s9CodingKeyP", "intValue"]
+- ["s9CodingKeyP", "stringValue"]
+- !private ["Sl", "subscript"]
+- !private ["10Foundation15ContiguousBytesP", "subscript"]
+- ["s28CustomDebugStringConvertibleP", "=="]
+- !private ["s28CustomDebugStringConvertibleP", "DataDeserializer"]
+- !private ["s28CustomDebugStringConvertibleP", "DecodableDeserializer"]
+- !private ["s28CustomDebugStringConvertibleP", "HttpBinResponse"]
+- !private ["s28CustomDebugStringConvertibleP", "ImageDeserializer"]
+- !private ["s28CustomDebugStringConvertibleP", "JSON"]
+- !private ["s28CustomDebugStringConvertibleP", "JSONDeserializer"]
+- !private ["s28CustomDebugStringConvertibleP", "RestController"]
+- !private ["s28CustomDebugStringConvertibleP", "RestOptions"]
+- !private ["s28CustomDebugStringConvertibleP", "SomeObject"]
+- !private ["s28CustomDebugStringConvertibleP", "VoidDeserializer"]
+- !private ["s28CustomDebugStringConvertibleP", "XCTAssert"]
+- !private ["s28CustomDebugStringConvertibleP", "XCTFail"]
+- ["s28CustomDebugStringConvertibleP", ""]
+- ["s28CustomDebugStringConvertibleP", "_rawHashValue"]
+- ["s28CustomDebugStringConvertibleP", "debugDescription"]
+- ["s28CustomDebugStringConvertibleP", "description"]
+- !private ["s28CustomDebugStringConvertibleP", "expectation"]
+- !private ["s28CustomDebugStringConvertibleP", "fulfill"]
+- !private ["s28CustomDebugStringConvertibleP", "get"]
+- ["s28CustomDebugStringConvertibleP", "hash"]
+- ["s28CustomDebugStringConvertibleP", "hashValue"]
+- ["s28CustomDebugStringConvertibleP", "init"]
+- ["s28CustomDebugStringConvertibleP", "intValue"]
+- !private ["s28CustomDebugStringConvertibleP", "make"]
+- !private ["s28CustomDebugStringConvertibleP", "post"]
+- !private ["s28CustomDebugStringConvertibleP", "put"]
+- !private ["s28CustomDebugStringConvertibleP", "setUp"]
+- ["s28CustomDebugStringConvertibleP", "stringValue"]
+- !private ["s28CustomDebugStringConvertibleP", "subscript"]
+- !private ["s28CustomDebugStringConvertibleP", "tearDown"]
+- !private ["s28CustomDebugStringConvertibleP", "waitForExpectations"]
+- !private ["s17CustomReflectableP", "subscript"]
+- ["s23CustomStringConvertibleP", "=="]
+- !private ["s23CustomStringConvertibleP", "DataDeserializer"]
+- !private ["s23CustomStringConvertibleP", "DecodableDeserializer"]
+- !private ["s23CustomStringConvertibleP", "HttpBinResponse"]
+- !private ["s23CustomStringConvertibleP", "ImageDeserializer"]
+- !private ["s23CustomStringConvertibleP", "JSON"]
+- !private ["s23CustomStringConvertibleP", "JSONDeserializer"]
+- !private ["s23CustomStringConvertibleP", "RestController"]
+- !private ["s23CustomStringConvertibleP", "RestOptions"]
+- !private ["s23CustomStringConvertibleP", "SomeObject"]
+- !private ["s23CustomStringConvertibleP", "VoidDeserializer"]
+- !private ["s23CustomStringConvertibleP", "XCTAssert"]
+- !private ["s23CustomStringConvertibleP", "XCTFail"]
+- ["s23CustomStringConvertibleP", ""]
+- ["s23CustomStringConvertibleP", "_rawHashValue"]
+- !private ["s23CustomStringConvertibleP", "appendInterpolation"]
+- !private ["s23CustomStringConvertibleP", "appendLiteral"]
+- !private ["s23CustomStringConvertibleP", "array"]
+- !private ["s23CustomStringConvertibleP", "bool"]
+- ["s23CustomStringConvertibleP", "debugDescription"]
+- ["s23CustomStringConvertibleP", "description"]
+- !private ["s23CustomStringConvertibleP", "double"]
+- !private ["s23CustomStringConvertibleP", "expectation"]
+- !private ["s23CustomStringConvertibleP", "fulfill"]
+- !private ["s23CustomStringConvertibleP", "get"]
+- ["s23CustomStringConvertibleP", "hash"]
+- ["s23CustomStringConvertibleP", "hashValue"]
+- ["s23CustomStringConvertibleP", "init"]
+- !private ["s23CustomStringConvertibleP", "int"]
+- ["s23CustomStringConvertibleP", "intValue"]
+- !private ["s23CustomStringConvertibleP", "make"]
+- !private ["s23CustomStringConvertibleP", "numerical"]
+- !private ["s23CustomStringConvertibleP", "post"]
+- !private ["s23CustomStringConvertibleP", "put"]
+- !private ["s23CustomStringConvertibleP", "setUp"]
+- !private ["s23CustomStringConvertibleP", "string"]
+- ["s23CustomStringConvertibleP", "stringValue"]
+- !private ["s23CustomStringConvertibleP", "subscript"]
+- !private ["s23CustomStringConvertibleP", "tearDown"]
+- !private ["s23CustomStringConvertibleP", "waitForExpectations"]
+- !private ["14RestEssentials16DataDeserializerC", "init"]
+- !private ["10Foundation12DataProtocolP", "subscript"]
+- ["Se", ""]
+- ["Se", "encode"]
+- ["Se", "init"]
+- !private ["Se", "json"]
+- !private ["Se", "someBoolean"]
+- !private ["Se", "someDouble"]
+- !private ["Se", "someInt"]
+- !private ["Se", "someNumberArray"]
+- !private ["Se", "someString"]
+- !private ["Se", "subscript"]
+- !private ["Se", "url"]
+- !private ["14RestEssentials21DecodableDeserializerC", "init"]
+- !private ["s7DecoderP", "container"]
+- !private ["s26DefaultStringInterpolationV", "appendInterpolation"]
+- !private ["s26DefaultStringInterpolationV", "appendLiteral"]
+- !private ["14RestEssentials12DeserializerP", "init"]
+- ["SE", ""]
+- ["SE", "encode"]
+- ["SE", "init"]
+- !private ["SE", "json"]
+- !private ["SE", "someBoolean"]
+- !private ["SE", "someDouble"]
+- !private ["SE", "someInt"]
+- !private ["SE", "someNumberArray"]
+- !private ["SE", "someString"]
+- !private ["SE", "subscript"]
+- !private ["SE", "url"]
+- !private ["s7EncoderP", "container"]
+- ["SQ", "=="]
+- !private ["SQ", "DataDeserializer"]
+- !private ["SQ", "DecodableDeserializer"]
+- !private ["SQ", "HttpBinResponse"]
+- !private ["SQ", "ImageDeserializer"]
+- !private ["SQ", "JSON"]
+- !private ["SQ", "JSONDeserializer"]
+- !private ["SQ", "RestController"]
+- !private ["SQ", "RestOptions"]
+- !private ["SQ", "SomeObject"]
+- !private ["SQ", "VoidDeserializer"]
+- !private ["SQ", "XCTAssert"]
+- !private ["SQ", "XCTFail"]
+- ["SQ", ""]
+- ["SQ", "_rawHashValue"]
+- ["SQ", "debugDescription"]
+- ["SQ", "description"]
+- !private ["SQ", "expectation"]
+- !private ["SQ", "fulfill"]
+- !private ["SQ", "get"]
+- ["SQ", "hash"]
+- ["SQ", "hashValue"]
+- ["SQ", "init"]
+- ["SQ", "intValue"]
+- !private ["SQ", "make"]
+- !private ["SQ", "post"]
+- !private ["SQ", "put"]
+- !private ["SQ", "setUp"]
+- ["SQ", "stringValue"]
+- !private ["SQ", "subscript"]
+- !private ["SQ", "tearDown"]
+- !private ["SQ", "waitForExpectations"]
+- ["s5ErrorP", "malformedResponse"]
+- ["s5ErrorP", "unexpectedStatusCode"]
+- !private ["s25ExpressibleByArrayLiteralP", "array"]
+- !private ["s25ExpressibleByArrayLiteralP", "bool"]
+- !private ["s25ExpressibleByArrayLiteralP", "double"]
+- !private ["s25ExpressibleByArrayLiteralP", "init"]
+- !private ["s25ExpressibleByArrayLiteralP", "int"]
+- !private ["s25ExpressibleByArrayLiteralP", "numerical"]
+- !private ["s25ExpressibleByArrayLiteralP", "string"]
+- !private ["s25ExpressibleByArrayLiteralP", "subscript"]
+- !private ["s30ExpressibleByDictionaryLiteralP", "array"]
+- !private ["s30ExpressibleByDictionaryLiteralP", "bool"]
+- !private ["s30ExpressibleByDictionaryLiteralP", "double"]
+- !private ["s30ExpressibleByDictionaryLiteralP", "init"]
+- !private ["s30ExpressibleByDictionaryLiteralP", "int"]
+- !private ["s30ExpressibleByDictionaryLiteralP", "numerical"]
+- !private ["s30ExpressibleByDictionaryLiteralP", "string"]
+- !private ["s30ExpressibleByDictionaryLiteralP", "subscript"]
+- ["SH", "=="]
+- !private ["SH", "DataDeserializer"]
+- !private ["SH", "DecodableDeserializer"]
+- !private ["SH", "HttpBinResponse"]
+- !private ["SH", "ImageDeserializer"]
+- !private ["SH", "JSON"]
+- !private ["SH", "JSONDeserializer"]
+- !private ["SH", "RestController"]
+- !private ["SH", "RestOptions"]
+- !private ["SH", "SomeObject"]
+- !private ["SH", "VoidDeserializer"]
+- !private ["SH", "XCTAssert"]
+- !private ["SH", "XCTFail"]
+- ["SH", ""]
+- ["SH", "_rawHashValue"]
+- ["SH", "debugDescription"]
+- ["SH", "description"]
+- !private ["SH", "expectation"]
+- !private ["SH", "fulfill"]
+- !private ["SH", "get"]
+- ["SH", "hash"]
+- ["SH", "hashValue"]
+- ["SH", "init"]
+- ["SH", "intValue"]
+- !private ["SH", "make"]
+- !private ["SH", "post"]
+- !private ["SH", "put"]
+- !private ["SH", "setUp"]
+- ["SH", "stringValue"]
+- !private ["SH", "subscript"]
+- !private ["SH", "tearDown"]
+- !private ["SH", "waitForExpectations"]
+- !private ["s6HasherV", "combine"]
+- ["19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV", "SomeObject"]
+- ["19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV", "String"]
+- ["19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV", "deinit"]
+- ["19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV", "encode"]
+- ["19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV", "init"]
+- ["19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV", "json"]
+- ["19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV", "url"]
+- !private ["14RestEssentials17ImageDeserializerC", "init"]
+- !private ["14RestEssentials4JSONV", "array"]
+- !private ["14RestEssentials4JSONV", "bool"]
+- !private ["14RestEssentials4JSONV", "double"]
+- !private ["14RestEssentials4JSONV", "init"]
+- !private ["14RestEssentials4JSONV", "int"]
+- !private ["14RestEssentials4JSONV", "numerical"]
+- !private ["14RestEssentials4JSONV", "string"]
+- !private ["14RestEssentials4JSONV", "subscript"]
+- !private ["14RestEssentials16JSONDeserializerC", "init"]
+- !private ["s22KeyedDecodingContainerV", "decode"]
+- !private ["s22KeyedDecodingContainerV", "decodeIfPresent"]
+- !private ["s30KeyedDecodingContainerProtocolP", "decode"]
+- !private ["s30KeyedDecodingContainerProtocolP", "decodeIfPresent"]
+- !private ["s22KeyedEncodingContainerV", "encode"]
+- !private ["s22KeyedEncodingContainerV", "encodeIfPresent"]
+- !private ["s30KeyedEncodingContainerProtocolP", "encode"]
+- !private ["s30KeyedEncodingContainerProtocolP", "encodeIfPresent"]
+- !private ["SM", "subscript"]
+- !private ["10Foundation19MutableDataProtocolP", "subscript"]
+- ["So8NSObjectC", "Bool"]
+- ["So8NSObjectC", "Codable"]
+- !private ["So8NSObjectC", "Data"]
+- !private ["So8NSObjectC", "DataDeserializer"]
+- !private ["So8NSObjectC", "DecodableDeserializer"]
+- ["So8NSObjectC", "Double"]
+- !private ["So8NSObjectC", "HttpBinResponse"]
+- !private ["So8NSObjectC", "ImageDeserializer"]
+- ["So8NSObjectC", "Int"]
+- !private ["So8NSObjectC", "JSON"]
+- !private ["So8NSObjectC", "JSONDeserializer"]
+- !private ["So8NSObjectC", "NSImage"]
+- !private ["So8NSObjectC", "NetworkingError"]
+- !private ["So8NSObjectC", "RestController"]
+- !private ["So8NSObjectC", "RestOptions"]
+- ["So8NSObjectC", "SomeObject"]
+- ["So8NSObjectC", "String"]
+- !private ["So8NSObjectC", "Void"]
+- !private ["So8NSObjectC", "VoidDeserializer"]
+- !private ["So8NSObjectC", "XCTAssert"]
+- !private ["So8NSObjectC", "XCTFail"]
+- !private ["So8NSObjectC", "expectation"]
+- !private ["So8NSObjectC", "fulfill"]
+- !private ["So8NSObjectC", "get"]
+- ["So8NSObjectC", "init"]
+- !private ["So8NSObjectC", "make"]
+- !private ["So8NSObjectC", "post"]
+- !private ["So8NSObjectC", "put"]
+- ["So8NSObjectC", "setUp"]
+- ["So8NSObjectC", "tearDown"]
+- ["So8NSObjectC", "testDataResponse"]
+- ["So8NSObjectC", "testDecodableResponse"]
+- ["So8NSObjectC", "testEncodableObject"]
+- ["So8NSObjectC", "testGETEncodable"]
+- ["So8NSObjectC", "testGETGenericJSON"]
+- ["So8NSObjectC", "testGetImage"]
+- ["So8NSObjectC", "testJsonParsing"]
+- ["So8NSObjectC", "testPOST"]
+- ["So8NSObjectC", "testPUT"]
+- ["So8NSObjectC", "testUnexpectedStatusCode"]
+- ["So8NSObjectC", "testVoidResponse"]
+- !private ["So8NSObjectC", "waitForExpectations"]
+- !private ["So8NSObjectP", "DataDeserializer"]
+- !private ["So8NSObjectP", "DecodableDeserializer"]
+- !private ["So8NSObjectP", "HttpBinResponse"]
+- !private ["So8NSObjectP", "ImageDeserializer"]
+- !private ["So8NSObjectP", "JSON"]
+- !private ["So8NSObjectP", "JSONDeserializer"]
+- !private ["So8NSObjectP", "RestController"]
+- !private ["So8NSObjectP", "RestOptions"]
+- !private ["So8NSObjectP", "SomeObject"]
+- !private ["So8NSObjectP", "VoidDeserializer"]
+- !private ["So8NSObjectP", "XCTAssert"]
+- !private ["So8NSObjectP", "XCTFail"]
+- ["So8NSObjectP", ""]
+- !private ["So8NSObjectP", "expectation"]
+- !private ["So8NSObjectP", "fulfill"]
+- !private ["So8NSObjectP", "get"]
+- !private ["So8NSObjectP", "init"]
+- !private ["So8NSObjectP", "make"]
+- !private ["So8NSObjectP", "post"]
+- !private ["So8NSObjectP", "put"]
+- !private ["So8NSObjectP", "setUp"]
+- !private ["So8NSObjectP", "tearDown"]
+- !private ["So8NSObjectP", "waitForExpectations"]
+- ["14RestEssentials15NetworkingErrorO", "malformedResponse"]
+- ["14RestEssentials15NetworkingErrorO", "unexpectedStatusCode"]
+- !private ["Sk", "subscript"]
+- !private ["Sm", "subscript"]
+- !private ["14RestEssentials0A10ControllerC", "get"]
+- !private ["14RestEssentials0A10ControllerC", "make"]
+- !private ["14RestEssentials0A10ControllerC", "post"]
+- !private ["14RestEssentials0A10ControllerC", "put"]
+- ["19RestEssentialsTests0a10ControllerC0C", "Bool"]
+- ["19RestEssentialsTests0a10ControllerC0C", "Codable"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "Data"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "DataDeserializer"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "DecodableDeserializer"]
+- ["19RestEssentialsTests0a10ControllerC0C", "Double"]
+- ["19RestEssentialsTests0a10ControllerC0C", "HttpBinResponse"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "ImageDeserializer"]
+- ["19RestEssentialsTests0a10ControllerC0C", "Int"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "JSON"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "JSONDeserializer"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "NSImage"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "NetworkingError"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "RestController"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "RestOptions"]
+- ["19RestEssentialsTests0a10ControllerC0C", "SomeObject"]
+- ["19RestEssentialsTests0a10ControllerC0C", "String"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "Void"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "VoidDeserializer"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "XCTAssert"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "XCTFail"]
+- ["19RestEssentialsTests0a10ControllerC0C", "deinit"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "expectation"]
+- ["19RestEssentialsTests0a10ControllerC0C", "init"]
+- ["19RestEssentialsTests0a10ControllerC0C", "setUp"]
+- ["19RestEssentialsTests0a10ControllerC0C", "tearDown"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testDataResponse"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testDecodableResponse"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testEncodableObject"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testGETEncodable"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testGETGenericJSON"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testGetImage"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testJsonParsing"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testPOST"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testPUT"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testUnexpectedStatusCode"]
+- ["19RestEssentialsTests0a10ControllerC0C", "testVoidResponse"]
+- !private ["19RestEssentialsTests0a10ControllerC0C", "waitForExpectations"]
+- !private ["14RestEssentials0A7OptionsV", "expectedStatusCode"]
+- !private ["14RestEssentials0A7OptionsV", "init"]
+- !private ["14RestEssentials6ResultO", "value"]
+- !private ["ST", "subscript"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "Bool"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "Double"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "Int"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "String"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "deinit"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "encode"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "init"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "someBoolean"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "someDouble"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "someInt"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "someNumberArray"]
+- ["19RestEssentialsTests0a10ControllerC0C10SomeObjectV", "someString"]
+- !private ["s27StringInterpolationProtocolP", "appendInterpolation"]
+- !private ["s27StringInterpolationProtocolP", "appendLiteral"]
+- !private ["s16TextOutputStreamP", "appendInterpolation"]
+- !private ["s16TextOutputStreamP", "appendLiteral"]
+- !private ["So20NSURLSessionDelegateP", "get"]
+- !private ["So20NSURLSessionDelegateP", "make"]
+- !private ["So20NSURLSessionDelegateP", "post"]
+- !private ["So20NSURLSessionDelegateP", "put"]
+- !private ["14RestEssentials16VoidDeserializerC", "init"]
+- !private ["So11XCTActivityP", "DataDeserializer"]
+- !private ["So11XCTActivityP", "DecodableDeserializer"]
+- !private ["So11XCTActivityP", "HttpBinResponse"]
+- !private ["So11XCTActivityP", "ImageDeserializer"]
+- !private ["So11XCTActivityP", "JSON"]
+- !private ["So11XCTActivityP", "JSONDeserializer"]
+- !private ["So11XCTActivityP", "RestController"]
+- !private ["So11XCTActivityP", "RestOptions"]
+- !private ["So11XCTActivityP", "SomeObject"]
+- !private ["So11XCTActivityP", "VoidDeserializer"]
+- !private ["So11XCTActivityP", "XCTAssert"]
+- !private ["So11XCTActivityP", "XCTFail"]
+- ["So11XCTActivityP", ""]
+- !private ["So11XCTActivityP", "expectation"]
+- !private ["So11XCTActivityP", "init"]
+- !private ["So11XCTActivityP", "setUp"]
+- !private ["So11XCTActivityP", "tearDown"]
+- !private ["So11XCTActivityP", "waitForExpectations"]
+- !private ["So17XCTWaiterDelegateP", "DataDeserializer"]
+- !private ["So17XCTWaiterDelegateP", "DecodableDeserializer"]
+- !private ["So17XCTWaiterDelegateP", "HttpBinResponse"]
+- !private ["So17XCTWaiterDelegateP", "ImageDeserializer"]
+- !private ["So17XCTWaiterDelegateP", "JSON"]
+- !private ["So17XCTWaiterDelegateP", "JSONDeserializer"]
+- !private ["So17XCTWaiterDelegateP", "RestController"]
+- !private ["So17XCTWaiterDelegateP", "RestOptions"]
+- !private ["So17XCTWaiterDelegateP", "SomeObject"]
+- !private ["So17XCTWaiterDelegateP", "VoidDeserializer"]
+- !private ["So17XCTWaiterDelegateP", "XCTAssert"]
+- !private ["So17XCTWaiterDelegateP", "XCTFail"]
+- ["So17XCTWaiterDelegateP", ""]
+- !private ["So17XCTWaiterDelegateP", "expectation"]
+- !private ["So17XCTWaiterDelegateP", "init"]
+- !private ["So17XCTWaiterDelegateP", "setUp"]
+- !private ["So17XCTWaiterDelegateP", "tearDown"]
+- !private ["So17XCTWaiterDelegateP", "waitForExpectations"]
+- ["So6XCTestC", "Bool"]
+- ["So6XCTestC", "Codable"]
+- !private ["So6XCTestC", "Data"]
+- !private ["So6XCTestC", "DataDeserializer"]
+- !private ["So6XCTestC", "DecodableDeserializer"]
+- ["So6XCTestC", "Double"]
+- !private ["So6XCTestC", "HttpBinResponse"]
+- !private ["So6XCTestC", "ImageDeserializer"]
+- ["So6XCTestC", "Int"]
+- !private ["So6XCTestC", "JSON"]
+- !private ["So6XCTestC", "JSONDeserializer"]
+- !private ["So6XCTestC", "NSImage"]
+- !private ["So6XCTestC", "NetworkingError"]
+- !private ["So6XCTestC", "RestController"]
+- !private ["So6XCTestC", "RestOptions"]
+- ["So6XCTestC", "SomeObject"]
+- ["So6XCTestC", "String"]
+- !private ["So6XCTestC", "Void"]
+- !private ["So6XCTestC", "VoidDeserializer"]
+- !private ["So6XCTestC", "XCTAssert"]
+- !private ["So6XCTestC", "XCTFail"]
+- !private ["So6XCTestC", "expectation"]
+- ["So6XCTestC", "init"]
+- ["So6XCTestC", "setUp"]
+- ["So6XCTestC", "tearDown"]
+- ["So6XCTestC", "testDataResponse"]
+- ["So6XCTestC", "testDecodableResponse"]
+- ["So6XCTestC", "testEncodableObject"]
+- ["So6XCTestC", "testGETEncodable"]
+- ["So6XCTestC", "testGETGenericJSON"]
+- ["So6XCTestC", "testGetImage"]
+- ["So6XCTestC", "testJsonParsing"]
+- ["So6XCTestC", "testPOST"]
+- ["So6XCTestC", "testPUT"]
+- ["So6XCTestC", "testUnexpectedStatusCode"]
+- ["So6XCTestC", "testVoidResponse"]
+- !private ["So6XCTestC", "waitForExpectations"]
+- ["So10XCTestCaseC", "Bool"]
+- ["So10XCTestCaseC", "Codable"]
+- !private ["So10XCTestCaseC", "Data"]
+- !private ["So10XCTestCaseC", "DataDeserializer"]
+- !private ["So10XCTestCaseC", "DecodableDeserializer"]
+- ["So10XCTestCaseC", "Double"]
+- !private ["So10XCTestCaseC", "HttpBinResponse"]
+- !private ["So10XCTestCaseC", "ImageDeserializer"]
+- ["So10XCTestCaseC", "Int"]
+- !private ["So10XCTestCaseC", "JSON"]
+- !private ["So10XCTestCaseC", "JSONDeserializer"]
+- !private ["So10XCTestCaseC", "NSImage"]
+- !private ["So10XCTestCaseC", "NetworkingError"]
+- !private ["So10XCTestCaseC", "RestController"]
+- !private ["So10XCTestCaseC", "RestOptions"]
+- ["So10XCTestCaseC", "SomeObject"]
+- ["So10XCTestCaseC", "String"]
+- !private ["So10XCTestCaseC", "Void"]
+- !private ["So10XCTestCaseC", "VoidDeserializer"]
+- !private ["So10XCTestCaseC", "XCTAssert"]
+- !private ["So10XCTestCaseC", "XCTFail"]
+- ["So10XCTestCaseC", ""]
+- !private ["So10XCTestCaseC", "expectation"]
+- ["So10XCTestCaseC", "init"]
+- ["So10XCTestCaseC", "setUp"]
+- ["So10XCTestCaseC", "tearDown"]
+- ["So10XCTestCaseC", "testDataResponse"]
+- ["So10XCTestCaseC", "testDecodableResponse"]
+- ["So10XCTestCaseC", "testEncodableObject"]
+- ["So10XCTestCaseC", "testGETEncodable"]
+- ["So10XCTestCaseC", "testGETGenericJSON"]
+- ["So10XCTestCaseC", "testGetImage"]
+- ["So10XCTestCaseC", "testJsonParsing"]
+- ["So10XCTestCaseC", "testPOST"]
+- ["So10XCTestCaseC", "testPUT"]
+- ["So10XCTestCaseC", "testUnexpectedStatusCode"]
+- ["So10XCTestCaseC", "testVoidResponse"]
+- !private ["So10XCTestCaseC", "waitForExpectations"]
+- !private ["So17XCTestExpectationC", "fulfill"]
+- !private ["s14_ArrayProtocolP", "subscript"]
+- !private ["s24_DestructorSafeContainerP", "subscript"]
+- !private ["s19_HasContiguousBytesP", "subscript"]
+- !private ["s35_HasCustomAnyHashableRepresentationP", "subscript"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "DataDeserializer"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "DecodableDeserializer"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "HttpBinResponse"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "ImageDeserializer"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "JSON"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "JSONDeserializer"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "RestController"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "RestOptions"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "SomeObject"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "VoidDeserializer"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "XCTAssert"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "XCTFail"]
+- ["10Foundation27_KeyValueCodingAndObservingP", ""]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "expectation"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "fulfill"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "get"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "init"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "make"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "post"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "put"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "setUp"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "tearDown"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "waitForExpectations"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "DataDeserializer"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "DecodableDeserializer"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "HttpBinResponse"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "ImageDeserializer"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "JSON"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "JSONDeserializer"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "RestController"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "RestOptions"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "SomeObject"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "VoidDeserializer"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "XCTAssert"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "XCTFail"]
+- ["10Foundation37_KeyValueCodingAndObservingPublishingP", ""]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "expectation"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "fulfill"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "get"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "init"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "make"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "post"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "put"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "setUp"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "tearDown"]
+- !private ["10Foundation37_KeyValueCodingAndObservingPublishingP", "waitForExpectations"]
+- !private ["s21_ObjectiveCBridgeableP", "subscript"]
+depends-nominal:
+- !private "Sa"
+- !private "SK"
+- "s7CVarArgP"
+- "s9CodingKeyP"
+- !private "Sl"
+- !private "10Foundation15ContiguousBytesP"
+- "s28CustomDebugStringConvertibleP"
+- !private "s17CustomReflectableP"
+- "s23CustomStringConvertibleP"
+- !private "14RestEssentials16DataDeserializerC"
+- !private "10Foundation12DataProtocolP"
+- "Se"
+- !private "14RestEssentials21DecodableDeserializerC"
+- !private "s7DecoderP"
+- !private "s26DefaultStringInterpolationV"
+- !private "14RestEssentials12DeserializerP"
+- "SE"
+- !private "s7EncoderP"
+- "SQ"
+- "s5ErrorP"
+- !private "s25ExpressibleByArrayLiteralP"
+- !private "s30ExpressibleByDictionaryLiteralP"
+- "SH"
+- !private "s6HasherV"
+- "19RestEssentialsTests0a10ControllerC0C15HttpBinResponseV"
+- !private "14RestEssentials17ImageDeserializerC"
+- !private "14RestEssentials4JSONV"
+- !private "14RestEssentials16JSONDeserializerC"
+- !private "s22KeyedDecodingContainerV"
+- !private "s30KeyedDecodingContainerProtocolP"
+- !private "s22KeyedEncodingContainerV"
+- !private "s30KeyedEncodingContainerProtocolP"
+- !private "SM"
+- !private "10Foundation19MutableDataProtocolP"
+- "So8NSObjectC"
+- "So8NSObjectP"
+- "14RestEssentials15NetworkingErrorO"
+- !private "Sk"
+- !private "Sm"
+- !private "14RestEssentials0A10ControllerC"
+- "19RestEssentialsTests0a10ControllerC0C"
+- !private "14RestEssentials0A7OptionsV"
+- !private "14RestEssentials6ResultO"
+- !private "ST"
+- "19RestEssentialsTests0a10ControllerC0C10SomeObjectV"
+- !private "s27StringInterpolationProtocolP"
+- !private "s16TextOutputStreamP"
+- !private "So20NSURLSessionDelegateP"
+- !private "14RestEssentials16VoidDeserializerC"
+- "So11XCTActivityP"
+- "So17XCTWaiterDelegateP"
+- "So6XCTestC"
+- "So10XCTestCaseC"
+- !private "So17XCTestExpectationC"
+- !private "s14_ArrayProtocolP"
+- !private "s24_DestructorSafeContainerP"
+- !private "s19_HasContiguousBytesP"
+- !private "s35_HasCustomAnyHashableRepresentationP"
+- "10Foundation27_KeyValueCodingAndObservingP"
+- "10Foundation37_KeyValueCodingAndObservingPublishingP"
+- !private "s21_ObjectiveCBridgeableP"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/Swift.swiftmodule/x86_64.swiftinterface"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/SwiftOnoneSupport.swiftmodule/x86_64.swiftinterface"
+- "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/XPC.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/ObjectiveC.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/CoreData.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/CoreImage.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/Combine.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/QuartzCore.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/Dispatch.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/Metal.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/Darwin.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/Foundation.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/CoreFoundation.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/CoreGraphics.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/Swift.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/IOKit.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/AppKit.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/prebuilt-modules/SwiftOnoneSupport.swiftmodule/x86_64-apple-macos.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/ThreadLocalStorage.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/SwiftStddef.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/AssertionReporting.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/KeyPath.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/SwiftStdbool.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/System.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/Random.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/RuntimeStubs.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/LibcShims.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/UnicodeShims.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/RuntimeShims.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/FoundationShims.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/CoreFoundationShims.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/GlobalObjects.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/HeapObject.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/Target.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/SwiftStdint.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/RefCount.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/Visibility.h"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework/Modules/module.modulemap"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/swift/shims/module.modulemap"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/apinotes/Dispatch.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework/Headers/XCTest.apinotes"
+interface-hash: "5ceba69feafffcaa3c52fe60a2ee4ed0"

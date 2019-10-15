@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.1 (swiftlang-1100.0.270.13 clang-1100.0.33.7)"
+options: "31bb8559aedc4a86d76292d8c66a9121"
+build_time: [1571146085, 362215000]
+inputs:
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentials/Deserializer.swift": [1571146040, 720063134]
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentials/JSON.swift": [1555418034, 854566376]
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentials/RestController.swift": [1571146081, 691860960]
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentials/Result.swift": [1506193556, 0]

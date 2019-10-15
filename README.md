@@ -20,11 +20,13 @@ RestEssentials works with any of the supported operating systems listed below wi
 - iOS 8.0+
 - tvOS 9.0+
 - watchOS 2.0+
+- iPadOS 11.0+
+- macOS 10.10+
 
 ## Swift Version Compatibility
 
-RestEssentials is **ONLY** compatible with Swift 4 and above. See below for a list of recommended versions for your version of Swift:
-- Swift 5             -> RestEssentials 4.0.3
+RestEssentials is **ONLY** compatible with Swift 5 and above. See below for a list of recommended versions for your version of Swift:
+- Swift 5             -> RestEssentials 5.0.0 (or 4.0.3 -- macOS and SPM support added in 5)
 - Swift 4             -> RestEssentials 4.0.2
 - Swift 3             -> RestEssentials 3.1.0
 - Swift 2.3          -> Not Supported
@@ -41,7 +43,19 @@ RestEssentials is **ONLY** compatible with Swift 4 and above. See below for a li
 
 ## Installation
 
-> **Embedded frameworks require a minimum deployment target of iOS 8**
+### Swift Package Manager
+
+RestEssentials is compatible with the SPM for macOS, iOS, iPadOS, tvOS, and watchOS (not avaiale on Linux at this time). When using XCode 11, the Swift Package Manager is the recommended installation.
+
+To use in XCode 11, open your project and go to ```File->Swift Packages->Add Package Dependency...``` and follow along the dialogs. Thats it!
+
+If you prefer to add it manually using SPM, just add the RestEssentials dependency to your target in your ```Package.swift``` file.
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/sean7512/RestEssentials.git", from: "5.0.0")
+]
+```
 
 ### CocoaPods
 
@@ -61,7 +75,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'MyApp' do
-    pod 'RestEssentials', '~> 4.0.3'
+pod 'RestEssentials', '~> 5.0.0'
 end
 ```
 
