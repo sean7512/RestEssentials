@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   s.platforms = { :ios => "8.0", :tvos => "9.0", :watchos => "2.0" }
 
-  s.source_files = 'Source/*.swift'
+  s.source_files = 'Sources/RestEssentials/*.swift'
 
   s.requires_arc = true
 end
