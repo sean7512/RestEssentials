@@ -1,0 +1,5 @@
+version: "Apple Swift version 5.1 (swiftlang-1100.0.270.13 clang-1100.0.33.7)"
+options: "3982504e11ef7ae8f135ebb43078eefe"
+build_time: [1571146483, 930591000]
+inputs:
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentialsTests/RestControllerTests.swift": [1571146369, 170304245]

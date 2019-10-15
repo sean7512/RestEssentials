@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentialsTests.build/master.swiftdeps"
+  },
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentialsTests/RestControllerTests.swift": {
+    "dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentialsTests.build/RestControllerTests.d",
+    "object": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentialsTests.build/RestControllerTests.swift.o",
+    "swiftmodule": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentialsTests.build/RestControllerTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentialsTests.build/RestControllerTests.swiftdeps"
+  }
+}

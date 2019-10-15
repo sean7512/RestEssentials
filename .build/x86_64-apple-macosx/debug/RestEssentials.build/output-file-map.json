@@ -1,0 +1,29 @@
+{
+  "": {
+    "swift-dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/master.swiftdeps"
+  },
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentials/Deserializer.swift": {
+    "dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/Deserializer.d",
+    "object": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/Deserializer.swift.o",
+    "swiftmodule": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/Deserializer~partial.swiftmodule",
+    "swift-dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/Deserializer.swiftdeps"
+  },
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentials/JSON.swift": {
+    "dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/JSON.d",
+    "object": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/JSON.swift.o",
+    "swiftmodule": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/JSON~partial.swiftmodule",
+    "swift-dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/JSON.swiftdeps"
+  },
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentials/RestController.swift": {
+    "dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/RestController.d",
+    "object": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/RestController.swift.o",
+    "swiftmodule": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/RestController~partial.swiftmodule",
+    "swift-dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/RestController.swiftdeps"
+  },
+  "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/Sources/RestEssentials/Result.swift": {
+    "dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/Result.d",
+    "object": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/Result.swift.o",
+    "swiftmodule": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/Result~partial.swiftmodule",
+    "swift-dependencies": "/Users/seankosanovich/code_checkouts/GitHub/RestEssentials/.build/x86_64-apple-macosx/debug/RestEssentials.build/Result.swiftdeps"
+  }
+}
