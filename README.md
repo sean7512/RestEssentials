@@ -1,4 +1,4 @@
-RestEssentials is an extremely lightweight REST and JSON library for Swift and can be used on iOS, tvOS, and watchOS.
+RestEssentials is an extremely lightweight REST and JSON library for Swift and can be used on iOS, iPadOS, macOS, tvOS, and watchOS.
 
 ## Features
 
@@ -45,7 +45,7 @@ RestEssentials is **ONLY** compatible with Swift 5 and above. See below for a li
 
 ### Swift Package Manager
 
-RestEssentials is compatible with the SPM for macOS, iOS, iPadOS, tvOS, and watchOS (not avaiale on Linux at this time). When using XCode 11, the Swift Package Manager is the recommended installation.
+RestEssentials is compatible with the SPM for macOS, iOS, iPadOS, tvOS, and watchOS (not avaiale on Linux at this time). When using XCode 11, the Swift Package Manager is the recommended installation method.
 
 To use in XCode 11, open your project and go to ```File->Swift Packages->Add Package Dependency...``` and follow along the dialogs. Thats it!
 
