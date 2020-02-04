@@ -52,7 +52,11 @@ public class DecodableDeserializer<T: Decodable>: Deserializer {
     public required init() { }
 
     public func deserialize(_ data: Data) throws -> T {
-        return try JSONDecoder().decode(T.self, from: data)
+        do {
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            throw NetworkingError.malformedResponse(data, error)
+        }
     }
 }
 
@@ -83,7 +87,7 @@ public class VoidDeserializer: Deserializer {
 
         public func deserialize(_ data: Data) throws -> UIImage {
             guard let image = UIImage(data: data) else {
-                throw NetworkingError.malformedResponse(data)
+                throw NetworkingError.malformedResponse(data, nil)
             }
             return image
         }
@@ -100,7 +104,7 @@ public class VoidDeserializer: Deserializer {
 
     public func deserialize(_ data: Data) throws -> NSImage {
         guard let image = NSImage(data: data) else {
-            throw NetworkingError.malformedResponse(data)
+            throw NetworkingError.malformedResponse(data, nil)
         }
         return image
     }

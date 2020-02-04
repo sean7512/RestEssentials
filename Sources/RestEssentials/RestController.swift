@@ -25,7 +25,8 @@ public enum NetworkingError: Error {
 
     /// Indicates the server's response could not be deserialized using the given Deserializer.
     /// - parameter Data: The raw returned data from the server
-    case malformedResponse(Data)
+    /// - parameter Error?: The original system error (like a DecodingError, etc) that caused the malformedResponse to trigger
+    case malformedResponse(Data, Error?)
 
     /// Inidcates the server did not respond to the request.
     case noResponse

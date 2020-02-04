@@ -179,7 +179,7 @@ internal extension JSON {
             self.init(array: jsonArray)
         } else {
             print("Unknown json data type: \(json)")
-            throw NetworkingError.malformedResponse(data)
+            throw NetworkingError.malformedResponse(data, nil)
         }
     }
 

@@ -269,6 +269,37 @@ class RestControllerTests: XCTestCase {
         }
     }
 
+    func testWrongDecodabelResponse() {
+        let expectation = self.expectation(description: "POST JSON network call and wrong decodable object is returned")
+
+        guard let rest = RestController.make(urlString: "https://httpbin.org") else {
+            XCTFail("Bad URL")
+            return
+        }
+
+        let json: JSON = ["someString": "value1", "someInt": 2, "someDouble": 4.5, "someBoolean": true, "someNumberArray": [1, 2, 3, 4]]
+        rest.post(json, withDeserializer: DecodableDeserializer<SomeObject>(), at: "post") { result, httpResponse in
+            do {
+                let response = try result.value()
+                 XCTFail("Response should not have succeeded")
+            } catch NetworkingError.malformedResponse(let _, let originalError) {
+                if let decodingError = originalError as? DecodingError {
+                    expectation.fulfill()
+                } else {
+                    XCTFail("Oroginal error, not the expected DecodingErrorType: \(originalError)")
+                }
+            } catch {
+                XCTFail("Error performing POST: \(error)")
+            }
+        }
+
+        waitForExpectations(timeout: 5) { (error) -> Void in
+            if let _ = error {
+                XCTFail("Test timeout reached")
+            }
+        }
+    }
+
     func testEncodableObject() {
         let expectation = self.expectation(description: "POST JSON network call and decodable object is returned")
 

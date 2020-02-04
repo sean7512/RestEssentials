@@ -26,7 +26,7 @@ RestEssentials works with any of the supported operating systems listed below wi
 ## Swift Version Compatibility
 
 RestEssentials is **ONLY** compatible with Swift 5 and above. See below for a list of recommended versions for your version of Swift:
-- Swift 5             -> RestEssentials 5.0.1  (or 4.0.3 -- macOS and SPM support added in 5)
+- Swift 5             -> RestEssentials 5.1  (or 4.0.3+ -- macOS and SPM support added in 5.0.1)
 - Swift 4             -> RestEssentials 4.0.2
 - Swift 3             -> RestEssentials 3.1.0
 - Swift 2.3          -> Not Supported
@@ -53,7 +53,7 @@ If you prefer to add it manually using SPM, just add the RestEssentials dependen
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sean7512/RestEssentials.git", from: "5.0.1")
+    .package(url: "https://github.com/sean7512/RestEssentials.git", from: "5.1")
 ]
 ```
 
@@ -75,7 +75,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'MyApp' do
-pod 'RestEssentials', '~> 5.0.1'
+pod 'RestEssentials', '~> 5.1'
 end
 ```
 
@@ -262,7 +262,7 @@ rest.get(withDeserializer: ImageDeserializer()) { result, httpResponse in
 ```
 
 ### Error Handling
-When attempting to retrieve the result value (```try result.value()```), any errors that occurred will be thrown here.  The errors may be one of the built-in ```NetworkingError``` types or they may be ones from Foundation (especially if you are using the ```Codable``` protocol).  The built in error definitions are below for your convenience.
+When attempting to retrieve the result value (```try result.value()```), any errors that occurred will be thrown here.  The errors may be one of the built-in ```NetworkingError``` types or they may be ones from Foundation.  The built in error definitions are below for your convenience.
 
 ```swift
 /// Errors related to the networking for the `RestController`
@@ -278,13 +278,14 @@ public enum NetworkingError: Error {
 
     /// Indicates the server's response could not be deserialized using the given Deserializer.
     /// - parameter Data: The raw returned data from the server
-    case malformedResponse(Data)
+    /// - parameter Error?: The original system error (like a DecodingError, etc) that caused the malformedResponse to trigger
+    case malformedResponse(Data, Error?)
 
     /// Inidcates the server did not respond to the request.
     case noResponse
 }
 ```
-For information on the ```Codable``` errors, you can vew Apple's documentation at https://developer.apple.com/documentation/swift/encodingerror and https://developer.apple.com/documentation/swift/decodingerror
+```DecodingError``` errors will be caught and wrapped as a ```NetworkingError.malformedResponse(Data, Error?)```. For more enformating on these errors, see https://developer.apple.com/documentation/swift/encodingerror and https://developer.apple.com/documentation/swift/decodingerror
 
 ### Other Notes
 If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the `VoidDeserializer`.  If you want to return a different data type other than a Decodable, JSON, Data, or UIImage; create a new implementation of `Deserializer` and use that.
