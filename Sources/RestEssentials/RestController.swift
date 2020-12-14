@@ -46,9 +46,14 @@ public struct RestOptions {
     public init() {}
 }
 
+/// Allows users to generate headers before each REST call is made. The headers returned will be COMBINED with any headers set in the original RestController call. Any headers returned here will override the values given in the original call if they have the same name.
+///
+/// - parameter requestUrl: The URL that this header generation request is for. Never nu,,
+public typealias HeaderGenerator = (URL) -> [String : String]?
+
 /// Allows users to create HTTP REST networking calls that deal with JSON.
 ///
-/// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately.
+/// **NOTE:** Ensure to configure `App Transport Security` appropriately.
 public class RestController : NSObject, URLSessionDelegate {
 
     fileprivate static let kDefaultRequestTimeout = 60 as TimeInterval
@@ -64,11 +69,14 @@ public class RestController : NSObject, URLSessionDelegate {
     private let url: URL
     private var session: URLSession
 
+    /// This generator will be called before every useage of this RestController
+    public var headerGenerator: HeaderGenerator?
+
     /// If set to *true*, then self signed SSL certificates will be accepted from the **SAME** host only.
     ///
     /// If you are making a request to *https://foo.com* and you get redirected to *https://bar.com* (where bar.com uses a self signed SSL certificate), then the request will fail; as the SSL host of *bar.com* does not match the intended host of *foo.com*.
     ///
-    /// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately.
+    /// **NOTE:** Ensure to configure `App Transport Security` appropriately.
     public var acceptSelfSignedCertificate = false
 
     private init(url: URL) {
@@ -78,7 +86,7 @@ public class RestController : NSObject, URLSessionDelegate {
 
     /// Creates a new `RestController` for the given URL endpoint.
     ///
-    /// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately for the server.
+    /// **NOTE:** Ensure to configure `App Transport Security` appropriately.
     /// - parameter urlString: The URL of the server to send requests to.
     /// - returns: If the given URL string represents a valid `URL`, then a `RestController` for the URL will be returned; it not then `nil` will be returned.
     public static func make(urlString: String) -> RestController? {
@@ -91,7 +99,7 @@ public class RestController : NSObject, URLSessionDelegate {
 
     /// Creates a new `RestController` for the given URL endpoint.
     ///
-    /// **NOTE:** If running on iOS 9.0+ then ensure to configure `App Transport Security` appropriately for the server.
+    /// **NOTE:** Ensure to configure `App Transport Security` appropriately.
     /// - parameter url: The URL of the server to send requests to.
     /// - returns: A `RestController` for the given URL.
     public static func make(url: URL) -> RestController {
@@ -123,6 +131,12 @@ public class RestController : NSObject, URLSessionDelegate {
         request.setValue(accept, forHTTPHeaderField: RestController.kAcceptKey)
         if let customHeaders = options.httpHeaders {
             for (httpHeaderKey, httpHeaderValue) in customHeaders {
+                request.setValue(httpHeaderValue, forHTTPHeaderField: httpHeaderKey)
+            }
+        }
+
+        if let generatedHeaders = headerGenerator?(restURL) {
+            for (httpHeaderKey, httpHeaderValue) in generatedHeaders {
                 request.setValue(httpHeaderValue, forHTTPHeaderField: httpHeaderKey)
             }
         }

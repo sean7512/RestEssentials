@@ -53,7 +53,7 @@ class RestControllerTests: XCTestCase {
                 XCTAssert(response.url == "https://httpbin.org/get")
 
                 expectation.fulfill()
-            } catch NetworkingError.malformedResponse(let data) {
+            } catch NetworkingError.malformedResponse(let data, _) {
                 XCTFail("Error performing GET, malformed data response: \(data)")
             } catch {
                 XCTFail("Error performing GET: \(error)")
@@ -280,13 +280,13 @@ class RestControllerTests: XCTestCase {
         let json: JSON = ["someString": "value1", "someInt": 2, "someDouble": 4.5, "someBoolean": true, "someNumberArray": [1, 2, 3, 4]]
         rest.post(json, withDeserializer: DecodableDeserializer<SomeObject>(), at: "post") { result, httpResponse in
             do {
-                let response = try result.value()
+                _ = try result.value()
                  XCTFail("Response should not have succeeded")
-            } catch NetworkingError.malformedResponse(let _, let originalError) {
-                if let decodingError = originalError as? DecodingError {
+            } catch NetworkingError.malformedResponse( _, let originalError) {
+                if (originalError as? DecodingError) != nil {
                     expectation.fulfill()
                 } else {
-                    XCTFail("Oroginal error, not the expected DecodingErrorType: \(originalError)")
+                    XCTFail("Oroginal error, not the expected DecodingErrorType: \(String(describing: originalError))")
                 }
             } catch {
                 XCTFail("Error performing POST: \(error)")

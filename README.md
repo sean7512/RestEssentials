@@ -17,16 +17,16 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift and c
 
 RestEssentials works with any of the supported operating systems listed below with the version of Xcode.
 
-- iOS 8.0+
-- tvOS 9.0+
-- watchOS 2.0+
+- iOS 11.0+
+- tvOS 11.0+
+- watchOS 4.0+
 - iPadOS 11.0+
-- macOS 10.10+
+- macOS 10.13+
 
 ## Swift Version Compatibility
 
 RestEssentials is **ONLY** compatible with Swift 5 and above. See below for a list of recommended versions for your version of Swift:
-- Swift 5             -> RestEssentials 5.1.0  (or 4.0.3+ -- macOS and SPM support added in 5.0.1)
+- Swift 5             -> RestEssentials 5.2.0  (or 4.0.3+ -- macOS and SPM support added in 5.0.1)
 - Swift 4             -> RestEssentials 4.0.2
 - Swift 3             -> RestEssentials 3.1.0
 - Swift 2.3          -> Not Supported
@@ -53,7 +53,7 @@ If you prefer to add it manually using SPM, just add the RestEssentials dependen
 
 ```swift
 dependencies: [
-.package(url: "https://github.com/sean7512/RestEssentials.git", from: "5.1.0")
+.package(url: "https://github.com/sean7512/RestEssentials.git", from: "5.2.0")
 ]
 ```
 
@@ -71,11 +71,11 @@ To integrate RestEssentials into your Xcode project using CocoaPods, specify it 
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+platform :ios, '11.0'
 use_frameworks!
 
 target 'MyApp' do
-pod 'RestEssentials', '~> 5.1.0'
+pod 'RestEssentials', '~> 5.2.0'
 end
 ```
 
@@ -294,11 +294,13 @@ The callbacks are **NOT** guranteed to be on the main thread (or the calling thr
 
 There is an alternative static function to instantiate a `RestController` object: `make:URL` This variation does not return an `Optional` like the `String` version.  This is useful for easily constructing your URL with query parameters (typically for a `GET` request).
 
+A `RestController` has a `headerGenerator` field that is a closure callback that will be made for every call to generatoe headers. This simplifies the process of sending the same header on every request, as a `RestOptions` object does not need to be created for each request.
+
 All of the operations can take an optional `RestOptions` object, which allow you to configure the expected HTTP status code, optional HTTP headers to include in the request, and the timeout on the request in seconds.
 
 All of the operations can also take a relative path to be used.  If your `RestController` object is for *http://foo.com* you can pass in *some/relative/path*, then the request will go to *http://foo.com/some/relative/path*.  This enables you to use a single `RestController` object for all REST calls to the same host.  This **IS** the preferred behavior isntead of creating a new `RestController` for every call.
 
-You can optionally allow the framework to accept a self-signed SSL certificate from the host using the *acceptSelfSignedCertificate* property on the `RestController` instance.  If being used on iOS 9.0+, you must properly configure App Transport Security.
+You can optionally allow the framework to accept a self-signed SSL certificate from the host using the *acceptSelfSignedCertificate* property on the `RestController` instance.  You must properly configure App Transport Security.
 
 ## FAQ
 
