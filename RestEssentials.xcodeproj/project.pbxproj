@@ -24,7 +24,6 @@
 		OBJ_30 /* Deserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Deserializer.swift */; };
 		OBJ_31 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* JSON.swift */; };
 		OBJ_32 /* RestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* RestController.swift */; };
-		OBJ_33 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* Result.swift */; };
 		OBJ_40 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_51 /* RestControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* RestControllerTests.swift */; };
 		OBJ_53 /* RestEssentials.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "RestEssentials::RestEssentials::Product" /* RestEssentials.framework */; };
@@ -52,7 +51,6 @@
 		OBJ_11 /* Deserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deserializer.swift; sourceTree = "<group>"; };
 		OBJ_12 /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		OBJ_13 /* RestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestController.swift; sourceTree = "<group>"; };
-		OBJ_14 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		OBJ_17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		OBJ_18 /* RestControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestControllerTests.swift; sourceTree = "<group>"; };
 		OBJ_22 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -139,7 +137,6 @@
 				OBJ_11 /* Deserializer.swift */,
 				OBJ_12 /* JSON.swift */,
 				OBJ_13 /* RestController.swift */,
-				OBJ_14 /* Result.swift */,
 			);
 			name = RestEssentials;
 			path = Sources/RestEssentials;
@@ -232,7 +229,6 @@
 				OBJ_30 /* Deserializer.swift in Sources */,
 				OBJ_31 /* JSON.swift in Sources */,
 				OBJ_32 /* RestController.swift in Sources */,
-				OBJ_33 /* Result.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

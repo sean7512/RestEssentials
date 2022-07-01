@@ -16,20 +16,20 @@
 public enum NetworkingError: Error {
     /// Indicates the server responded with an unexpected status code.
     /// - parameter Int: The status code the server respodned with.
-    /// - parameter Data?: The raw returned data from the server
-    case unexpectedStatusCode(Int, Data?)
+    /// - parameter HTTPURLResponse: The HTTPURLResponse from the server
+    /// - parameter Data: The raw returned data from the server
+    case unexpectedStatusCode(Int, HTTPURLResponse, Data)
 
     /// Indicates that the server responded using an unknown protocol.
-    /// - parameter Data?: The raw returned data from the server
-    case badResponse(Data?)
+    /// - parameter URLResponse: The response returned form the server.
+    /// - parameter Data: The raw returned data from the server.
+    case badResponse(URLResponse, Data)
 
     /// Indicates the server's response could not be deserialized using the given Deserializer.
+    /// - parameter HTTPURLResponse: The HTTPURLResponse from the server
     /// - parameter Data: The raw returned data from the server
-    /// - parameter Error?: The original system error (like a DecodingError, etc) that caused the malformedResponse to trigger
-    case malformedResponse(Data, Error?)
-
-    /// Inidcates the server did not respond to the request.
-    case noResponse
+    /// - parameter Error: The original system error (like a DecodingError, etc) that caused the malformedResponse to trigger
+    case malformedResponse(HTTPURLResponse, Data, Error)
 }
 
 /// Options for `RestController` calls. Allows you to set an expected HTTP status code, HTTP Headers, or to modify the request timeout.
@@ -81,7 +81,7 @@ public class RestController : NSObject, URLSessionDelegate {
 
     private init(url: URL) {
         self.url = url
-        self.session = Foundation.URLSession.shared
+        self.session = URLSession.shared
     }
 
     /// Creates a new `RestController` for the given URL endpoint.
@@ -104,7 +104,7 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - returns: A `RestController` for the given URL.
     public static func make(url: URL) -> RestController {
         let restController = RestController(url: url)
-        restController.session = Foundation.URLSession(configuration: URLSessionConfiguration.default, delegate: restController, delegateQueue: nil)
+        restController.session = URLSession(configuration: URLSessionConfiguration.default, delegate: restController, delegateQueue: nil)
         return restController
     }
 
@@ -117,7 +117,7 @@ public class RestController : NSObject, URLSessionDelegate {
         }
     }
 
-    private func dataTask(relativePath: String?, httpMethod: String, accept: String, payload: Data?, options: RestOptions) async throws -> (Result<Data>, HTTPURLResponse?) {
+    private func dataTask(relativePath: String?, httpMethod: String, accept: String, payload: Data?, options: RestOptions) async throws -> (Data, HTTPURLResponse) {
         let restURL: URL;
         if let relativeURL = relativePath {
             restURL = url.appendingPathComponent(relativeURL)
@@ -162,28 +162,23 @@ public class RestController : NSObject, URLSessionDelegate {
 
 
         guard let httpResponse = response as? HTTPURLResponse else {
-            return (.failure(NetworkingError.badResponse(data)), nil)
+            throw NetworkingError.badResponse(response, data)
         }
 
         if let expectedStatusCode = options.expectedStatusCode, httpResponse.statusCode != expectedStatusCode {
-            return (.failure(NetworkingError.unexpectedStatusCode(httpResponse.statusCode, data)), httpResponse)
+            throw NetworkingError.unexpectedStatusCode(httpResponse.statusCode, httpResponse, data)
         }
 
-        return (.success(data), httpResponse)
+        return (data, httpResponse)
     }
 
-    private func makeCall<T: Deserializer>(_ relativePath: String?, httpMethod: String, payload: Data?, responseDeserializer: T, options: RestOptions) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
+    private func makeCall<T: Deserializer>(_ relativePath: String?, httpMethod: String, payload: Data?, responseDeserializer: T, options: RestOptions) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        let (data, httpResponse) = try await dataTask(relativePath: relativePath, httpMethod: httpMethod, accept: responseDeserializer.acceptHeader, payload: payload, options: options)
         do {
-            let (result, httpResponse) = try await dataTask(relativePath: relativePath, httpMethod: httpMethod, accept: responseDeserializer.acceptHeader, payload: payload, options: options)
-            do {
-                let data = try result.value()
-                let transformedResponse = try responseDeserializer.deserialize(data)
-                return (.success(transformedResponse), httpResponse)
-            } catch {
-                return (.failure(error), httpResponse)
-            }
+            let transformedResponse = try responseDeserializer.deserialize(data)
+            return (transformedResponse, httpResponse)
         } catch {
-            return (.failure(error), nil)
+            throw NetworkingError.malformedResponse(httpResponse, data, error)
         }
     }
     
@@ -195,8 +190,8 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - returns: A boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func get<T: Deserializer>(withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
-        return await makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: responseDeserializer, options: options)
+    public func get<T: Deserializer>(withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        return try await makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: responseDeserializer, options: options)
     }
 
     /// Performs a GET request to the server, capturing the data object type response from the server.
@@ -207,9 +202,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - returns: A boxed `Result<D>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func get<D: Decodable>(_ type: D.Type, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<D>, HTTPURLResponse?) {
+    public func get<D: Decodable>(_ type: D.Type, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (D, HTTPURLResponse?) {
         let decodableDeserializer = DecodableDeserializer<D>()
-        return await makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: decodableDeserializer, options: options)
+        return try await makeCall(relativePath, httpMethod: RestController.kGetType, payload: nil, responseDeserializer: decodableDeserializer, options: options)
     }
 
     /// Performs a POST request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -221,13 +216,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - returns: A boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func post<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
-        do {
-            let payload = try json.makeData()
-            return await makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: responseDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func post<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        let payload = try json.makeData()
+        return try await makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: responseDeserializer, options: options)
     }
 
     /// Performs a POST request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -239,13 +230,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - returns: A boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func post<T: Deserializer, E: Encodable>(_ encodable: E, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
-        do {
-            let payload = try JSONEncoder().encode(encodable)
-            return await makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: responseDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func post<T: Deserializer, E: Encodable>(_ encodable: E, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        let payload = try JSONEncoder().encode(encodable)
+        return try await makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: responseDeserializer, options: options)
     }
 
     /// Performs a POST request to the server, capturing the `JSON` response from the server.
@@ -256,13 +243,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - returns:A boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func post(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<JSON>, HTTPURLResponse?) {
-        do {
-            let payload = try json.makeData()
-            return await makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: JSONDeserializer(), options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func post(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (JSON, HTTPURLResponse?) {
+        let payload = try json.makeData()
+        return try await makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: JSONDeserializer(), options: options)
     }
 
     /// Performs a POST request to the server, capturing the `JSON` response from the server.
@@ -274,14 +257,10 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter responseType: The type of object this get call returns. This type must conform to `Decodable`
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - returns: A boxed `Result<D>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func post<E: Encodable, D: Decodable>(_ encodable: E, at relativePath: String? = nil, responseType type: D.Type, options: RestOptions = RestOptions()) async -> (Result<D>, HTTPURLResponse?) {
-        do {
-            let payload = try JSONEncoder().encode(encodable)
-            let decodableDeserializer = DecodableDeserializer<D>()
-            return await makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: decodableDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func post<E: Encodable, D: Decodable>(_ encodable: E, at relativePath: String? = nil, responseType type: D.Type, options: RestOptions = RestOptions()) async throws -> (D, HTTPURLResponse?) {
+        let payload = try JSONEncoder().encode(encodable)
+        let decodableDeserializer = DecodableDeserializer<D>()
+        return try await makeCall(relativePath, httpMethod: RestController.kPostType, payload: payload, responseDeserializer: decodableDeserializer, options: options)
     }
     
     /// Performs a PUT request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -293,13 +272,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - returns: A boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func put<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
-        do {
-            let payload = try json.makeData()
-            return await makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: responseDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func put<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        let payload = try json.makeData()
+        return try await makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: responseDeserializer, options: options)
     }
     
     /// Performs a PUT request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -311,13 +286,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - returns: A boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func put<T: Deserializer, E: Encodable>(_ encodable: E, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
-        do {
-            let payload = try JSONEncoder().encode(encodable)
-            return await makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: responseDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func put<T: Deserializer, E: Encodable>(_ encodable: E, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        let payload = try JSONEncoder().encode(encodable)
+        return try await makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: responseDeserializer, options: options)
     }
     
     /// Performs a PUT request to the server, capturing the `JSON` response from the server.
@@ -328,13 +299,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - returns: A boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func put(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<JSON>, HTTPURLResponse?) {
-        do {
-            let payload = try json.makeData()
-            return await makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: JSONDeserializer(), options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func put(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (JSON, HTTPURLResponse?) {
+        let payload = try json.makeData()
+        return try await makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: JSONDeserializer(), options: options)
     }
     
     /// Performs a PUT request to the server, capturing the `JSON` response from the server.
@@ -346,14 +313,10 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter responseType: The type of object this get call returns. This type must conform to `Decodable`
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - returns: A boxed `Result<D>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func put<E: Encodable, D: Decodable>(_ encodable: E, at relativePath: String? = nil, responseType type: D.Type, options: RestOptions = RestOptions()) async -> (Result<D>, HTTPURLResponse?) {
-        do {
-            let payload = try JSONEncoder().encode(encodable)
-            let decodableDeserializer = DecodableDeserializer<D>()
-            return await makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: decodableDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func put<E: Encodable, D: Decodable>(_ encodable: E, at relativePath: String? = nil, responseType type: D.Type, options: RestOptions = RestOptions()) async throws -> (D, HTTPURLResponse?) {
+        let payload = try JSONEncoder().encode(encodable)
+        let decodableDeserializer = DecodableDeserializer<D>()
+        return try await makeCall(relativePath, httpMethod: RestController.kPutType, payload: payload, responseDeserializer: decodableDeserializer, options: options)
     }
     
     /// Performs a DELETE request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -365,13 +328,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - returns: A boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func delete<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
-        do {
-            let payload = try json.makeData()
-            return await makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: responseDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func delete<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        let payload = try json.makeData()
+        return try await makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: responseDeserializer, options: options)
     }
     
     /// Performs a DELETE request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -383,13 +342,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - returns: A boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func delete<T: Deserializer, E: Encodable>(_ encodable: E, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
-        do {
-            let payload = try JSONEncoder().encode(encodable)
-            return await makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: responseDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func delete<T: Deserializer, E: Encodable>(_ encodable: E, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        let payload = try JSONEncoder().encode(encodable)
+        return try await makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: responseDeserializer, options: options)
     }
     
     /// Performs a DELETE request to the server, capturing the `JSON` response from the server.
@@ -400,13 +355,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - returns: A boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func delete(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<JSON>, HTTPURLResponse?) {
-        do {
-            let payload = try json.makeData()
-            return await makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: JSONDeserializer(), options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func delete(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (JSON, HTTPURLResponse?) {
+        let payload = try json.makeData()
+        return try await makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: JSONDeserializer(), options: options)
     }
     
     /// Performs a DELETE request to the server, capturing the `JSON` response from the server.
@@ -418,14 +369,10 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter responseType: The type of object this get call returns. This type must conform to `Decodable`
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - returns: A boxed `Result<D>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func delete<E: Encodable, D: Decodable>(_ encodable: E, at relativePath: String? = nil, responseType type: D.Type, options: RestOptions = RestOptions()) async -> (Result<D>, HTTPURLResponse?) {
-        do {
-            let payload = try JSONEncoder().encode(encodable)
-            let decodableDeserializer = DecodableDeserializer<D>()
-            return await makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: decodableDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func delete<E: Encodable, D: Decodable>(_ encodable: E, at relativePath: String? = nil, responseType type: D.Type, options: RestOptions = RestOptions()) async throws -> (D, HTTPURLResponse?) {
+        let payload = try JSONEncoder().encode(encodable)
+        let decodableDeserializer = DecodableDeserializer<D>()
+        return try await makeCall(relativePath, httpMethod: RestController.kDeleteType, payload: payload, responseDeserializer: decodableDeserializer, options: options)
     }
     
     /// Performs a PATCH request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -437,13 +384,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - returns: A boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func patch<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
-        do {
-            let payload = try json.makeData()
-            return await makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: responseDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func patch<T: Deserializer>(_ json: JSON, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        let payload = try json.makeData()
+        return try await makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: responseDeserializer, options: options)
     }
     
     /// Performs a PATCH request to the server, capturing the output of the server using the supplied `Deserializer`.
@@ -455,13 +398,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path to append to this instance.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct for this call.
     /// - returns: A boxed `Result<T.ResponseType>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func patch<T: Deserializer, E: Encodable>(_ encodable: E, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<T.ResponseType>, HTTPURLResponse?) {
-        do {
-            let payload = try JSONEncoder().encode(encodable)
-            return await makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: responseDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func patch<T: Deserializer, E: Encodable>(_ encodable: E, withDeserializer responseDeserializer: T, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (T.ResponseType, HTTPURLResponse?) {
+        let payload = try JSONEncoder().encode(encodable)
+        return try await makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: responseDeserializer, options: options)
     }
     
     /// Performs a PATCH request to the server, capturing the `JSON` response from the server.
@@ -472,13 +411,9 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter relativePath: An **optional** parameter of a relative path of this inscatnaces main URL as setup at when created.
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - returns: A boxed `Result<JSON>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func patch(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions()) async -> (Result<JSON>, HTTPURLResponse?) {
-        do {
-            let payload = try json.makeData()
-            return await makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: JSONDeserializer(), options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func patch(_ json: JSON, at relativePath: String? = nil, options: RestOptions = RestOptions()) async throws -> (JSON, HTTPURLResponse?) {
+        let payload = try json.makeData()
+        return try await makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: JSONDeserializer(), options: options)
     }
     
     /// Performs a PATCH request to the server, capturing the `JSON` response from the server.
@@ -490,14 +425,10 @@ public class RestController : NSObject, URLSessionDelegate {
     /// - parameter responseType: The type of object this get call returns. This type must conform to `Decodable`
     /// - parameter options: An **optional** parameter of a `RestOptions` struct containing any header fields to include with the call or a different expected status code.
     /// - returns: A boxed `Result<D>` and a `NSHTTPURLResponse?` representing the response from the server.
-    public func patch<E: Encodable, D: Decodable>(_ encodable: E, at relativePath: String? = nil, responseType type: D.Type, options: RestOptions = RestOptions()) async -> (Result<D>, HTTPURLResponse?) {
-        do {
-            let payload = try JSONEncoder().encode(encodable)
-            let decodableDeserializer = DecodableDeserializer<D>()
-            return await makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: decodableDeserializer, options: options)
-        } catch {
-            return (.failure(error), nil)
-        }
+    public func patch<E: Encodable, D: Decodable>(_ encodable: E, at relativePath: String? = nil, responseType type: D.Type, options: RestOptions = RestOptions()) async throws -> (D, HTTPURLResponse?) {
+        let payload = try JSONEncoder().encode(encodable)
+        let decodableDeserializer = DecodableDeserializer<D>()
+        return try await makeCall(relativePath, httpMethod: RestController.kPatchType, payload: payload, responseDeserializer: decodableDeserializer, options: options)
     }
     
 }

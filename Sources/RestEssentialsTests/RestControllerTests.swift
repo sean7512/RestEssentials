@@ -39,147 +39,110 @@ class RestControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testGETEncodable() async {
+    func testGETEncodable() async throws {
         guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
         }
 
-        let (result, _) = await rest.get(HttpBinResponse.self)
-        do {
-            let response = try result.value()
-            XCTAssert(response.url == "https://httpbin.org/get")
-        } catch NetworkingError.malformedResponse(let data, _) {
-            XCTFail("Error performing GET, malformed data response: \(data)")
-        } catch {
-            XCTFail("Error performing GET: \(error)")
-        }
+        let (response, _) = try await rest.get(HttpBinResponse.self)
+        XCTAssert(response.url == "https://httpbin.org/get")
     }
 
-    func testGETGenericJSON() async {
+    func testGETGenericJSON() async throws {
         guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
         }
         
-        let (result, _) = await rest.get(withDeserializer: JSONDeserializer())
-        do {
-            let json = try result.value()
-            XCTAssert(json["url"].string == "https://httpbin.org/get")
-        } catch {
-            XCTFail("Error performing GET: \(error)")
-        }
+        let (json, _) = try await rest.get(withDeserializer: JSONDeserializer())
+        XCTAssert(json["url"].string == "https://httpbin.org/get")
     }
 
-    func testPOST() async {
+    func testPOST() async throws {
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
         let json: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true, "key5": [1, 2, 3, 4]]
-        let (result, _) = await rest.post(json, at: "post")
-        do {
-            let json = try result.value()
-            XCTAssert(json["url"].string == "https://httpbin.org/post")
-            XCTAssert(json["json"]["key1"].string == "value1")
-            XCTAssert(json["json"]["key2"].int == 2)
-            XCTAssert(json["json"]["key3"].double == 4.5)
-            XCTAssert(json["json"]["key4"].bool == true)
-            XCTAssert(json["json"]["key5"][2].numerical == 3)
-            XCTAssert(json["json"]["key6"].string == nil)
+        let (resposneJson, _) = try await rest.post(json, at: "post")
+        XCTAssert(resposneJson["url"].string == "https://httpbin.org/post")
+        XCTAssert(resposneJson["json"]["key1"].string == "value1")
+        XCTAssert(resposneJson["json"]["key2"].int == 2)
+        XCTAssert(resposneJson["json"]["key3"].double == 4.5)
+        XCTAssert(resposneJson["json"]["key4"].bool == true)
+        XCTAssert(resposneJson["json"]["key5"][2].numerical == 3)
+        XCTAssert(resposneJson["json"]["key6"].string == nil)
 
-            guard let jsonArray = json["json"]["key5"].array else {
-                XCTFail("Array not returned in JSON")
-                return
-            }
+        guard let jsonArray = resposneJson["json"]["key5"].array else {
+            XCTFail("Array not returned in JSON")
+            return
+        }
 
-            for item in jsonArray {
-                XCTAssert(item.numerical != nil)
-            }
-        } catch {
-            XCTFail("Error performing POST: \(error)")
+        for item in jsonArray {
+            XCTAssert(item.numerical != nil)
         }
     }
 
-    func testPUT() async {
+    func testPUT() async throws {
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
-        let (result, _) = await rest.put(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]), at: "put")
-        do {
-            let json = try result.value()
-            XCTAssert(json["url"].string == "https://httpbin.org/put")
-        } catch {
-            XCTFail("Error performing PUT: \(error)")
-        }
+        let (json, _) = try await rest.put(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]), at: "put")
+        XCTAssert(json["url"].string == "https://httpbin.org/put")
     }
 
-    func testGetImage() async{
+    func testGetImage() async throws {
         guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
-        let (result, _) = await rest.get(withDeserializer: ImageDeserializer())
-        do {
-            let img = try result.value()
-            #if os(iOS) || os(watchOS) || os(tvOS)
-                XCTAssert(img is UIImage)
-            #elseif os(OSX)
-                XCTAssert(img is NSImage)
-            #endif
-        } catch {
-            XCTFail("Error performing GET: \(error)")
-        }
+        let (img, _) = try await rest.get(withDeserializer: ImageDeserializer())
+        #if os(iOS) || os(watchOS) || os(tvOS)
+            XCTAssert(img is UIImage)
+        #elseif os(OSX)
+            XCTAssert(img is NSImage)
+        #endif
     }
 
-    func testVoidResponse() async {
+    func testVoidResponse() async throws {
         guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
-        let _ = await rest.get(withDeserializer: VoidDeserializer())
+        let _ = try await rest.get(withDeserializer: VoidDeserializer())
     }
 
-    func testDataResponse() async {
+    func testDataResponse() async throws {
         guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
-        let (result, _) = await rest.get(withDeserializer: DataDeserializer())
-        do {
-            let data = try result.value()
-            XCTAssert(data is Data)
-        } catch {
-            XCTFail("Error performing GET: \(error)")
-        }
+        let (data, _) = try await rest.get(withDeserializer: DataDeserializer())
+        XCTAssert(data is Data)
     }
 
-    func testDecodableResponse() async {
+    func testDecodableResponse() async throws {
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
         let json: JSON = ["someString": "value1", "someInt": 2, "someDouble": 4.5, "someBoolean": true, "someNumberArray": [1, 2, 3, 4]]
-        let (result, _) = await rest.post(json, withDeserializer: DecodableDeserializer<HttpBinResponse>(), at: "post")
-        do {
-            let response = try result.value()
-            XCTAssert(response is HttpBinResponse)
-            XCTAssert(response.url == "https://httpbin.org/post")
-            XCTAssert(response.json?.someString == "value1")
-            XCTAssert(response.json?.someInt == 2)
-            XCTAssert(response.json?.someDouble == 4.5)
-            XCTAssert(response.json?.someBoolean == true)
-            XCTAssert(response.json?.someNumberArray[2] == 3)
-        } catch {
-            XCTFail("Error performing POST: \(error)")
-        }
+        let (httpBinResponse, _) = try await rest.post(json, withDeserializer: DecodableDeserializer<HttpBinResponse>(), at: "post")
+        XCTAssert(httpBinResponse is HttpBinResponse)
+        XCTAssert(httpBinResponse.url == "https://httpbin.org/post")
+        XCTAssert(httpBinResponse.json?.someString == "value1")
+        XCTAssert(httpBinResponse.json?.someInt == 2)
+        XCTAssert(httpBinResponse.json?.someDouble == 4.5)
+        XCTAssert(httpBinResponse.json?.someBoolean == true)
+        XCTAssert(httpBinResponse.json?.someNumberArray[2] == 3)
     }
 
     func testWrongDecodabelResponse() async {
@@ -189,40 +152,34 @@ class RestControllerTests: XCTestCase {
         }
 
         let json: JSON = ["someString": "value1", "someInt": 2, "someDouble": 4.5, "someBoolean": true, "someNumberArray": [1, 2, 3, 4]]
-        let (result, _) = await rest.post(json, withDeserializer: DecodableDeserializer<SomeObject>(), at: "post")
         do {
-            _ = try result.value()
+            let _ = try await rest.post(json, withDeserializer: DecodableDeserializer<SomeObject>(), at: "post")
              XCTFail("Response should not have succeeded")
-        } catch NetworkingError.malformedResponse( _, let originalError) {
+        } catch NetworkingError.malformedResponse(_, _, let originalError) {
             XCTAssertNotNil(originalError as? DecodingError)
         } catch {
             XCTFail("Error performing POST: \(error)")
         }
     }
 
-    func testEncodableObject() async {
+    func testEncodableObject() async throws {
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
         let someObject = SomeObject(someString: "value1", someInt: 2, someDouble: 4.5, someBoolean: true, someNumberArray: [1, 2, 3, 4])
-        let (result, _) = await rest.post(someObject, at: "post", responseType: HttpBinResponse.self)
-        do {
-            let response = try result.value()
-            XCTAssert(response is HttpBinResponse)
-            XCTAssert(response.url == "https://httpbin.org/post")
-            XCTAssert(response.json?.someString == someObject.someString)
-            XCTAssert(response.json?.someInt == someObject.someInt)
-            XCTAssert(response.json?.someDouble == someObject.someDouble)
-            XCTAssert(response.json?.someBoolean == someObject.someBoolean)
-            XCTAssert(response.json?.someNumberArray[2] == someObject.someNumberArray[2])
-        } catch {
-            XCTFail("Error performing POST: \(error)")
-        }
+        let (httpBinResponse, _) = try await rest.post(someObject, at: "post", responseType: HttpBinResponse.self)
+        XCTAssert(httpBinResponse is HttpBinResponse)
+        XCTAssert(httpBinResponse.url == "https://httpbin.org/post")
+        XCTAssert(httpBinResponse.json?.someString == someObject.someString)
+        XCTAssert(httpBinResponse.json?.someInt == someObject.someInt)
+        XCTAssert(httpBinResponse.json?.someDouble == someObject.someDouble)
+        XCTAssert(httpBinResponse.json?.someBoolean == someObject.someBoolean)
+        XCTAssert(httpBinResponse.json?.someNumberArray[2] == someObject.someNumberArray[2])
     }
 
-    func testUnexpectedStatusCode() async {
+    func testUnexpectedStatusCode() async throws {
         guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
@@ -230,35 +187,29 @@ class RestControllerTests: XCTestCase {
         
         var options = RestOptions()
         options.expectedStatusCode = 201
-        let (result, _) = await rest.get(HttpBinResponse.self, options: options)
         do {
-            let _ = try result.value()
+            let _ = try await rest.get(HttpBinResponse.self, options: options)
             XCTFail("Expected to get an error, but call succeeded")
-        } catch NetworkingError.unexpectedStatusCode(let actualStatusCode, _) {
+        } catch NetworkingError.unexpectedStatusCode(let actualStatusCode, _, _) {
             XCTAssert(actualStatusCode != options.expectedStatusCode)
         } catch {
             XCTFail("Received unexpected error: \(error)")
         }
     }
 
-    func testJsonParsing() async {
+    func testJsonParsing() async throws {
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
         }
 
         let json: JSON = ["error_code": 2, "error_description": "Invalid credentials", "result": 1]
-        let (result, _) = await rest.post(json, at: "post")
-        do {
-            let json = try result.value()
-            XCTAssert(json["url"].string == "https://httpbin.org/post")
-            if let errorCode = json["json"]["error_code"].int, errorCode != 5 {
-                XCTAssert(errorCode == 2)
-            } else {
-                XCTFail("Error code sent was a 2, should pass")
-            }
-        } catch {
-            XCTFail("Error performing POST: \(error)")
+        let (responseJson, _) = try await rest.post(json, at: "post")
+        XCTAssert(responseJson["url"].string == "https://httpbin.org/post")
+        if let errorCode = responseJson["json"]["error_code"].int, errorCode != 5 {
+            XCTAssert(errorCode == 2)
+        } else {
+            XCTFail("Error code sent was a 2, should pass")
         }
     }
 }
