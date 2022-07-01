@@ -40,33 +40,23 @@ class RestControllerTests: XCTestCase {
     }
 
     func testGETEncodable() async {
-
-        let expectation = expectation(description: "GET JSON network call")
-
         guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
         }
 
         let (result, _) = await rest.get(HttpBinResponse.self)
-
         do {
             let response = try result.value()
             XCTAssert(response.url == "https://httpbin.org/get")
-
-            expectation.fulfill()
         } catch NetworkingError.malformedResponse(let data, _) {
             XCTFail("Error performing GET, malformed data response: \(data)")
         } catch {
             XCTFail("Error performing GET: \(error)")
         }
-
-        await waitForExpectations(timeout: 5)
     }
 
     func testGETGenericJSON() async {
-        let expectation = expectation(description: "GET JSON network call")
-
         guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
@@ -76,18 +66,12 @@ class RestControllerTests: XCTestCase {
         do {
             let json = try result.value()
             XCTAssert(json["url"].string == "https://httpbin.org/get")
-
-            expectation.fulfill()
         } catch {
             XCTFail("Error performing GET: \(error)")
         }
-        
-        await waitForExpectations(timeout: 5)
     }
 
     func testPOST() async {
-        let expectation = expectation(description: "POST JSON network call")
-
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
@@ -113,18 +97,12 @@ class RestControllerTests: XCTestCase {
             for item in jsonArray {
                 XCTAssert(item.numerical != nil)
             }
-
-            expectation.fulfill()
         } catch {
             XCTFail("Error performing POST: \(error)")
         }
-
-        await waitForExpectations(timeout: 5)
     }
 
     func testPUT() async {
-        let expectation = expectation(description: "PUT JSON network call")
-
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
@@ -134,18 +112,12 @@ class RestControllerTests: XCTestCase {
         do {
             let json = try result.value()
             XCTAssert(json["url"].string == "https://httpbin.org/put")
-
-            expectation.fulfill()
         } catch {
             XCTFail("Error performing PUT: \(error)")
         }
-
-        await waitForExpectations(timeout: 5)
     }
 
     func testGetImage() async{
-        let expectation = expectation(description: "GET Image network call")
-
         guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
@@ -159,32 +131,21 @@ class RestControllerTests: XCTestCase {
             #elseif os(OSX)
                 XCTAssert(img is NSImage)
             #endif
-
-            expectation.fulfill()
         } catch {
             XCTFail("Error performing GET: \(error)")
         }
-
-        await waitForExpectations(timeout: 5)
     }
 
     func testVoidResponse() async {
-        let expectation = expectation(description: "GET Void network call")
-
         guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
         }
 
         let _ = await rest.get(withDeserializer: VoidDeserializer())
-        expectation.fulfill()
-
-        await waitForExpectations(timeout: 5)
     }
 
     func testDataResponse() async {
-        let expectation = expectation(description: "GET Data network call")
-
         guard let rest = RestController.make(urlString: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png") else {
             XCTFail("Bad URL")
             return
@@ -194,18 +155,12 @@ class RestControllerTests: XCTestCase {
         do {
             let data = try result.value()
             XCTAssert(data is Data)
-
-            expectation.fulfill()
         } catch {
             XCTFail("Error performing GET: \(error)")
         }
-
-        await waitForExpectations(timeout: 5)
     }
 
     func testDecodableResponse() async {
-        let expectation = expectation(description: "POST JSON network call and decodable object is returned")
-
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
@@ -222,18 +177,12 @@ class RestControllerTests: XCTestCase {
             XCTAssert(response.json?.someDouble == 4.5)
             XCTAssert(response.json?.someBoolean == true)
             XCTAssert(response.json?.someNumberArray[2] == 3)
-
-            expectation.fulfill()
         } catch {
             XCTFail("Error performing POST: \(error)")
         }
-
-        await waitForExpectations(timeout: 5)
     }
 
     func testWrongDecodabelResponse() async {
-        let expectation = expectation(description: "POST JSON network call and wrong decodable object is returned")
-
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
@@ -245,21 +194,13 @@ class RestControllerTests: XCTestCase {
             _ = try result.value()
              XCTFail("Response should not have succeeded")
         } catch NetworkingError.malformedResponse( _, let originalError) {
-            if (originalError as? DecodingError) != nil {
-                expectation.fulfill()
-            } else {
-                XCTFail("Oroginal error, not the expected DecodingErrorType: \(String(describing: originalError))")
-            }
+            XCTAssertNotNil(originalError as? DecodingError)
         } catch {
             XCTFail("Error performing POST: \(error)")
         }
-
-        await waitForExpectations(timeout: 5)
     }
 
     func testEncodableObject() async {
-        let expectation = expectation(description: "POST JSON network call and decodable object is returned")
-
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
@@ -276,18 +217,12 @@ class RestControllerTests: XCTestCase {
             XCTAssert(response.json?.someDouble == someObject.someDouble)
             XCTAssert(response.json?.someBoolean == someObject.someBoolean)
             XCTAssert(response.json?.someNumberArray[2] == someObject.someNumberArray[2])
-
-            expectation.fulfill()
         } catch {
             XCTFail("Error performing POST: \(error)")
         }
-
-        await waitForExpectations(timeout: 5)
     }
 
     func testUnexpectedStatusCode() async {
-        let expectation = expectation(description: "GET JSON network call")
-        
         guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
             XCTFail("Bad URL")
             return
@@ -301,17 +236,12 @@ class RestControllerTests: XCTestCase {
             XCTFail("Expected to get an error, but call succeeded")
         } catch NetworkingError.unexpectedStatusCode(let actualStatusCode, _) {
             XCTAssert(actualStatusCode != options.expectedStatusCode)
-            expectation.fulfill()
         } catch {
             XCTFail("Received unexpected error: \(error)")
         }
-        
-        await waitForExpectations(timeout: 5)
     }
 
     func testJsonParsing() async {
-        let expectation = expectation(description: "POST JSON network call")
-
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
             return
@@ -324,14 +254,11 @@ class RestControllerTests: XCTestCase {
             XCTAssert(json["url"].string == "https://httpbin.org/post")
             if let errorCode = json["json"]["error_code"].int, errorCode != 5 {
                 XCTAssert(errorCode == 2)
-                expectation.fulfill()
             } else {
                 XCTFail("Error code sent was a 2, should pass")
             }
         } catch {
             XCTFail("Error performing POST: \(error)")
         }
-
-        await waitForExpectations(timeout: 5)
     }
 }
