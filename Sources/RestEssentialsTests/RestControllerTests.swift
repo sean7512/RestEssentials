@@ -45,7 +45,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        let (response, _) = try await rest.get(HttpBinResponse.self)
+        let response = try await rest.get(HttpBinResponse.self)
         XCTAssert(response.url == "https://httpbin.org/get")
     }
 
@@ -55,7 +55,7 @@ class RestControllerTests: XCTestCase {
             return
         }
         
-        let (json, _) = try await rest.get(withDeserializer: JSONDeserializer())
+        let json = try await rest.get(withDeserializer: JSONDeserializer())
         XCTAssert(json["url"].string == "https://httpbin.org/get")
     }
 
@@ -66,7 +66,7 @@ class RestControllerTests: XCTestCase {
         }
 
         let json: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true, "key5": [1, 2, 3, 4]]
-        let (resposneJson, _) = try await rest.post(json, at: "post")
+        let resposneJson = try await rest.post(json, at: "post")
         XCTAssert(resposneJson["url"].string == "https://httpbin.org/post")
         XCTAssert(resposneJson["json"]["key1"].string == "value1")
         XCTAssert(resposneJson["json"]["key2"].int == 2)
@@ -91,7 +91,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        let (json, _) = try await rest.put(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]), at: "put")
+        let json = try await rest.put(JSON(dict: ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]), at: "put")
         XCTAssert(json["url"].string == "https://httpbin.org/put")
     }
 
@@ -101,7 +101,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        let (img, _) = try await rest.get(withDeserializer: ImageDeserializer())
+        let img = try await rest.get(withDeserializer: ImageDeserializer())
         #if os(iOS) || os(watchOS) || os(tvOS)
             XCTAssert(img is UIImage)
         #elseif os(OSX)
@@ -124,7 +124,7 @@ class RestControllerTests: XCTestCase {
             return
         }
 
-        let (data, _) = try await rest.get(withDeserializer: DataDeserializer())
+        let data = try await rest.get(withDeserializer: DataDeserializer())
         XCTAssert(data is Data)
     }
 
@@ -135,7 +135,7 @@ class RestControllerTests: XCTestCase {
         }
 
         let json: JSON = ["someString": "value1", "someInt": 2, "someDouble": 4.5, "someBoolean": true, "someNumberArray": [1, 2, 3, 4]]
-        let (httpBinResponse, _) = try await rest.post(json, withDeserializer: DecodableDeserializer<HttpBinResponse>(), at: "post")
+        let httpBinResponse = try await rest.post(json, withDeserializer: DecodableDeserializer<HttpBinResponse>(), at: "post")
         XCTAssert(httpBinResponse is HttpBinResponse)
         XCTAssert(httpBinResponse.url == "https://httpbin.org/post")
         XCTAssert(httpBinResponse.json?.someString == "value1")
@@ -169,7 +169,7 @@ class RestControllerTests: XCTestCase {
         }
 
         let someObject = SomeObject(someString: "value1", someInt: 2, someDouble: 4.5, someBoolean: true, someNumberArray: [1, 2, 3, 4])
-        let (httpBinResponse, _) = try await rest.post(someObject, at: "post", responseType: HttpBinResponse.self)
+        let httpBinResponse = try await rest.post(someObject, at: "post", responseType: HttpBinResponse.self)
         XCTAssert(httpBinResponse is HttpBinResponse)
         XCTAssert(httpBinResponse.url == "https://httpbin.org/post")
         XCTAssert(httpBinResponse.json?.someString == someObject.someString)
@@ -204,7 +204,7 @@ class RestControllerTests: XCTestCase {
         }
 
         let json: JSON = ["error_code": 2, "error_description": "Invalid credentials", "result": 1]
-        let (responseJson, _) = try await rest.post(json, at: "post")
+        let responseJson = try await rest.post(json, at: "post")
         XCTAssert(responseJson["url"].string == "https://httpbin.org/post")
         if let errorCode = responseJson["json"]["error_code"].int, errorCode != 5 {
             XCTAssert(errorCode == 2)
