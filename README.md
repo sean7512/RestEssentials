@@ -15,7 +15,7 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift and c
 
 ## Requirements
 
-RestEssentials 6.0.0 and newer works with any of the supported operating systems listed below with the version of Xcode.
+RestEssentials 6.0 and newer works with any of the supported operating systems listed below with the version of Xcode.
 
 - iOS 15.0+
 - tvOS 15.0+
@@ -28,7 +28,7 @@ If you are need support for an older OS, you can use 5.2.0, which supported back
 ## Swift Version Compatibility
 
 RestEssentials is **ONLY** compatible with Swift 5 and above. See below for a list of recommended versions for your version of Swift:
-- Swift 5.5+          -> RestEssentials 6.0.0
+- Swift 5.5+          -> RestEssentials 6.0.1
 - Swift 5             -> RestEssentials 5.2.0  (or 4.0.3+ -- macOS and SPM support added in 5.0.1)
 - Swift 4             -> RestEssentials 4.0.2
 - Swift 3             -> RestEssentials 3.1.0
@@ -56,7 +56,7 @@ If you prefer to add it manually using SPM, just add the RestEssentials dependen
 
 ```swift
 dependencies: [
-.package(url: "https://github.com/sean7512/RestEssentials.git", from: "6.0.0")
+.package(url: "https://github.com/sean7512/RestEssentials.git", from: "6.0.1")
 ]
 ```
 
@@ -78,7 +78,7 @@ platform :ios, '15.0'
 use_frameworks!
 
 target 'MyApp' do
-pod 'RestEssentials', '~> 6.0.0'
+pod 'RestEssentials', '~> 6.0.1'
 end
 ```
 

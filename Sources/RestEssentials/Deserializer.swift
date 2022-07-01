@@ -5,7 +5,7 @@
 //  Created by Sean Kosanovich on 7/13/16.
 //  Copyright © 2017 Sean Kosanovich. All rights reserved.
 //
-
+import Foundation
 #if os(iOS) || os(watchOS) || os(tvOS)
     import UIKit
 #elseif os(OSX)

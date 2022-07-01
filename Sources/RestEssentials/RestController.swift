@@ -5,12 +5,7 @@
 //  Created by Sean Kosanovich on 6/7/15.
 //  Copyright © 2017 Sean Kosanovich. All rights reserved.
 //
-
-#if os(iOS) || os(watchOS) || os(tvOS)
-    import UIKit
-#elseif os(OSX)
-    import AppKit
-#endif
+import Foundation
 
 /// Errors related to the networking for the `RestController`
 public enum NetworkingError: Error {
@@ -146,21 +141,7 @@ public class RestController : NSObject, URLSessionDelegate {
             request.httpBody = payloadToSend
         }
 
-        #if os(iOS)
-            DispatchQueue.main.async {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            }
-        #endif
-
         let (data, response) = try await session.data(for: request)
-
-        #if os(iOS)
-            DispatchQueue.main.async {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
-        #endif
-
-
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkingError.badResponse(response, data)
         }
