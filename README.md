@@ -62,7 +62,7 @@ dependencies: [
 
 ### CocoaPods
 
-[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects and is the preferred method of installation.
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
 
 Install the latest version of CocoaPods with the following command:
 
