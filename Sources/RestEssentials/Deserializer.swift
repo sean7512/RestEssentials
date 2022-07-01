@@ -12,6 +12,12 @@
     import AppKit
 #endif
 
+/// Errors related to data deserialization
+public enum DeserializationError: Error {
+    /// Indicates that the given Data could not be converted to an image.
+    case invalidImage
+}
+
 /// Protocol for de-serializing responses from the web server.
 public protocol Deserializer {
 
@@ -52,11 +58,7 @@ public class DecodableDeserializer<T: Decodable>: Deserializer {
     public required init() { }
 
     public func deserialize(_ data: Data) throws -> T {
-        do {
-            return try JSONDecoder().decode(T.self, from: data)
-        } catch {
-            throw NetworkingError.malformedResponse(data, error)
-        }
+        return try JSONDecoder().decode(T.self, from: data)
     }
 }
 
@@ -87,7 +89,7 @@ public class VoidDeserializer: Deserializer {
 
         public func deserialize(_ data: Data) throws -> UIImage {
             guard let image = UIImage(data: data) else {
-                throw NetworkingError.malformedResponse(data, nil)
+                throw DeserializationError.invalidImage
             }
             return image
         }
@@ -104,7 +106,7 @@ public class VoidDeserializer: Deserializer {
 
     public func deserialize(_ data: Data) throws -> NSImage {
         guard let image = NSImage(data: data) else {
-            throw NetworkingError.malformedResponse(data, nil)
+            throw DeserializationError.invalidImage
         }
         return image
     }

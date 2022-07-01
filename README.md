@@ -3,34 +3,37 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift and c
 ## Features
 
 - [x] Easily perform asynchronous REST networking calls (GET, POST, PUT, PATCH, or DELETE) that send JSON
+- [x] Easy API that uses Swift's async/await syntax
 - [x] Natively integrates with Swift's Decodable and Encodable types
-- [x] Supports JSON, Void, UIImage, and Data resposne types
+- [x] Supports JSON, Void, UIImage/NSImage, and Data resposne types with full support for custom expansion
 - [x] Full JSON parsing capabilities
 - [x] HTTP response validation
 - [x] Send custom HTTP headers
 - [x] Accept self-signed SSL certificates
 - [x] Change timeout options
-- [x] Response type handling can be extended via new Protocol implementation
 - [x] Fully native Swift API
 
 ## Requirements
 
-RestEssentials works with any of the supported operating systems listed below with the version of Xcode.
+RestEssentials 6.0.0 and newer works with any of the supported operating systems listed below with the version of Xcode.
 
-- iOS 11.0+
-- tvOS 11.0+
-- watchOS 4.0+
-- iPadOS 11.0+
-- macOS 10.13+
+- iOS 15.0+
+- tvOS 15.0+
+- watchOS 8.0+
+- iPadOS 15.0+
+- macOS 12.0+
+
+If you are need support for an older OS, you can use 5.2.0, which supported back to iOS 11.0.
 
 ## Swift Version Compatibility
 
 RestEssentials is **ONLY** compatible with Swift 5 and above. See below for a list of recommended versions for your version of Swift:
+- Swift 5.5+          -> RestEssentials 6.0.0
 - Swift 5             -> RestEssentials 5.2.0  (or 4.0.3+ -- macOS and SPM support added in 5.0.1)
 - Swift 4             -> RestEssentials 4.0.2
 - Swift 3             -> RestEssentials 3.1.0
-- Swift 2.3          -> Not Supported
-- Swift 2.0-2.2   -> RestEssentials 2.0.0
+- Swift 2.3           -> Not Supported
+- Swift 2.0-2.2       -> RestEssentials 2.0.0
 - Swift 1             -> RestEssentials 1.0.2
 
 ## Communication
@@ -47,19 +50,19 @@ RestEssentials is **ONLY** compatible with Swift 5 and above. See below for a li
 
 RestEssentials is compatible with the SPM for macOS, iOS, iPadOS, tvOS, and watchOS (not avaiale on Linux at this time). When using XCode 11, the Swift Package Manager is the recommended installation method.
 
-To use in XCode 11, open your project and go to ```File->Swift Packages->Add Package Dependency...``` and follow along the dialogs. Thats it!
+To use in XCode 11+, open your project and go to ```File->Swift Packages->Add Package Dependency...``` and follow along the dialogs. Thats it!
 
 If you prefer to add it manually using SPM, just add the RestEssentials dependency to your target in your ```Package.swift``` file.
 
 ```swift
 dependencies: [
-.package(url: "https://github.com/sean7512/RestEssentials.git", from: "5.2.0")
+.package(url: "https://github.com/sean7512/RestEssentials.git", from: "6.0.0")
 ]
 ```
 
 ### CocoaPods
 
-[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects and is the preferred method of installation.
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
 
 Install the latest version of CocoaPods with the following command:
 
@@ -71,11 +74,11 @@ To integrate RestEssentials into your Xcode project using CocoaPods, specify it 
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '11.0'
+platform :ios, '15.0'
 use_frameworks!
 
 target 'MyApp' do
-pod 'RestEssentials', '~> 5.2.0'
+pod 'RestEssentials', '~> 6.0.0'
 end
 ```
 
@@ -131,14 +134,8 @@ guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
     return
 }
 
-rest.get(HttpBinResponse.self) { result, httpResponse in
-    do {
-        let response = try result.value() // response is of type HttpBinResponse
-        print(response.url) // "http://httpbin.org/get"
-    } catch {
-        print("Error performing GET: \(error)")
-    }
-}
+let response = try await rest.get(HttpBinResponse.self)
+print(response.url) // "http://httpbin.org/get"
 ```
 
 ### Making a POST Request using a Swift 4 Codable object and getting back a Swift 4 *Codable* object
@@ -163,14 +160,8 @@ guard let rest = RestController.make(urlString: "http://httpbin.org") else {
 }
 
 let myCar = Car(make: "Jeep", model: "Grand Cherokee", year: 2017)
-rest.post(myCar, at: "post", responseType: HttpBinResponse.self) { result, httpResponse in
-    do {
-        let response = try result.value() // response is of type HttpBinResponse
-        let car = response.json // car is of type Car
-    } catch {
-        print("Error performing GET: \(error)")
-    }
-}
+let response = try await rest.post(myCar, at: "post", responseType: HttpBinResponse.self)
+let car = response.json // car is of type Car
 ```
 
 ### Making a GET Request and parsing the response as raw JSON (not using Swift 4's Codable)
@@ -183,14 +174,8 @@ guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
     return
 }
 
-rest.get(withDeserializer: JSONDeserializer()) { result, httpResponse in
-    do {
-        let json = try result.value()
-        print(json["url"].string) // "http://httpbin.org/get"
-    } catch {
-        print("Error performing GET: \(error)")
-    }
-}
+let json = try await rest.get(withDeserializer: JSONDeserializer())
+print(json["url"].string) // "http://httpbin.org/get"
 ```
 
 ### Making a POST Request and parsing the response (not using Swift 4's Codable)
@@ -204,20 +189,14 @@ guard let rest = RestController.make(urlString: "http://httpbin.org") else {
 }
 
 let postData: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true, "key5": [1, 2, 3, 4]]
-rest.post(postData, at: "post") { result, httpResponse in
-    do {
-        let json = try result.value()
-        print(json["url"].string) // "http://httpbin.org/post"
-        print(json["json"]["key1"].string) // "value1"
-        print(json["json"]["key2"].int) // 2
-        print(json["json"]["key3"].double) // 4.5
-        print(json["json"]["key4"].bool) // true
-        print(json["json"]["key5"][2].numerical) // 3
-        print(json["json"]["key6"].string) // nil
-    } catch {
-        print("Error performing POST: \(error)")
-    }
-}
+let json = try await rest.post(postData, at: "post")
+print(json["url"].string) // "http://httpbin.org/post"
+print(json["json"]["key1"].string) // "value1"
+print(json["json"]["key2"].int) // 2
+print(json["json"]["key3"].double) // 4.5
+print(json["json"]["key4"].bool) // true
+print(json["json"]["key5"][2].numerical) // 3
+print(json["json"]["key6"].string) // nil
 ```
 
 ### Making a PUT Request and parsing the response (not using Swift 4's Codable)
@@ -231,14 +210,8 @@ guard let rest = RestController.make(urlString: "http://httpbin.org/put") else {
 }
 
 let putData: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]
-rest.put(putData) { result, httpResponse in
-    do {
-        let json = try result.value()
-        print(json["url"].string) // "http://httpbin.org/put"
-    } catch {
-        print("Error performing PUT: \(error)")
-    }
-}
+let json = try await rest.put(putData)
+print(json["url"].string) // "http://httpbin.org/put"
 ```
 
 ### Making a GET Request for an image
@@ -251,46 +224,37 @@ guard let rest = RestController.make(urlString: "https://www.google.com/images/b
     return
 }
 
-rest.get(withDeserializer: ImageDeserializer()) { result, httpResponse in
-    do {
-        let img = try result.value()
-        let isImage = img is UIImage // true
-    } catch {
-        print("Error performing GET: \(error)")
-    }
-}
+let img = try await rest.get(withDeserializer: ImageDeserializer())
+let isImage = img is UIImage // true
 ```
 
 ### Error Handling
-When attempting to retrieve the result value (```try result.value()```), any errors that occurred will be thrown here.  The errors may be one of the built-in ```NetworkingError``` types or they may be ones from Foundation.  The built in error definitions are below for your convenience.
+All of the network calls can throw errors at runtime. The errors may be one of the built-in ```NetworkingError``` types or they may be ones from Foundation.  The built in error definitions are below for your convenience.
 
 ```swift
 /// Errors related to the networking for the `RestController`
 public enum NetworkingError: Error {
     /// Indicates the server responded with an unexpected status code.
     /// - parameter Int: The status code the server respodned with.
-    /// - parameter Data?: The raw returned data from the server
-    case unexpectedStatusCode(Int, Data?)
+    /// - parameter HTTPURLResponse: The HTTPURLResponse from the server
+    /// - parameter Data: The raw returned data from the server
+    case unexpectedStatusCode(Int, HTTPURLResponse, Data)
 
     /// Indicates that the server responded using an unknown protocol.
-    /// - parameter Data?: The raw returned data from the server
-    case badResponse(Data?)
+    /// - parameter URLResponse: The response returned form the server.
+    /// - parameter Data: The raw returned data from the server.
+    case badResponse(URLResponse, Data)
 
     /// Indicates the server's response could not be deserialized using the given Deserializer.
+    /// - parameter HTTPURLResponse: The HTTPURLResponse from the server
     /// - parameter Data: The raw returned data from the server
-    /// - parameter Error?: The original system error (like a DecodingError, etc) that caused the malformedResponse to trigger
-    case malformedResponse(Data, Error?)
-
-    /// Inidcates the server did not respond to the request.
-    case noResponse
+    /// - parameter Error: The original system error (like a DecodingError, etc) that caused the malformedResponse to trigger
+    case malformedResponse(HTTPURLResponse, Data, Error)
 }
 ```
-```DecodingError``` errors will be caught and wrapped as a ```NetworkingError.malformedResponse(Data, Error?)```. For more enformating on these errors, see https://developer.apple.com/documentation/swift/encodingerror and https://developer.apple.com/documentation/swift/decodingerror
 
 ### Other Notes
-If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the `VoidDeserializer`.  If you want to return a different data type other than a Decodable, JSON, Data, or UIImage; create a new implementation of `Deserializer` and use that.
-
-The callbacks are **NOT** guranteed to be on the main thread (or the calling thread), JSON parsing should happen in the callback and then passed back to the main thread as needed (after parsing).
+If the web service you're calling doesn't return any JSON (or you don't need to capture it), then use the `VoidDeserializer`.  If you want to return a different data type other than a Decodable, JSON, Data, or UIImage/NSImage; create a new implementation of `Deserializer` and use that.
 
 There is an alternative static function to instantiate a `RestController` object: `make:URL` This variation does not return an `Optional` like the `String` version.  This is useful for easily constructing your URL with query parameters (typically for a `GET` request).
 

@@ -10,6 +10,12 @@ import Foundation
 
 public typealias JSONValue = Any
 
+/// Errors related to JSON deserialization
+public enum JSONError: Error {
+    /// Indicates that the given JSON does not start with an array or an object
+    case invalidJSONStart
+}
+
 /// Represents any valid JSON type: another JSON object, an array, a string, a number, or a boolean.
 public struct JSON : CustomStringConvertible, ExpressibleByArrayLiteral, ExpressibleByDictionaryLiteral {
 
@@ -179,7 +185,7 @@ internal extension JSON {
             self.init(array: jsonArray)
         } else {
             print("Unknown json data type: \(json)")
-            throw NetworkingError.malformedResponse(data, nil)
+            throw JSONError.invalidJSONStart
         }
     }
 
