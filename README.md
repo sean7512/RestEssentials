@@ -28,7 +28,7 @@ If you are need support for an older OS, you can use 5.2.0, which supported back
 ## Swift Version Compatibility
 
 RestEssentials is **ONLY** compatible with Swift 5 and above. See below for a list of recommended versions for your version of Swift:
-- Swift 5.5+          -> RestEssentials 6.0.1+
+- Swift 5.5+          -> RestEssentials latest
 - Swift 5             -> RestEssentials 5.2.0  (or 4.0.3+ -- macOS and SPM support added in 5.0.1)
 - Swift 4             -> RestEssentials 4.0.2
 - Swift 3             -> RestEssentials 3.1.0
@@ -56,41 +56,13 @@ If you prefer to add it manually using SPM, just add the RestEssentials dependen
 
 ```swift
 dependencies: [
-.package(url: "https://github.com/sean7512/RestEssentials.git", from: "6.0.1")
+.package(url: "https://github.com/sean7512/RestEssentials.git", from: "6.1.1")
 ]
-```
-
-### CocoaPods
-
-[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
-
-Install the latest version of CocoaPods with the following command:
-
-```bash
-$ sudo gem install cocoapods
-```
-
-To integrate RestEssentials into your Xcode project using CocoaPods, specify it in your `Podfile`:
-
-```ruby
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '15.0'
-use_frameworks!
-
-target 'MyApp' do
-pod 'RestEssentials', '~> 6.0.1'
-end
-```
-
-Then, run the following command:
-
-```bash
-$ pod install
 ```
 
 ### Manually
 
-If you prefer not to use CocoaPods, you can integrate RestEssentials into your project manually.
+If you prefer not to use Swift Package Manager, you can integrate RestEssentials into your project manually.
 
 #### Embedded Framework
 
