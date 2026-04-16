@@ -115,7 +115,7 @@ public class RestController : NSObject, URLSessionDelegate {
     private func dataTask(relativePath: String?, httpMethod: String, accept: String, payload: Data?, options: RestOptions) async throws -> (Data, HTTPURLResponse) {
         let restURL: URL;
         if let relativeURL = relativePath {
-            restURL = url.appendingPathComponent(relativeURL)
+            restURL = url.appending(path: relativeURL)
         } else {
             restURL = url
         }
