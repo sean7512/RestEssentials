@@ -17,18 +17,18 @@ RestEssentials is an extremely lightweight REST and JSON library for Swift and c
 
 RestEssentials 6.0 and newer works with any of the supported operating systems listed below with the version of Xcode.
 
-- iOS 15.0+
-- tvOS 15.0+
-- watchOS 8.0+
-- iPadOS 15.0+
-- macOS 12.0+
+- iOS 17.0+
+- tvOS 17.0+
+- watchOS 10.0+
+- iPadOS 17.0+
+- macOS 14.0+
 
 If you are need support for an older OS, you can use 5.2.0, which supported back to iOS 11.0.
 
 ## Swift Version Compatibility
 
 RestEssentials is **ONLY** compatible with Swift 5 and above. See below for a list of recommended versions for your version of Swift:
-- Swift 5.5+          -> RestEssentials 6.0.1
+- Swift 5.5+          -> RestEssentials 6.0.1+
 - Swift 5             -> RestEssentials 5.2.0  (or 4.0.3+ -- macOS and SPM support added in 5.0.1)
 - Swift 4             -> RestEssentials 4.0.2
 - Swift 3             -> RestEssentials 3.1.0
@@ -213,6 +213,28 @@ let putData: JSON = ["key1": "value1", "key2": 2, "key3": 4.5, "key4": true]
 let json = try await rest.put(putData)
 print(json["url"].string) // "http://httpbin.org/put"
 ```
+
+### Making a GET Request with Query Parameters
+
+```swift
+import RestEssentials
+
+guard let rest = RestController.make(urlString: "http://httpbin.org/get") else {
+    print("Bad URL")
+    return
+}
+
+let queryItems = [
+    URLQueryItem(name: "foo", value: "bar"),
+    URLQueryItem(name: "baz", value: "qux")
+]
+
+let json = try await rest.get(withDeserializer: JSONDeserializer(), queryItems: queryItems)
+print(json["args"]["foo"].string) // "bar"
+print(json["args"]["baz"].string) // "qux"
+```
+
+All HTTP methods (GET, POST, PUT, PATCH, DELETE) support the optional `queryItems` parameter, which accepts an array of `URLQueryItem` objects that will be appended to the request URL.
 
 ### Making a GET Request for an image
 

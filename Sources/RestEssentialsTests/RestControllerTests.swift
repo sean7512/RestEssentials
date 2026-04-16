@@ -197,6 +197,67 @@ class RestControllerTests: XCTestCase {
         }
     }
 
+    func testGETWithQueryItems() async throws {
+        guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
+            XCTFail("Bad URL")
+            return
+        }
+
+        let queryItems = [
+            URLQueryItem(name: "foo", value: "bar"),
+            URLQueryItem(name: "baz", value: "qux")
+        ]
+
+        let json = try await rest.get(withDeserializer: JSONDeserializer(), queryItems: queryItems)
+        let returnedURL = json["url"].string
+        XCTAssert(returnedURL?.contains("foo=bar") == true, "URL should contain foo=bar, got: \(returnedURL ?? "nil")")
+        XCTAssert(returnedURL?.contains("baz=qux") == true, "URL should contain baz=qux, got: \(returnedURL ?? "nil")")
+        XCTAssert(json["args"]["foo"].string == "bar")
+        XCTAssert(json["args"]["baz"].string == "qux")
+    }
+
+    func testGETWithQueryItemsAndRelativePath() async throws {
+        guard let rest = RestController.make(urlString: "https://httpbin.org") else {
+            XCTFail("Bad URL")
+            return
+        }
+
+        let queryItems = [
+            URLQueryItem(name: "search", value: "hello world")
+        ]
+
+        let json = try await rest.get(withDeserializer: JSONDeserializer(), at: "get", queryItems: queryItems)
+        XCTAssert(json["args"]["search"].string == "hello world", "Query parameter 'search' should be 'hello world'")
+    }
+
+    func testPOSTWithQueryItems() async throws {
+        guard let rest = RestController.make(urlString: "https://httpbin.org") else {
+            XCTFail("Bad URL")
+            return
+        }
+
+        let queryItems = [
+            URLQueryItem(name: "token", value: "abc123")
+        ]
+
+        let json: JSON = ["key1": "value1"]
+        let responseJson = try await rest.post(json, at: "post", queryItems: queryItems)
+        let returnedURL = responseJson["url"].string
+        XCTAssert(returnedURL?.contains("token=abc123") == true, "URL should contain token=abc123, got: \(returnedURL ?? "nil")")
+        XCTAssert(responseJson["args"]["token"].string == "abc123")
+        XCTAssert(responseJson["json"]["key1"].string == "value1")
+    }
+
+    func testGETWithEmptyQueryItems() async throws {
+        guard let rest = RestController.make(urlString: "https://httpbin.org/get") else {
+            XCTFail("Bad URL")
+            return
+        }
+
+        let json = try await rest.get(withDeserializer: JSONDeserializer(), queryItems: [])
+        XCTAssert(json["url"].string == "https://httpbin.org/get", "URL should have no query string when query items are empty")
+    }
+
     func testJsonParsing() async throws {
         guard let rest = RestController.make(urlString: "https://httpbin.org") else {
             XCTFail("Bad URL")
