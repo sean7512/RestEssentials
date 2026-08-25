@@ -18,6 +18,14 @@ DerivedData
 *.ipa
 *.xcuserstate
 
+# Swift Package Manager
+#
+# Auto-generated Xcode/IDE state for the package. Nothing here needs to be
+# in source control. If you ever add shared schemes, un-ignore
+# .swiftpm/xcode/xcshareddata/ explicitly.
+.swiftpm/
+Package.resolved
+
 # CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However

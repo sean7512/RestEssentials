@@ -44,7 +44,8 @@ public struct RestOptions {
 /// Allows users to generate headers before each REST call is made. The headers returned will be COMBINED with any headers set in the original RestController call. Any headers returned here will override the values given in the original call if they have the same name.
 ///
 /// - parameter requestUrl: The URL that this header generation request is for. Never nu,,
-public typealias HeaderGenerator = (URL) -> [String : String]?
+/// - parameter data: Optional data that will be sent as the body. If nil, no data will be in the body.
+public typealias HeaderGenerator = (URL, Data?) -> [String : String]?
 
 /// Allows users to create HTTP REST networking calls that deal with JSON.
 ///
@@ -143,7 +144,7 @@ public class RestController : NSObject, URLSessionDelegate {
             }
         }
 
-        if let generatedHeaders = headerGenerator?(restURL) {
+        if let generatedHeaders = headerGenerator?(restURL, payload) {
             for (httpHeaderKey, httpHeaderValue) in generatedHeaders {
                 request.setValue(httpHeaderValue, forHTTPHeaderField: httpHeaderKey)
             }
